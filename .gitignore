@@ -1,0 +1,40 @@
+.DS_Store
+node_modules
+/dist
+
+# local env files
+.env.local
+.env.*.local
+
+electron/
+
+# Log files
+*.log
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw*
+/ios/App/App.ipa
+/ios/App/fastlane/report.xml
+/ios/App/App.app.dSYM.zip
+
+# fastlane specific
+fastlane/report.xml
+
+# deliver temporary files
+fastlane/Preview.html
+
+# snapshot generated screenshots
+fastlane/screenshots
+
+# scan temporary files
+fastlane/test_output
+/android/app/release
+android/signing/*
+!android/signing/.gitkeep
+!android/signing/keystore.properties.example

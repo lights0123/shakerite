@@ -1,0 +1,8 @@
+{
+  "appId": "com.shakerite.app",
+  "appName": "Shakerite",
+  "bundledWebRuntime": false,
+  "webDir": "dist",
+  "linuxAndroidStudioPath": "/usr/bin/android-studio",
+  "androidSplashResourceName": "splash"
+}

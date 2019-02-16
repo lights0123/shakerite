@@ -1,0 +1,126 @@
+@import "~typeface-open-sans";
+@import "~typeface-roboto";
+@import "~typeface-zilla-slab";
+
+:root {
+	--beep-success: #47bd8f;
+	--beep-danger: #ff5c5d;
+	--beep-secondary: #5c5c5c;
+	--beep-primary: #ff5c5d;
+	--beep-dark: #1b1b1b;
+	--beep-light-dark: #555555;
+	--beep-light: #ffffff;
+	--ion-dark-transparent: rgba(27, 27, 27, 0.5);
+	--border-width: 0;
+	--ion-padding: 0;
+}
+
+:root[mode='md'] {
+	--ion-font-family: Arial, sans-serif;
+}
+
+:root[mode='ios'] {
+	--ion-font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Roboto', sans-serif;
+}
+
+.ion-color-facebook {
+	--ion-color-base: #4267b2;
+	--ion-color-base-rgb: 66, 103, 178;
+	--ion-color-contrast: #ffffff;
+	--ion-color-contrast-rgb: 255, 255, 255;
+	--ion-color-shade: #3a5b9d;
+	--ion-color-tint: #5576ba;
+}
+
+.ion-color-twitter {
+	--ion-color-base: #1DA1F2;
+	--ion-color-base-rgb: 29, 161, 242;
+	--ion-color-contrast: #000000;
+	--ion-color-contrast-rgb: 0, 0, 0;
+	--ion-color-shade: #1a8ed5;
+	--ion-color-tint: #34aaf3;
+}
+
+.ion-color-soundcloud {
+	--ion-color-base: #ff5500;
+	--ion-color-base-rgb: 255, 85, 0;
+	--ion-color-contrast: #ffffff;
+	--ion-color-contrast-rgb: 255, 255, 255;
+	--ion-color-shade: #e04b00;
+	--ion-color-tint: #ff661a;
+}
+
+ion-toolbar {
+	--ion-toolbar-background-color: var(--beep-light);
+	padding-top: env(safe-area-inset-top);
+}
+
+.header-ios ion-toolbar:last-child {
+	--border-width: 0;
+}
+
+.header-md::after {
+	background-image: none;
+}
+
+ion-title {
+	text-align: center;
+}
+
+.md ion-title img {
+	max-width: 70%;
+}
+
+.input-holder {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+input:invalid {
+	box-shadow: none;
+}
+
+#lottie {
+	position: relative;
+	width: 100%;
+	height: 300px;
+}
+
+div[style].cloned-input {
+	opacity: 0 !important;
+}
+
+.hash-protected-img {
+	float: left;
+	width: 1.25rem;
+}
+
+body,
+html {
+	height: 100vh;
+}
+
+/* iPhone support
+ * first selector: X/Xs/X-MAX 
+ * second selector: XR
+ */
+@media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3), only screen and (min-device-width: 414px) and (max-device-width: 767px) and (-webkit-min-device-pixel-ratio: 2) {
+	html.plt-ios.plt-hybrid,
+	html.plt-ios.plt-pwa {
+		--ion-statusbar-padding: env(safe-area-inset-top);
+	}
+}
+
+.searchbar-has-value .searchbar-clear-button.sc-ion-searchbar-ios {
+	display: block;
+}
+
+.searchbar-has-value .searchbar-cancel-button.sc-ion-searchbar-ios {
+	margin-right: 0 !important;
+	opacity: 1 !important;
+}
+
+ion-tab-bar.hidden {
+	display: none;
+}

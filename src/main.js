@@ -1,0 +1,131 @@
+import 'mdn-polyfills/Node.prototype.replaceWith';
+import Vue from 'vue';
+import Vuex from 'vuex';
+import './theme/common.css';
+import { Ionic, IonicAPI } from '@modus/ionic-vue';
+import { Capacitor, Plugins, StatusBarStyle } from '@capacitor/core';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { faBookmark, faFont } from '@fortawesome/free-solid-svg-icons';
+import { faBookmark as faBookmarkRegular } from '@fortawesome/free-regular-svg-icons';
+import WPAPI from 'wpapi';
+import VueShave from 'vue-shave';
+import AsyncComputed from 'vue-async-computed';
+import settings from './views/Settings.vue';
+import saved from './views/Saved.vue';
+import news from './views/News.vue';
+import helpers from './helpers';
+// import Ionic from '@ionic/vue';
+// import { HTTP } from '@ionic-native/http';
+const {
+	SplashScreen, Network, StatusBar, Browser, App,
+} = Plugins;
+Vue.config.productionTip = false;
+library.add(faBookmark, faFont, faBookmarkRegular);
+// window.HTTP = HTTP;
+Vue.component('font-awesome-icon', FontAwesomeIcon);
+Ionic.init();
+Vue.use(IonicAPI);
+Vue.use(Vuex);
+Vue.use(VueShave, { character: '…' });
+Vue.use(AsyncComputed);
+window.Browser = Browser;
+
+// Initial Capacitor calls
+async function initCapacitor() {
+	// Platform checks
+	Vue.prototype.$isWeb = Capacitor.platform === 'web';
+	Vue.prototype.$isIOS = Capacitor.platform === 'ios';
+
+	// Set status-bar background and style
+	window.StatusBar = StatusBar;
+	window.StatusBarStyle = StatusBarStyle;
+	StatusBar.setBackgroundColor({ color: '#ffffff' }).catch(helpers.err);
+	StatusBar.setStyle({ style: StatusBarStyle.Light }).catch(helpers.err);
+
+	// Set network checks
+	Network.getStatus()
+		  .then(s => (Vue.prototype.$networkStatus = s))
+		  .catch(helpers.err);
+
+	// Listen to network changes
+	Network.addListener('networkStatusChange', s => (Vue.prototype.$networkStatus = s)).catch(
+		  helpers.err,
+	);
+}
+
+function getActiveComponent(app) {
+	const tab = document.querySelector('#app > ion-tabs > ion-tab:not(.tab-hidden)');
+	return app.$children.find(child => tab.contains(child.$el));
+}
+
+// Navigate through a swipe gesture
+async function initNavGesture(app) {
+	const gesture = await import('@ionic/core/dist/collection/utils/gesture/gesture');
+
+	gesture
+		  .createGesture({
+			  el: document,
+			  gestureName: 'swipe',
+			  gesturePriority: 40,
+			  threshold: 10,
+			  queue: window.Ionic.queue,
+			  canStart: () => true,
+			  onStart: () => {
+			  },
+			  onMove: () => {
+			  },
+			  onEnd: (ev) => {
+				  const threshold = app.$root.$el.offsetWidth / 2;
+				  if (Math.abs(ev.deltaX) < threshold) {
+					  return;
+				  }
+				  getActiveComponent(app).$router.go(ev.deltaX > 0 ? -1 : 1);
+			  },
+		  })
+		  .setDisabled(false);
+}
+
+// Initialize Capacitor
+initCapacitor();
+// Initialize helpers
+Vue.prototype.$helpers = helpers;
+// Create a Vue app instance
+window.Vue = Vue;
+const { default: store, getData } = require('./store/store');
+getData(store).then(() => {
+	window.vue = new Vue({
+		// router,
+		store,
+		mounted() {
+			SplashScreen.hide().catch(this.$helpers.err);
+			if (Capacitor.platform === 'ios') initNavGesture(this);
+			window.addEventListener('keyboardWillShow', (event) => {
+				if (event.keyboardHeight) this.$refs.tabbar.classList.add('hidden');
+			});
+			window.addEventListener('keyboardWillHide', () => {
+				this.$refs.tabbar.classList.remove('hidden');
+				document.activeElement.blur();
+			});
+			window.addEventListener('ionBackButton', (e) => {
+				const component = getActiveComponent(this);
+				if (component.$router.history.index > 0) component.$router.history.go(-1); else App.exitApp();
+				e.stopPropagation();
+			}, true);
+		},
+		data: {
+			bookmarkURL: require('@fortawesome/fontawesome-free/svgs/solid/bookmark.svg'),
+		},
+		components: {
+			news,
+			saved,
+			settings,
+		},
+		provide() {
+			return {
+				API: new WPAPI({ endpoint: 'https://shakerite.com/wp-json' }),
+			};
+		},
+
+	}).$mount('#app');
+});
