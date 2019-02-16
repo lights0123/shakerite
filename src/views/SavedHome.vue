@@ -10,7 +10,7 @@
 		<ion-refresher slot="fixed" :disabled="articles.length === 0" @ionRefresh="refresh" ref="refresh">
 			<ion-refresher-content></ion-refresher-content>
 		</ion-refresher>
-		<ion-searchbar animated="true" show-cancel-button debounce="500"/>
+		<!--<ion-searchbar animated="true" show-cancel-button debounce="500"/>-->
 		<div class="center">
 			<ion-spinner v-if="articles.length === 0 && noArticles"></ion-spinner>
 		</div>
