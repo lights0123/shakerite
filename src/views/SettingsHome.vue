@@ -9,11 +9,11 @@
 		</ion-header>
 		<ion-content class="content outer-content">
 			<br/>
-			<ion-list>
+			<!--<ion-list>
 				<ion-item detail @click="true || $router.push('/alerts')">
 					<ion-label>Alerts</ion-label>
 				</ion-item>
-			</ion-list>
+			</ion-list>-->
 			<ion-list-header>
 				<ion-label>Follow Us</ion-label>
 			</ion-list-header>
@@ -64,7 +64,7 @@
 						<ion-radio slot="end" value="inapp"></ion-radio>
 					</ion-item>
 					<ion-item>
-						<ion-label>System Browser</ion-label>
+						<ion-label>{{ $isIOS ? 'Safari' : 'System Browser' }}</ion-label>
 						<ion-radio slot="end" value="system"></ion-radio>
 					</ion-item>
 				</ion-radio-group>
