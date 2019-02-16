@@ -18,7 +18,7 @@
 					<ion-icon slot="icon-only" name="share"></ion-icon>
 				</ion-button>
 			</ion-buttons>
-			<ion-title><img src="../images/shakerite.png" class="logo" alt="Shakerite logo"/></ion-title>
+			<ion-title><logo/></ion-title>
 		</ion-toolbar>
 	</ion-header>
 	<ion-content class="content" :style="cssProps">
@@ -48,10 +48,11 @@ import { Article, Media } from '../helpers/api';
 import sanitizeHtml from 'sanitize-html';
 import SaveScroll from '../mixins/SaveScroll';
 import { SET_SAVED_ARTICLES } from '../store/actions';
+import Logo from '@/components/Logo.vue';
 
 const { Share } = Plugins;
 export default {
-	components: { Media: MediaComponent },
+	components: { Media: MediaComponent, Logo },
 	props: ['id'],
 	name: 'Article',
 	mixins: [SaveScroll],
@@ -118,16 +119,13 @@ export default {
 						a: sanitizeHtml.simpleTransform('a', { target: '_blank' }),
 					},
 				});
-				console.log(article.content, content);
 				const parser = new DOMParser().parseFromString(content, 'text/html');
 				const images = {};
 				parser.querySelectorAll('a').forEach((e) => {
 					if (e.children.length !== 1 || e.children[0].tagName !== 'IMG') {
 						const link = document.createElement('smart-link');
 						link.setAttribute('href', e.getAttribute('href'));
-						console.log(e.innerHTML);
 						link.innerHTML = e.innerHTML;
-						console.log(link);
 						e.replaceWith(link);
 						return;
 					}
@@ -146,13 +144,7 @@ export default {
 					},
 					components: { Media: MediaComponent, SmartLink: A },
 					template: parser.body.innerHTML,
-					methods: {
-						open(e) {
-							console.log(e);
-						},
-					},
 				};
-				console.log(content.template);
 				let categories = [];
 				article.categories.forEach((category) => {
 					categories.push(category.fetch());

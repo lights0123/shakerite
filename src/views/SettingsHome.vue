@@ -4,7 +4,7 @@
 	<ion-page class="ion-page">
 		<ion-header>
 			<ion-toolbar>
-				<ion-title><img src="../images/shakerite.png" class="logo" alt="Shakerite logo"/></ion-title>
+				<ion-title><logo/></ion-title>
 			</ion-toolbar>
 		</ion-header>
 		<ion-content class="content outer-content">
@@ -106,9 +106,11 @@
 import SaveScroll from '../mixins/SaveScroll';
 import { SET_BROWSER } from '../store/actions';
 import openLink from '../helpers/link';
+import Logo from '@/components/Logo';
 
 export default {
 	name: 'SettingsHome',
+	components: { Logo },
 	mixins: [SaveScroll],
 	data() {
 		return {

@@ -45,11 +45,15 @@ async function initCapacitor() {
 
 	// Set network checks
 	Network.getStatus()
-		  .then(s => (Vue.prototype.$networkStatus = s))
+		  .then((s) => {
+			  Vue.prototype.$networkStatus = s;
+		  })
 		  .catch(helpers.err);
 
 	// Listen to network changes
-	Network.addListener('networkStatusChange', s => (Vue.prototype.$networkStatus = s)).catch(
+	Network.addListener('networkStatusChange', (s) => {
+		Vue.prototype.$networkStatus = s;
+	}).catch(
 		  helpers.err,
 	);
 }
@@ -61,7 +65,7 @@ function getActiveComponent(app) {
 
 // Navigate through a swipe gesture
 async function initNavGesture(app) {
-	const gesture = await import('@ionic/core/dist/collection/utils/gesture/gesture');
+	const gesture = await import('@ionic/core/dist/collection/utils/gesture');
 
 	gesture
 		  .createGesture({

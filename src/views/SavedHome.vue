@@ -12,7 +12,7 @@
 		</ion-refresher>
 		<!--<ion-searchbar animated="true" show-cancel-button debounce="500"/>-->
 		<div class="center">
-			<ion-spinner v-if="articles.length === 0 && noArticles"></ion-spinner>
+			<ion-spinner v-if="articles.length === 0 && hasArticles"></ion-spinner>
 		</div>
 		<article-preview v-for="(article, index) in articles"
 		                 @click.native="$router.push('/article/' + article.id)" :article="article"

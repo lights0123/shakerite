@@ -8,7 +8,9 @@
 					<span v-if="$isIOS">Back</span>
 				</ion-button>
 			</ion-buttons>
-			<ion-title><img src="../images/shakerite.png" class="logo" alt="Shakerite logo"/></ion-title>
+			<ion-title>
+				<logo/>
+			</ion-title>
 		</ion-toolbar>
 	</ion-header>
 	<ion-content class="content">
@@ -271,9 +273,11 @@
 </template>
 
 <script>
+import Logo from '@/components/Logo';
 
 export default {
 	name: 'About',
+	components: { Logo },
 };
 </script>
 

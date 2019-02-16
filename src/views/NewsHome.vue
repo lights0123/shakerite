@@ -2,7 +2,9 @@
 <ion-page class="ion-page">
 	<ion-header>
 		<ion-toolbar>
-			<ion-title><img src="../images/shakerite.png" class="logo" alt="Shakerite logo"/></ion-title>
+			<ion-title>
+				<logo/>
+			</ion-title>
 		</ion-toolbar>
 		<CategoryChooser :categories="categories" v-model="selCategory"/>
 	</ion-header>
@@ -35,11 +37,14 @@ import ArticlePreview from '../components/ArticlePreview';
 import { ADD_ARTICLE, SET_ARTICLES, SET_CATEGORY } from '../store/mutations';
 import { defaultCategories } from '../helpers/categories';
 import { Search } from '../helpers/api';
+import Logo from '@/components/Logo';
 
 let s;
 export default {
 	name: 'NewsHome',
-	components: { ArticlePreview, Media, CategoryChooser },
+	components: {
+		Logo, ArticlePreview, Media, CategoryChooser,
+	},
 	mixins: [SaveScroll],
 	data() {
 		return {

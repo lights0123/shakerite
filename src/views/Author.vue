@@ -8,7 +8,7 @@
 					<span v-if="$isIOS">Back</span>
 				</ion-button>
 			</ion-buttons>
-			<ion-title><img src="../images/shakerite.png" class="logo" alt="Shakerite logo"/></ion-title>
+			<ion-title><logo/></ion-title>
 		</ion-toolbar>
 	</ion-header>
 	<ion-content class="outer-content">
@@ -33,9 +33,10 @@ import ArticlePreview from '../components/ArticlePreview';
 import MediaComponent from '../components/Media.vue';
 import { Search } from '../helpers/api';
 import SaveScroll from '../mixins/SaveScroll';
+import Logo from '@/components/Logo';
 
 export default {
-	components: { ArticlePreview, Media: MediaComponent },
+	components: { Logo, ArticlePreview, Media: MediaComponent },
 	props: ['name', 'from'],
 	name: 'Author',
 	mixins: [SaveScroll],
