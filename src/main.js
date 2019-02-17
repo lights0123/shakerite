@@ -15,6 +15,7 @@ import settings from './views/Settings.vue';
 import saved from './views/Saved.vue';
 import news from './views/News.vue';
 import helpers from './helpers';
+import returnBody from './helpers/WPResponse';
 // import Ionic from '@ionic/vue';
 // import { HTTP } from '@ionic-native/http';
 const {
@@ -30,6 +31,11 @@ Vue.use(Vuex);
 Vue.use(VueShave, { character: '…' });
 Vue.use(AsyncComputed);
 window.Browser = Browser;
+const isNative = Capacitor.platform !== 'web';
+let deviceReady = false;
+document.addEventListener('deviceready', () => {
+	deviceReady = true;
+}, false);
 
 // Initial Capacitor calls
 async function initCapacitor() {
@@ -53,9 +59,7 @@ async function initCapacitor() {
 	// Listen to network changes
 	Network.addListener('networkStatusChange', (s) => {
 		Vue.prototype.$networkStatus = s;
-	}).catch(
-		  helpers.err,
-	);
+	});
 }
 
 function getActiveComponent(app) {
@@ -96,6 +100,8 @@ initCapacitor();
 Vue.prototype.$helpers = helpers;
 // Create a Vue app instance
 window.Vue = Vue;
+window.WPAPI = WPAPI;
+window.returnBody = returnBody;
 const { default: store, getData } = require('./store/store');
 getData(store).then(() => {
 	window.vue = new Vue({
@@ -126,8 +132,32 @@ getData(store).then(() => {
 			settings,
 		},
 		provide() {
+			let transport = {};
+			if (isNative) {
+				transport = {
+					get(wpreq, cb) {
+						const url = wpreq.toString();
+						console.log(url);
+						return new Promise((resolve, reject) => {
+							function req() {
+								window.cordova.plugin.http.get(url, {}, {}, (res) => {
+									const body = returnBody(wpreq, res);
+									if (cb && typeof cb === 'function') cb(null, body);
+									resolve(body);
+								}, (err) => {
+									if (cb && typeof cb === 'function') cb(err);
+									reject(err);
+								});
+							}
+
+							if (deviceReady) req();
+							else document.addEventListener('deviceready', req, false);
+						});
+					},
+				};
+			}
 			return {
-				API: new WPAPI({ endpoint: 'https://shakerite.com/wp-json' }),
+				API: new WPAPI({ endpoint: 'https://shakerite.com/wp-json', transport }),
 			};
 		},
 
