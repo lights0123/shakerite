@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.shakerite.app">
+    package="com.shakeritemobile.com">
 
     <!-- Permissions -->
 
@@ -30,7 +30,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name="com.shakerite.app.MainActivity"
+            android:name="com.shakeritemobile.com.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBarLaunch">

@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Shakerite</string>
     <string name="title_activity_main">Shakerite</string>
-    <string name="package_name">com.shakerite.app</string>
-    <string name="fileprovider_authority">com.shakerite.app.fileprovider</string>
-    <string name="custom_url_scheme">com.shakerite.app</string>
+    <string name="package_name">com.shakeritemobile.com</string>
+    <string name="fileprovider_authority">com.shakeritemobile.com.fileprovider</string>
+    <string name="custom_url_scheme">com.shakeritemobile.com</string>
 </resources>

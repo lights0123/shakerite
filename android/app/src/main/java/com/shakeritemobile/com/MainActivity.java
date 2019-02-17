@@ -1,4 +1,4 @@
-package com.shakerite.app;
+package com.shakeritemobile.com;
 
 import android.os.Bundle;
 
