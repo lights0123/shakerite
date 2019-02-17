@@ -18,22 +18,22 @@
 				<ion-label>Follow Us</ion-label>
 			</ion-list-header>
 			<ion-list>
-				<ion-item detail @click="openLink('https://twitter.com/TheShakerite')">
+				<ion-item detail @click="openLinkGlobal('https://twitter.com/TheShakerite')">
 					<ion-icon name="logo-twitter" slot="start" color="twitter"/>
 					<ion-label>Follow us on Twitter</ion-label>
 				</ion-item>
-				<ion-item detail @click="openLink('https://www.facebook.com/TheShakerite')">
+				<ion-item detail @click="openLinkGlobal('https://www.facebook.com/TheShakerite')">
 					<ion-icon name="logo-facebook" slot="start" color="facebook"/>
 					<ion-label>Visit us on Facebook</ion-label>
 				</ion-item>
-				<ion-item detail @click="openLink('https://soundcloud.com/shakerite-podcast')">
+				<ion-item detail @click="openLinkGlobal('https://soundcloud.com/shakerite-podcast')">
 					<ion-icon :src="logo.soundcloud" slot="start" color="soundcloud"/>
 					<ion-label>Follow us on Soundcloud</ion-label>
 				</ion-item>
 				<ion-item
 					  v-if="$isIOS"
 					  detail
-					  @click="openLink('https://itunes.apple.com/us/podcast/the-shake/id1378107204?mt=2&app=podcast')">
+					  @click="openLinkGlobal('https://itunes.apple.com/us/podcast/the-shake/id1378107204?mt=2&app=podcast')">
 					<ion-icon :src="logo.podcast" slot="start"/>
 					<ion-label>Listen on Apple Podcasts</ion-label>
 				</ion-item>
