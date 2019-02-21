@@ -1,18 +1,9 @@
 {
-	"name": "@modus/beep",
-	"version": "0.1.0",
-	"description": "A security oriented project showcasing the power of Ionic4 and Vuejs",
-	"author": "Michael Tintiuc <michael.tintiuc@moduscreate.com>",
-	"user": "michaeltintiuc",
+	"name": "shakerite",
+	"version": "3.0.0",
+	"description": "The app for the Shakerite",
+	"author": "Ben Schattinger <developer@lights0123.com>",
 	"license": "MIT",
-	"repository": "github:ModusCreateOrg/beep",
-	"bugs": {
-		"url": "https://github.com/ModusCreateOrg/beep/issues"
-	},
-	"engines": {
-		"node": ">= 8.0.0",
-		"npm": ">= 5.0.0"
-	},
 	"scripts": {
 		"serve": "vue-cli-service serve",
 		"build": "vue-cli-service build",
@@ -34,12 +25,10 @@
 		"@capacitor/ios": "1.0.0-beta.13",
 		"@fortawesome/fontawesome-free": "^5.5.0",
 		"@fortawesome/fontawesome-svg-core": "^1.2.8",
-		"@fortawesome/free-brands-svg-icons": "^5.5.0",
 		"@fortawesome/free-regular-svg-icons": "^5.5.0",
 		"@fortawesome/free-solid-svg-icons": "^5.5.0",
 		"@fortawesome/vue-fontawesome": "^0.1.2",
 		"@ionic-native/core": "^5.0.0-beta.22",
-		"@ionic-native/http": "^5.0.0-beta.22",
 		"@ionic-native/keyboard": "^5.0.0-beta.22",
 		"@ionic/core": "4.0.1",
 		"@modus/ionic-vue": "1.1.2",
