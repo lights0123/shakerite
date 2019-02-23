@@ -10,3 +10,7 @@ target 'App' do
   pod 'CordovaPlugins', :path => '../capacitor-cordova-ios-plugins'
   # Do not delete
 end
+
+target 'Screenshot' do
+	pod 'SimulatorStatusMagic'
+end
