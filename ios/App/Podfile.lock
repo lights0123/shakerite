@@ -4,11 +4,17 @@ PODS:
   - CapacitorCordova (1.0.0-beta.12)
   - CordovaPlugins (1.0.0-beta.13):
     - CapacitorCordova
+  - SimulatorStatusMagic (2.4.1)
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - CordovaPlugins (from `../capacitor-cordova-ios-plugins`)
+  - SimulatorStatusMagic
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - SimulatorStatusMagic
 
 EXTERNAL SOURCES:
   Capacitor:
@@ -22,7 +28,8 @@ SPEC CHECKSUMS:
   Capacitor: f5ce5ee2dbb9940f5dece216bf1a65d6be0aabde
   CapacitorCordova: 82dd8d03ba4d49101b91e3fbbc7bec8adba6bea0
   CordovaPlugins: ca811756aad873e9108c05204441674dfafc7e2e
+  SimulatorStatusMagic: 28d4a9d1a500ac7cea0b2b5a43c1c6ddb40ba56c
 
-PODFILE CHECKSUM: 78ac319422efe1338956118f7aa7dc29bef1ae28
+PODFILE CHECKSUM: 0c9fc09dc6eb6db93dcb82656bcaee2c17bef2b6
 
 COCOAPODS: 1.6.0
