@@ -16,7 +16,12 @@
 	<ion-content class="content">
 		<div class="padding">
 			<ion-text>
+				<h1>Content</h1>
+				All content shown in the app is Copyright © {{year}} The Shakerite, all rights reserved, unless
+				otherwise noted.
 
+				<h1>App</h1>
+				<p>The Shakerite app is Copyright © {{year}} Ben Schattinger, released under the following license:</p>
 				<h1 id="mozilla-public-license-version-2.0">Mozilla Public License<br>Version 2.0</h1>
 				<h2 id="definitions">1. Definitions</h2>
 				<dl>
@@ -278,6 +283,11 @@ import Logo from '@/components/Logo';
 export default {
 	name: 'About',
 	components: { Logo },
+	computed: {
+		year() {
+			return (new Date()).getFullYear();
+		},
+	},
 };
 </script>
 
