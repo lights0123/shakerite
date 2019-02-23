@@ -36,7 +36,9 @@ export default {
 			return shortDate(this.article.date);
 		},
 		author() {
-			return Array.isArray(this.article.writers) ? `by ${arrayToSentence(this.article.writers)}` : '';
+			if (!Array.isArray(this.article.writers)) return '';
+			const writers = this.article.writers.filter(writer => writer !== '');
+			return `by ${arrayToSentence(writers)}`;
 		},
 	},
 };

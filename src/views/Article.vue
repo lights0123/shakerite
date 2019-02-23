@@ -18,7 +18,9 @@
 					<ion-icon slot="icon-only" name="share"></ion-icon>
 				</ion-button>
 			</ion-buttons>
-			<ion-title><logo/></ion-title>
+			<ion-title>
+				<logo/>
+			</ion-title>
 		</ion-toolbar>
 	</ion-header>
 	<ion-content class="content" :style="cssProps">
@@ -150,13 +152,15 @@ export default {
 					categories.push(category.fetch());
 				});
 				categories = await Promise.all(categories);
+				let writers = article.writers || [];
+				writers = writers.filter(writer => writer !== '');
 				return {
 					media: article.media,
 					title: article.title,
 					subtitle: article.subtitle,
 					content,
 					categories,
-					writers: article.writers,
+					writers,
 					excerpt: article.excerpt,
 				};
 			},
