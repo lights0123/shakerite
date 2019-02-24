@@ -632,6 +632,12 @@
   dependencies:
     "@fortawesome/fontawesome-common-types" "^0.2.12"
 
+"@fortawesome/free-brands-svg-icons@^5.5.0":
+  version "5.6.3"
+  resolved "https://registry.yarnpkg.com/@fortawesome/free-brands-svg-icons/-/free-brands-svg-icons-5.6.3.tgz#f4ac2abab83822b341b3b7257c38b9da12ca7395"
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.12"
+
 "@fortawesome/free-regular-svg-icons@^5.5.0":
   version "5.6.3"
   resolved "https://registry.yarnpkg.com/@fortawesome/free-regular-svg-icons/-/free-regular-svg-icons-5.6.3.tgz#b0a44d665c347b56d064a37962e81e8d8a8f2624"
@@ -659,6 +665,12 @@
 "@ionic-native/core@^5.0.0-beta.22":
   version "5.0.0-beta.23"
   resolved "https://registry.yarnpkg.com/@ionic-native/core/-/core-5.0.0-beta.23.tgz#47582886bc14a82e20e18489d758ee7d50e87d41"
+  dependencies:
+    "@types/cordova" latest
+
+"@ionic-native/http@^5.0.0-beta.22":
+  version "5.0.0-beta.23"
+  resolved "https://registry.yarnpkg.com/@ionic-native/http/-/http-5.0.0-beta.23.tgz#61303fac8c031cfc76852327b6d9acaed163224b"
   dependencies:
     "@types/cordova" latest
 
