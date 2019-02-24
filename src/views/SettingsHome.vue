@@ -4,7 +4,9 @@
 	<ion-page class="ion-page">
 		<ion-header>
 			<ion-toolbar>
-				<ion-title><logo/></ion-title>
+				<ion-title>
+					<logo/>
+				</ion-title>
 			</ion-toolbar>
 		</ion-header>
 		<ion-content class="content outer-content">
@@ -81,7 +83,7 @@
 				<ion-item detail @click="openLinkGlobal('mailto:shakeriteadviser@gmail.com?subject=Shakerite%20App')">
 					<ion-label>Contact Us</ion-label>
 				</ion-item>
-				<ion-item detail>
+				<ion-item detail @click="rate">
 					<ion-label>Rate us on the App Store</ion-label>
 				</ion-item>
 			</ion-list>
@@ -126,6 +128,9 @@ export default {
 		},
 		openLinkGlobal(url) {
 			window.open(url, '_system');
+		},
+		rate() {
+			window.open(`itms-apps://itunes.apple.com/app/viewContentsUserReviews/id508783468?action=write-review`, '_system');
 		},
 	},
 	computed: {

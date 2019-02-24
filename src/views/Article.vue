@@ -67,7 +67,7 @@ export default {
 			}).then(p => p.present());
 		},
 		share() {
-			const shareRet = Share.share({
+			Share.share({
 				title: this.article.title,
 				text: this.article.title,
 				url: `https://shakerite.com/?p=${this.id}`,
@@ -98,7 +98,10 @@ export default {
 			},
 			set(state) {
 				if (state) this.$store.dispatch(SET_SAVED_ARTICLES, [...this.$store.state.savedArticles, this.id]);
-				else this.$store.dispatch(SET_SAVED_ARTICLES, this.$store.state.savedArticles.filter(article => article !== this.id));
+				else {
+					const otherArticles = this.$store.state.savedArticles.filter(article => article !== this.id);
+					this.$store.dispatch(SET_SAVED_ARTICLES, otherArticles);
+				}
 			},
 		},
 	},
