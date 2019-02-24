@@ -10,9 +10,9 @@
 		"build:dev": "vue-cli-service build --mode development",
 		"lint": "vue-cli-service lint",
 		"build:android": "npm-run-all build sync:android",
-		"build:ios": "npm-run-all build sync:ios",
+		"build:ios": "npm-run-all build copy:ios",
 		"dev:android": "npm-run-all build:dev sync:android",
-		"dev:ios": "npm-run-all build:dev sync:ios",
+		"dev:ios": "npm-run-all build:dev copy:ios",
 		"copy:android": "npx cap copy android",
 		"copy:ios": "npx cap copy ios",
 		"sync:android": "npx cap sync android",
@@ -39,6 +39,7 @@
 		"cordova-plugin-inappbrowser": "^3.0.0",
 		"cordova-plugin-ionic-keyboard": "^2.1.3",
 		"he": "^1.2.0",
+		"li": "^1.3.0",
 		"lodash": "^4.17.11",
 		"mdn-polyfills": "^5.14.0",
 		"moment": "^2.22.2",
@@ -54,8 +55,7 @@
 		"vue-router": "^3.0.1",
 		"vue-shave": "^1.0.3",
 		"vuex": "^3.0.1",
-		"wpapi": "^1.1.2",
-		"li": "^1.3.0"
+		"wpapi": "^1.1.2"
 	},
 	"devDependencies": {
 		"@vue/cli-plugin-babel": "^3.0.1",
