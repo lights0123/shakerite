@@ -1,0 +1,5 @@
+Complete redesign! The new app features:
+
+• Infinite scrolling - no longer are you limited to the 10 most recent articles - scroll back as far as the first article.
+• More categories - sort by various categories.
+• Improved interface

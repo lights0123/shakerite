@@ -37,6 +37,8 @@
 		4D388575221F904B00CE62B7 /* Screenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Screenshot.swift; sourceTree = "<group>"; };
 		4D388577221F904B00CE62B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4D38857D221F907700CE62B7 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
+		4D8B8E0622224AF4002B78E2 /* Snapfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; name = Snapfile; path = fastlane/Snapfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		4D8B8E0722224C6B002B78E2 /* Framefile.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = Framefile.json; path = fastlane/screenshots/Framefile.json; sourceTree = SOURCE_ROOT; };
 		50379B222058CBB4000EE86E /* capacitor.config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = capacitor.config.json; sourceTree = "<group>"; };
 		504EC3041FED79650016851F /* App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = App.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		504EC3071FED79650016851F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -87,6 +89,8 @@
 				4D38857D221F907700CE62B7 /* SnapshotHelper.swift */,
 				4D388575221F904B00CE62B7 /* Screenshot.swift */,
 				4D388577221F904B00CE62B7 /* Info.plist */,
+				4D8B8E0622224AF4002B78E2 /* Snapfile */,
+				4D8B8E0722224C6B002B78E2 /* Framefile.json */,
 			);
 			path = Screenshot;
 			sourceTree = "<group>";
@@ -169,7 +173,6 @@
 				504EC3011FED79650016851F /* Frameworks */,
 				504EC3021FED79650016851F /* Resources */,
 				9592DBEFFC6D2A0C8D5DEB22 /* [CP] Embed Pods Frameworks */,
-				B17A222EA74B0BB45C61B08C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
