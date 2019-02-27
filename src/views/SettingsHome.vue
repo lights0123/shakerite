@@ -109,6 +109,7 @@ import SaveScroll from '../mixins/SaveScroll';
 import { SET_BROWSER } from '../store/actions';
 import openLink from '../helpers/link';
 import Logo from '@/components/Logo';
+import { review } from '../helpers/review';
 
 export default {
 	name: 'SettingsHome',
@@ -130,7 +131,7 @@ export default {
 			window.open(url, '_system');
 		},
 		rate() {
-			window.open(`itms-apps://itunes.apple.com/app/viewContentsUserReviews/id508783468?action=write-review`, '_system');
+			review();
 		},
 	},
 	computed: {

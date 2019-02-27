@@ -16,8 +16,9 @@ import saved from './views/Saved.vue';
 import news from './views/News.vue';
 import helpers from './helpers';
 import returnBody from './helpers/WPResponse';
-// import Ionic from '@ionic/vue';
-// import { HTTP } from '@ionic-native/http';
+import { enableReviews } from './helpers/review';
+
+enableReviews();
 const {
 	SplashScreen, Network, StatusBar, Browser, App,
 } = Plugins;
@@ -46,15 +47,15 @@ async function initCapacitor() {
 	// Set status-bar background and style
 	window.StatusBar = StatusBar;
 	window.StatusBarStyle = StatusBarStyle;
-	StatusBar.setBackgroundColor({ color: '#ffffff' }).catch(helpers.err);
-	StatusBar.setStyle({ style: StatusBarStyle.Light }).catch(helpers.err);
+	StatusBar.setBackgroundColor({ color: '#ffffff' }).catch(console.error);
+	StatusBar.setStyle({ style: StatusBarStyle.Light }).catch(console.error);
 
 	// Set network checks
 	Network.getStatus()
 		  .then((s) => {
 			  Vue.prototype.$networkStatus = s;
 		  })
-		  .catch(helpers.err);
+		  .catch(console.error);
 
 	// Listen to network changes
 	Network.addListener('networkStatusChange', (s) => {
@@ -108,7 +109,7 @@ getData(store).then(() => {
 		// router,
 		store,
 		mounted() {
-			SplashScreen.hide().catch(this.$helpers.err);
+			SplashScreen.hide().catch(this.$console.error);
 			if (Capacitor.platform === 'ios') initNavGesture(this);
 			window.addEventListener('keyboardWillShow', (event) => {
 				if (event.keyboardHeight) this.$refs.tabbar.classList.add('hidden');

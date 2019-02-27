@@ -1,21 +1,16 @@
 module.exports = {
 	root: true,
-	parser: 'vue-eslint-parser',
-	parserOptions: {
-		parser: 'babel-eslint',
-		sourceType: 'module',
-	},
 	env: {
 		browser: true,
+		node: true
 	},
-	extends: ['plugin:vue/essential', 'airbnb-base'],
-	globals: {
-		__static: true,
+	parserOptions: {
+		parser: 'typescript-eslint-parser',
+		sourceType: 'module',
 	},
-	plugins: [
-		'vue', 'promise',
-	],
-	'rules': {
+	extends: ['plugin:vue/recommended', 'airbnb-base'],
+	plugins: ['vue'],
+	rules: {
 		'global-require': 0,
 		'import/no-unresolved': 0,
 		'no-param-reassign': 0,
@@ -25,10 +20,29 @@ module.exports = {
 		'no-multi-assign': 0,
 		'indent': ['error', 'tab'],
 		'no-tabs': 0,
-		'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-		'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-		'max-len': ['error', { 'code': 120 }],
-		'no-mixed-spaces-and-tabs': 0,
-		'no-underscore-dangle': 0,
-	},
+		'no-console': 'off',
+		'no-debugger': 'off',
+		'vue/html-indent': ['error', 'tab', {
+			'attribute': 1,
+			'baseIndent': 1,
+			'closeBracket': 0,
+			'alignAttributesVertically': true,
+			'ignores': []
+		}],
+		'vue/component-name-in-template-casing': ['error', 'kebab-case'],
+		'max-len': ['error', 140],
+		'no-plusplus': 0,
+		'class-methods-use-this': 0,
+		'vue/max-attributes-per-line': ['error', {
+			'singleline': 3,
+			'multiline': {
+				'max': 1,
+				'allowFirstLine': true
+			}
+		}],
+		'vue/singleline-html-element-content-newline': 0,
+		'strict': 0,
+		'lines-between-class-members': ["error", "always", { exceptAfterSingleLine: true }],
+		'no-unused-vars': 0,
+	}
 };
