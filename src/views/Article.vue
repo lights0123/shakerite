@@ -1,43 +1,49 @@
 <template>
-<ion-page class="ion-page">
-	<ion-header>
-		<ion-toolbar>
-			<ion-buttons slot="start">
-				<ion-button @click="$router.back()">
-					<ion-icon name="arrow-back"></ion-icon>
-				</ion-button>
-				<ion-button @click="saved = !saved">
-					<font-awesome-icon :icon="[saved ? 'fas' : 'far', 'bookmark']" size="lg"/>
-				</ion-button>
-			</ion-buttons>
-			<ion-buttons slot="primary">
-				<ion-button @click="openFonts">
-					<font-awesome-icon icon="font" size="lg"/>
-				</ion-button>
-				<ion-button @click="share">
-					<ion-icon slot="icon-only" name="share"></ion-icon>
-				</ion-button>
-			</ion-buttons>
-			<ion-title>
-				<logo/>
-			</ion-title>
-		</ion-toolbar>
-	</ion-header>
-	<ion-content class="content" :style="cssProps">
-		<small class="categories" v-if="article.categories"><span v-for="category in article.categories"
-		                                                          :key="category.id">{{category.name}}</span>
-		</small>
-		<h1>{{article.title}}</h1>
-		<h2 v-if="article.subtitle">{{article.subtitle}}</h2>
-		<small v-if="article.writers"><span v-for="writer in article.writers" :key="writer"
-		                                    class="author"><router-link
-			  :to="`/author/${writer}/${id}`">{{writer}}</router-link></span></small>
-		<media :media="article.media"/>
-		<div class="article">
-			<component :is="article.content"/>
-		</div>
-	</ion-content>
-</ion-page>
+	<ion-page class="ion-page">
+		<ion-header>
+			<ion-toolbar>
+				<ion-buttons slot="start">
+					<ion-button @click="$router.back()">
+						<ion-icon name="arrow-back" />
+					</ion-button>
+					<ion-button @click="saved = !saved">
+						<font-awesome-icon :icon="[saved ? 'fas' : 'far', 'bookmark']" size="lg" />
+					</ion-button>
+				</ion-buttons>
+				<ion-buttons slot="primary">
+					<ion-button @click="openFonts">
+						<font-awesome-icon icon="font" size="lg" />
+					</ion-button>
+					<ion-button @click="share">
+						<ion-icon slot="icon-only" name="share" />
+					</ion-button>
+				</ion-buttons>
+				<ion-title>
+					<logo />
+				</ion-title>
+			</ion-toolbar>
+		</ion-header>
+		<ion-content class="content" :style="cssProps">
+			<small v-if="article.categories" class="categories"><span v-for="category in article.categories"
+			                                                          :key="category.id"
+			>{{ category.name }}</span>
+			</small>
+			<h1>{{ article.title }}</h1>
+			<h2 v-if="article.subtitle">{{ article.subtitle }}</h2>
+			<small v-if="article.writers">
+				<span v-for="writer in article.writers"
+				      :key="writer"
+				      class="author"
+				>
+					<router-link :to="`/author/${writer}/${id}`">{{ writer }}</router-link>
+				</span>
+			</small>
+			<media :media="article.media" />
+			<div class="article">
+				<component :is="article.content" />
+			</div>
+		</ion-content>
+	</ion-page>
 </template>
 
 <script>
@@ -54,10 +60,10 @@ import Logo from '@/components/Logo.vue';
 
 const { Share } = Plugins;
 export default {
-	components: { Media: MediaComponent, Logo },
-	props: ['id'],
 	name: 'Article',
+	components: { Media: MediaComponent, Logo },
 	mixins: [SaveScroll],
+	props: ['id'],
 	methods: {
 		openFonts(event) {
 			this.$ionic.popoverController.create({

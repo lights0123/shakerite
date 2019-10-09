@@ -31,7 +31,7 @@ Vue.use(IonicAPI);
 Vue.use(Vuex);
 Vue.use(VueShave, { character: '…' });
 Vue.use(AsyncComputed);
-window.Browser = Browser;
+
 const isNative = Capacitor.platform !== 'web';
 let deviceReady = false;
 document.addEventListener('deviceready', () => {
@@ -45,8 +45,6 @@ async function initCapacitor() {
 	Vue.prototype.$isIOS = Capacitor.platform === 'ios';
 
 	// Set status-bar background and style
-	window.StatusBar = StatusBar;
-	window.StatusBarStyle = StatusBarStyle;
 	StatusBar.setBackgroundColor({ color: '#ffffff' }).catch(console.error);
 	StatusBar.setStyle({ style: StatusBarStyle.Light }).catch(console.error);
 
@@ -102,14 +100,22 @@ Vue.prototype.$helpers = helpers;
 // Create a Vue app instance
 window.Vue = Vue;
 window.WPAPI = WPAPI;
-window.returnBody = returnBody;
 const { default: store, getData } = require('./store/store');
 getData(store).then(() => {
 	window.vue = new Vue({
 		// router,
 		store,
+		components: {
+			news,
+			saved,
+			settings,
+		},
+		data: {
+			bookmarkURL: require('@fortawesome/fontawesome-free/svgs/solid/bookmark.svg'),
+		},
 		mounted() {
-			SplashScreen.hide().catch(this.$console.error);
+			console.log('mounted!');
+			SplashScreen.hide().catch(console.error);
 			if (Capacitor.platform === 'ios') initNavGesture(this);
 			window.addEventListener('keyboardWillShow', (event) => {
 				if (event.keyboardHeight) this.$refs.tabbar.classList.add('hidden');
@@ -118,19 +124,23 @@ getData(store).then(() => {
 				this.$refs.tabbar.classList.remove('hidden');
 				document.activeElement.blur();
 			});
+			let activePopover;
+			document.addEventListener('ionPopoverDidPresent', ({ target }) => {
+				activePopover = target;
+			});
+			document.addEventListener('ionPopoverDidDismiss', () => {
+				activePopover = undefined;
+			});
 			window.addEventListener('ionBackButton', (e) => {
-				const component = getActiveComponent(this);
-				if (component.$router.history.index > 0) component.$router.history.go(-1); else App.exitApp();
+				if (activePopover) {
+					activePopover.dismiss();
+				} else {
+					const component = getActiveComponent(this);
+					console.log(component.$router.history.index);
+					if (component.$router.history.index > 0) component.$router.history.go(-1); else App.exitApp();
+				}
 				e.stopPropagation();
 			}, true);
-		},
-		data: {
-			bookmarkURL: require('@fortawesome/fontawesome-free/svgs/solid/bookmark.svg'),
-		},
-		components: {
-			news,
-			saved,
-			settings,
 		},
 		provide() {
 			let transport = {};

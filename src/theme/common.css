@@ -67,6 +67,12 @@ ion-title {
 	text-align: center;
 }
 
+.ios .bookmark-icon {
+	margin-top: 6px;
+	padding-bottom: 2px;
+	height: 26px;
+}
+
 .md ion-title img {
 	max-width: 70%;
 }
@@ -102,7 +108,7 @@ html {
 }
 
 /* iPhone support
- * first selector: X/Xs/X-MAX 
+ * first selector: X/Xs/X-MAX
  * second selector: XR
  */
 @media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3), only screen and (min-device-width: 414px) and (max-device-width: 767px) and (-webkit-min-device-pixel-ratio: 2) {

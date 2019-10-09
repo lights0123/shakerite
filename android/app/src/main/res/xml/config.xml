@@ -1,8 +1,14 @@
 <?xml version='1.0' encoding='utf-8'?>
   <widget version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <access origin="*" />
   
+  <feature name="LaunchReview">
+    <param name="android-package" value="uk.co.workingedge.phonegap.plugin.LaunchReview"/>
+  </feature>
+
+
   <feature name="CordovaHttpPlugin">
-    <param name="android-package" value="com.synconset.cordovahttp.CordovaHttpPlugin"/>
+    <param name="android-package" value="com.silkimen.cordovahttp.CordovaHttpPlugin"/>
   </feature>
 
 
@@ -14,11 +20,6 @@
 
   <feature name="InAppBrowser">
     <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser"/>
-  </feature>
-
-
-  <feature name="Keyboard">
-    <param name="android-package" value="io.ionic.keyboard.IonicKeyboard" onload="true"/>
   </feature>
 
   </widget>

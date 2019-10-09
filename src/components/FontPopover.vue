@@ -1,35 +1,37 @@
 <template>
-<ion-list lines="full">
-	<ion-grid>
-		<ion-row>
-			<ion-col>
-				<ion-item class="text-button text-smaller" @click="decreaseFont">
-					<div>A</div>
-				</ion-item>
-			</ion-col>
-			<ion-col>
-				<ion-item class="text-button text-larger" @click="increaseFont">
-					<div>A</div>
-				</ion-item>
-			</ion-col>
-		</ion-row>
-		<ion-row class="row-dots">
-			<ion-col v-for="dot in dots" @click="selectedColor = dot">
-				<div class="dot" :style="{ 'background-color': dot.bg }"
-				     :class="{ 'selected': selectedColor.fg === dot.fg && selectedColor.bg === dot.bg }"></div>
-			</ion-col>
-		</ion-row>
-	</ion-grid>
+	<ion-list lines="full">
+		<ion-grid>
+			<ion-row>
+				<ion-col>
+					<ion-item class="text-button text-smaller" @click="decreaseFont">
+						<div>A</div>
+					</ion-item>
+				</ion-col>
+				<ion-col>
+					<ion-item class="text-button text-larger" @click="increaseFont">
+						<div>A</div>
+					</ion-item>
+				</ion-col>
+			</ion-row>
+			<ion-row class="row-dots">
+				<ion-col v-for="dot in dots" @click="selectedColor = dot">
+					<div class="dot"
+						:style="{ 'background-color': dot.bg }"
+						:class="{ 'selected': selectedColor.fg === dot.fg && selectedColor.bg === dot.bg }"
+					/>
+				</ion-col>
+			</ion-row>
+		</ion-grid>
 
-	<ion-radio-group @ionChange="selectedFont = $event.target.value" name="font-family" :value="selectedFont">
-		<ion-item v-for="font in fonts">
-			<ion-label :style="{ '--ion-font-family': font.name, 'font-weight': font.weight }">
-				{{font.displayName}}
-			</ion-label>
-			<ion-radio :value="font.displayName"></ion-radio>
-		</ion-item>
-	</ion-radio-group>
-</ion-list>
+		<ion-radio-group name="font-family" :value="selectedFont" @ionChange="selectedFont = $event.target.value">
+			<ion-item v-for="font in fonts">
+				<ion-label :style="{ '--ion-font-family': font.name, 'font-weight': font.weight }">
+					{{ font.displayName }}
+				</ion-label>
+				<ion-radio :value="font.displayName" />
+			</ion-item>
+		</ion-radio-group>
+	</ion-list>
 </template>
 
 <script>
@@ -45,18 +47,6 @@ export default {
 				{ bg: '#4c4b50', fg: '#fff' },
 				{ bg: '#000', fg: '#fff' }],
 		};
-	},
-	methods: {
-		decreaseFont() {
-			let newSize = this.fontSize - 2;
-			if (newSize < 10) newSize = 10;
-			this.fontSize = newSize;
-		},
-		increaseFont() {
-			let newSize = this.fontSize + 2;
-			if (newSize > 30) newSize = 30;
-			this.fontSize = newSize;
-		},
 	},
 	computed: {
 		fonts() {
@@ -76,17 +66,16 @@ export default {
 					{ displayName: 'Open Sans', name: 'Open Sans' },
 					{ displayName: 'Open Sans Light', name: 'Open Sans', weight: 300 },
 				];
-			} else {
-				return [
-					{ displayName: 'Sans Serif', name: 'sans-serif' },
-					{ displayName: 'Serif', name: 'serif' },
-					{ displayName: 'Zilla Slab', name: 'Zilla Slab' },
-					{ displayName: 'Zilla Slab Light', name: 'Zilla Slab', weight: 300 },
-					{ displayName: 'Roboto', name: 'Roboto' },
-					{ displayName: 'Open Sans', name: 'Open Sans' },
-					{ displayName: 'Open Sans Light', name: 'Open Sans', weight: 300 },
-				];
 			}
+			return [
+				{ displayName: 'Sans Serif', name: 'sans-serif' },
+				{ displayName: 'Serif', name: 'serif' },
+				{ displayName: 'Zilla Slab', name: 'Zilla Slab' },
+				{ displayName: 'Zilla Slab Light', name: 'Zilla Slab', weight: 300 },
+				{ displayName: 'Roboto', name: 'Roboto' },
+				{ displayName: 'Open Sans', name: 'Open Sans' },
+				{ displayName: 'Open Sans Light', name: 'Open Sans', weight: 300 },
+			];
 		},
 		selectedFont: {
 			get() {
@@ -128,6 +117,18 @@ export default {
 				this.$store.dispatch(Actions.SET_COLOR_FG, fg);
 				this.$store.dispatch(Actions.SET_COLOR_BG, bg);
 			},
+		},
+	},
+	methods: {
+		decreaseFont() {
+			let newSize = this.fontSize - 2;
+			if (newSize < 10) newSize = 10;
+			this.fontSize = newSize;
+		},
+		increaseFont() {
+			let newSize = this.fontSize + 2;
+			if (newSize > 30) newSize = 30;
+			this.fontSize = newSize;
 		},
 	},
 };
