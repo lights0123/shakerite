@@ -23,17 +23,17 @@
 				</ion-title>
 			</ion-toolbar>
 		</ion-header>
-		<ion-content class="content" :style="cssProps">
+		<ion-content :style="cssProps" class="content">
 			<small v-if="article.categories" class="categories"><span v-for="category in article.categories"
-			                                                          :key="category.id"
+				:key="category.id"
 			>{{ category.name }}</span>
 			</small>
 			<h1>{{ article.title }}</h1>
 			<h2 v-if="article.subtitle">{{ article.subtitle }}</h2>
 			<small v-if="article.writers">
 				<span v-for="writer in article.writers"
-				      :key="writer"
-				      class="author"
+					:key="writer"
+					class="author"
 				>
 					<router-link :to="`/author/${writer}/${id}`">{{ writer }}</router-link>
 				</span>
@@ -46,14 +46,15 @@
 	</ion-page>
 </template>
 
-<script>
-import FontPopover from '@/components/FontPopover.vue';
+<script lang="ts">
+import sanitizeHtml from 'sanitize-html';
 import { mapState } from 'vuex';
 import { Plugins } from '@capacitor/core';
-import MediaComponent from '../components/Media';
-import A from '../components/A';
-import { Article, Media } from '../helpers/api';
-import sanitizeHtml from 'sanitize-html';
+import { Popover } from '@ionic/core/dist/types/components/popover/popover';
+import FontPopover from '@/components/FontPopover.vue';
+import MediaComponent from '../components/Media.vue';
+import A from '../components/A.vue';
+import { Article, Media } from '@/helpers/api';
 import SaveScroll from '../mixins/SaveScroll';
 import { SET_SAVED_ARTICLES } from '../store/actions';
 import Logo from '@/components/Logo.vue';
@@ -65,12 +66,12 @@ export default {
 	mixins: [SaveScroll],
 	props: ['id'],
 	methods: {
-		openFonts(event) {
+		openFonts(event: MouseEvent) {
 			this.$ionic.popoverController.create({
 				component: FontPopover,
 				componentProps: { parent: this },
 				event,
-			}).then(p => p.present());
+			}).then((p: Popover) => p.present());
 		},
 		share() {
 			Share.share({
@@ -195,7 +196,10 @@ small {
 	font-size: var(--font-size);
 	text-align: center;
 	display: block;
-	color: var(--ion-color-step-750);
+}
+
+.article {
+	user-select: auto;
 }
 
 .article, p {

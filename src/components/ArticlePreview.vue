@@ -1,21 +1,21 @@
 <template>
-<ion-card :class="{small: !large}">
-	<div class="media">
-		<media v-if="article.media" :media="article.media"/>
-	</div>
-	<div>
-		<ion-card-header>
-			<ion-card-title>{{article.title}}</ion-card-title>
-		</ion-card-header>
-		<ion-card-content>
-			<p v-shave="{ height: large ? 100 : 60 }">{{excerpt}}</p>
+	<ion-card :class="{small: !large}">
+		<div class="media">
+			<media v-if="article.media" :media="article.media" />
+		</div>
+		<div>
+			<ion-card-header>
+				<ion-card-title>{{article.title}}</ion-card-title>
+			</ion-card-header>
+			<ion-card-content>
+				<p v-shave="{ height: large ? 100 : 60 }">{{excerpt}}</p>
+			</ion-card-content>
+		</div>
+		<ion-card-content class="metadata">
+			<p>{{author}}</p>
+			<p>{{date}}</p>
 		</ion-card-content>
-	</div>
-	<ion-card-content class="metadata">
-		<p>{{author}}</p>
-		<p>{{date}}</p>
-	</ion-card-content>
-</ion-card>
+	</ion-card>
 </template>
 
 <script>
@@ -26,8 +26,8 @@ import { shortDate } from '../helpers/time';
 
 export default {
 	name: 'ArticlePreview',
-	props: ['article', 'large'],
 	components: { media },
+	props: ['article', 'large'],
 	computed: {
 		excerpt() {
 			return sanitizeHtml(this.article.excerpt, { allowedTags: [] });
@@ -44,32 +44,46 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 ion-card {
 	margin-top: 15px;
 	margin-bottom: 15px;
 	background-color: white;
 }
 
+.dark ion-card {
+	background-color: inherit;
+}
+
 ion-card:not(.small) ion-card-title {
 	text-align: center;
 }
 
-ion-card.small ion-card-title {
-	font-size: 1.2rem;
-}
+ion-card.small {
+	ion-card-title {
+		font-size: 1.2rem;
+	}
 
-ion-card.small ion-card-header {
-	padding-bottom: 0;
-}
+	ion-card-header {
+		padding-bottom: 0;
+	}
 
-ion-card.small ion-card-content {
-	padding-top: 10px;
-	padding-bottom: 0;
+	ion-card-content {
+		padding-top: 10px;
+		padding-bottom: 0;
+	}
 }
 
 ion-card-content {
 	line-height: 19.6px;
+}
+
+ion-card-header {
+	background: none;
+}
+
+ion-card-title {
+	--color: var(--ion-color-step-700, #666);
 }
 
 .metadata {
@@ -77,17 +91,17 @@ ion-card-content {
 	justify-content: space-between;
 	flex-wrap: nowrap;
 	padding-top: 0;
-}
 
-.metadata p:first-child {
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	overflow: hidden;
-}
+	p:first-child {
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+	}
 
-.metadata p:last-child {
-	white-space: nowrap;
-	padding-left: 10px;
+	p:last-child {
+		white-space: nowrap;
+		padding-left: 10px;
+	}
 }
 
 .small .media {

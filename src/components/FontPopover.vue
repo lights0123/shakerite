@@ -3,27 +3,27 @@
 		<ion-grid>
 			<ion-row>
 				<ion-col>
-					<ion-item class="text-button text-smaller" @click="decreaseFont">
+					<ion-item @click="decreaseFont" class="text-button text-smaller">
 						<div>A</div>
 					</ion-item>
 				</ion-col>
 				<ion-col>
-					<ion-item class="text-button text-larger" @click="increaseFont">
+					<ion-item @click="increaseFont" class="text-button text-larger">
 						<div>A</div>
 					</ion-item>
 				</ion-col>
 			</ion-row>
 			<ion-row class="row-dots">
-				<ion-col v-for="dot in dots" @click="selectedColor = dot">
-					<div class="dot"
-						:style="{ 'background-color': dot.bg }"
-						:class="{ 'selected': selectedColor.fg === dot.fg && selectedColor.bg === dot.bg }"
+				<ion-col @click="selectedColor = dot" v-for="dot in dots">
+					<div :class="{ 'selected': selectedColor.fg === dot.fg && selectedColor.bg === dot.bg }"
+					     :style="{ 'background-color': dot.bg }"
+					     class="dot"
 					/>
 				</ion-col>
 			</ion-row>
 		</ion-grid>
 
-		<ion-radio-group name="font-family" :value="selectedFont" @ionChange="selectedFont = $event.target.value">
+		<ion-radio-group :value="selectedFont" @ionChange="selectedFont = $event.target.value" name="font-family">
 			<ion-item v-for="font in fonts">
 				<ion-label :style="{ '--ion-font-family': font.name, 'font-weight': font.weight }">
 					{{ font.displayName }}
@@ -82,7 +82,7 @@ export default {
 				const { font } = this.$store.state;
 				try {
 					return this.fonts.find(({ name, weight }) => font.family === name && font.weight === weight)
-						  .displayName;
+							.displayName;
 				} catch (e) {
 					return undefined;
 				}

@@ -1,20 +1,22 @@
 <template>
-<a @click="openLink(href)">
-	<slot/>
-</a>
+	<a @click="openLink(href)">
+		<slot />
+	</a>
 </template>
 
-<script>
-import openLink from '../helpers/link.ts';
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator';
+import openLink from '../helpers/link';
 
-export default {
-	name: 'A',
-	props: ['href'],
-	methods: {
-		openLink(url) {
-			openLink(url, this.$store);
-		},
-	},
+@Component
+export default class A extends Vue {
+	@Prop(String)
+	public href!: string;
+
+	openLink(url: string) {
+		openLink(url, this.$store);
+	}
+
 };
 </script>
 

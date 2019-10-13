@@ -1,13 +1,14 @@
 <template>
-<ion-toolbar>
-	<div>
-		<ion-button v-for="category in cat" :key="category.id" @click="$emit('input', category.category)" fill="clear"
-		            :color="category.selected ? 'primary' : 'medium'" :strong="category.selected"
-		            :style="{selected: category.selected}">
-			<span>{{category.category.name}}</span>
-		</ion-button>
-	</div>
-</ion-toolbar>
+	<ion-toolbar>
+		<div>
+			<ion-button :color="category.selected ? 'primary' : 'medium'" :key="category.id" :strong="category.selected"
+			            :style="{selected: category.selected}"
+			            @click="$emit('input', category.category)" fill="clear"
+			            v-for="category in cat">
+				<span>{{category.category.name}}</span>
+			</ion-button>
+		</div>
+	</ion-toolbar>
 </template>
 
 <script>

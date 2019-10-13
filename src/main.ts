@@ -11,12 +11,11 @@ import { faBookmark as faBookmarkRegular } from '@fortawesome/free-regular-svg-i
 import WPAPI from 'wpapi';
 import VueShave from 'vue-shave';
 import AsyncComputed from 'vue-async-computed';
-import settings from './views/Settings.vue';
-import saved from './views/Saved.vue';
-import news from './views/News.vue';
-import helpers from './helpers';
+import { Popover } from '@ionic/core/dist/types/components/popover/popover';
+import * as helpers from './helpers';
 import returnBody from './helpers/WPResponse';
 import { enableReviews } from './helpers/review';
+import Main from './Main.vue';
 
 enableReviews();
 const {
@@ -50,10 +49,10 @@ async function initCapacitor() {
 
 	// Set network checks
 	Network.getStatus()
-		  .then((s) => {
-			  Vue.prototype.$networkStatus = s;
-		  })
-		  .catch(console.error);
+		.then((s) => {
+			Vue.prototype.$networkStatus = s;
+		})
+		.catch(console.error);
 
 	// Listen to network changes
 	Network.addListener('networkStatusChange', (s) => {
@@ -61,36 +60,31 @@ async function initCapacitor() {
 	});
 }
 
-function getActiveComponent(app) {
-	const tab = document.querySelector('#app > ion-tabs > ion-tab:not(.tab-hidden)');
-	return app.$children.find(child => tab.contains(child.$el));
-}
-
 // Navigate through a swipe gesture
 async function initNavGesture(app) {
 	const gesture = await import('@ionic/core/dist/collection/utils/gesture');
 
 	gesture
-		  .createGesture({
-			  el: document,
-			  gestureName: 'swipe',
-			  gesturePriority: 40,
-			  threshold: 10,
-			  queue: window.Ionic.queue,
-			  canStart: () => true,
-			  onStart: () => {
-			  },
-			  onMove: () => {
-			  },
-			  onEnd: (ev) => {
-				  const threshold = app.$root.$el.offsetWidth / 2;
-				  if (Math.abs(ev.deltaX) < threshold) {
-					  return;
-				  }
-				  getActiveComponent(app).$router.go(ev.deltaX > 0 ? -1 : 1);
-			  },
-		  })
-		  .setDisabled(false);
+		.createGesture({
+			el: document,
+			gestureName: 'swipe',
+			gesturePriority: 40,
+			threshold: 10,
+			queue: window.Ionic.queue,
+			canStart: () => true,
+			onStart: () => {
+			},
+			onMove: () => {
+			},
+			onEnd: (ev) => {
+				const threshold = app.$root.$el.offsetWidth / 2;
+				if (Math.abs(ev.deltaX) < threshold) {
+					return;
+				}
+				helpers.getActiveComponent(app).$router.go(ev.deltaX > 0 ? -1 : 1);
+			},
+		})
+		.setDisabled(false);
 }
 
 // Initialize Capacitor
@@ -98,35 +92,25 @@ initCapacitor();
 // Initialize helpers
 Vue.prototype.$helpers = helpers;
 // Create a Vue app instance
+// @ts-ignore
 window.Vue = Vue;
+// @ts-ignore
 window.WPAPI = WPAPI;
 const { default: store, getData } = require('./store/store');
 getData(store).then(() => {
+	// @ts-ignore
 	window.vue = new Vue({
 		// router,
 		store,
-		components: {
-			news,
-			saved,
-			settings,
-		},
-		data: {
-			bookmarkURL: require('@fortawesome/fontawesome-free/svgs/solid/bookmark.svg'),
-		},
+		render: h => h(Main),
 		mounted() {
 			console.log('mounted!');
 			SplashScreen.hide().catch(console.error);
 			if (Capacitor.platform === 'ios') initNavGesture(this);
-			window.addEventListener('keyboardWillShow', (event) => {
-				if (event.keyboardHeight) this.$refs.tabbar.classList.add('hidden');
-			});
-			window.addEventListener('keyboardWillHide', () => {
-				this.$refs.tabbar.classList.remove('hidden');
-				document.activeElement.blur();
-			});
-			let activePopover;
+
+			let activePopover: Popover | undefined;
 			document.addEventListener('ionPopoverDidPresent', ({ target }) => {
-				activePopover = target;
+				activePopover = target as unknown as Popover;
 			});
 			document.addEventListener('ionPopoverDidDismiss', () => {
 				activePopover = undefined;
@@ -135,8 +119,7 @@ getData(store).then(() => {
 				if (activePopover) {
 					activePopover.dismiss();
 				} else {
-					const component = getActiveComponent(this);
-					console.log(component.$router.history.index);
+					const component = helpers.getActiveComponent(this);
 					if (component.$router.history.index > 0) component.$router.history.go(-1); else App.exitApp();
 				}
 				e.stopPropagation();
@@ -146,7 +129,7 @@ getData(store).then(() => {
 			let transport = {};
 			if (isNative) {
 				transport = {
-					get(wpreq, cb) {
+					get(wpreq, cb?: (err: Error | null, data?: object) => any) {
 						const url = wpreq.toString();
 						console.log(url);
 						return new Promise((resolve, reject) => {
@@ -155,7 +138,7 @@ getData(store).then(() => {
 									const body = returnBody(wpreq, res);
 									if (cb && typeof cb === 'function') cb(null, body);
 									resolve(body);
-								}, (err) => {
+								}, (err: Error) => {
 									if (cb && typeof cb === 'function') cb(err);
 									reject(err);
 								});
@@ -171,6 +154,5 @@ getData(store).then(() => {
 				API: new WPAPI({ endpoint: 'https://shakerite.com/wp-json', transport }),
 			};
 		},
-
 	}).$mount('#app');
 });

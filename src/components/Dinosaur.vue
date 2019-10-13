@@ -1,5 +1,5 @@
 <template>
-<iframe :srcdoc="dino"></iframe>
+	<iframe :srcdoc="dino"></iframe>
 </template>
 
 <script>

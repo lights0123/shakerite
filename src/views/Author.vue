@@ -1,28 +1,30 @@
 <template>
-<ion-page class="ion-page">
-	<ion-header>
-		<ion-toolbar>
-			<ion-buttons slot="start">
-				<ion-button @click="$router.back()">
-					<ion-icon name="arrow-back"></ion-icon>
-					<span v-if="$isIOS">Back</span>
-				</ion-button>
-			</ion-buttons>
-			<ion-title><logo/></ion-title>
-		</ion-toolbar>
-	</ion-header>
-	<ion-content class="outer-content">
-		<h1>{{article.title}}</h1>
-		<media :media="article.media"/>
-		<div v-html="article.content"/>
-		<article-preview v-for="(article, index) in articles"
-		                 @click.native="$router.push('/article/' + article.id)" :article="article"
-		                 :key="article.id" :large="index === 0"/>
-		<ion-infinite-scroll @ionInfinite="loadContent" :disabled="articles.length === 0">
-			<ion-infinite-scroll-content/>
-		</ion-infinite-scroll>
-	</ion-content>
-</ion-page>
+	<ion-page class="ion-page">
+		<ion-header>
+			<ion-toolbar>
+				<ion-buttons slot="start">
+					<ion-button @click="$router.back()">
+						<ion-icon name="arrow-back"></ion-icon>
+						<span v-if="$isIOS">Back</span>
+					</ion-button>
+				</ion-buttons>
+				<ion-title>
+					<logo />
+				</ion-title>
+			</ion-toolbar>
+		</ion-header>
+		<ion-content class="outer-content">
+			<h1>{{article.title}}</h1>
+			<media :media="article.media" />
+			<div v-html="article.content" />
+			<article-preview :article="article"
+			                 :key="article.id" :large="index === 0"
+			                 @click.native="$router.push('/article/' + article.id)" v-for="(article, index) in articles" />
+			<ion-infinite-scroll :disabled="articles.length === 0" @ionInfinite="loadContent">
+				<ion-infinite-scroll-content />
+			</ion-infinite-scroll>
+		</ion-content>
+	</ion-page>
 </template>
 
 <script>

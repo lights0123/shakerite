@@ -13,19 +13,10 @@ module.exports = {
 
 	chainWebpack: (config) => {
 		config.module
-			  .rule('ts')
-			  .test(/\.ts$/)
-			  .use('ts-loader')
-			  .loader('ts-loader')
-			  .end();
-		config.module
 			  .rule('html')
 			  .test(/\.html$/)
 			  .use('html-loader')
 			  .loader('html-loader')
-			  .end();
-		config.resolve.extensions
-			  .add('.ts')
 			  .end();
 	},
 

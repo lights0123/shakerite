@@ -11,39 +11,7 @@
 
 <body>
 <ion-app id="app" v-show="true" style="display: none;">
-	<ion-tabs>
-
-		<ion-tab tab="news">
-			<news/>
-		</ion-tab>
-
-		<ion-tab tab="saved">
-			<saved/>
-		</ion-tab>
-
-		<ion-tab tab="settings">
-			<settings/>
-		</ion-tab>
-
-		<ion-tab-bar slot="bottom" ref="tabbar">
-			<ion-tab-button tab="news">
-				<ion-icon name="paper"></ion-icon>
-				<ion-label>News</ion-label>
-			</ion-tab-button>
-
-			<ion-tab-button tab="saved">
-				<ion-icon :src="bookmarkURL" class="bookmark-icon"></ion-icon>
-				<ion-label>Saved</ion-label>
-			</ion-tab-button>
-
-			<ion-tab-button tab="settings">
-				<ion-icon name="settings"></ion-icon>
-				<ion-label>Settings</ion-label>
-			</ion-tab-button>
-		</ion-tab-bar>
-	</ion-tabs>
 </ion-app>
-<!-- built files will be auto injected -->
 </body>
 
 </html>

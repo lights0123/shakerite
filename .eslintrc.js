@@ -1,19 +1,24 @@
 module.exports = {
 	root: true,
+
 	env: {
 		browser: true,
-		node: true
+		node: true,
 	},
 	parserOptions: {
 		parser: 'typescript-eslint-parser',
 		sourceType: 'module',
 	},
+
 	extends: ['plugin:vue/recommended', 'airbnb-base'],
 	plugins: ['vue'],
+
 	rules: {
+		'object-shorthand': ['error', 'always'],
 		'global-require': 0,
 		'import/no-unresolved': 0,
 		'no-param-reassign': 0,
+		'import/no-named-as-default-member': 0,
 		'no-shadow': 0,
 		'import/extensions': 0,
 		'import/newline-after-import': 0,
@@ -27,7 +32,7 @@ module.exports = {
 			'baseIndent': 1,
 			'closeBracket': 0,
 			'alignAttributesVertically': true,
-			'ignores': []
+			'ignores': [],
 		}],
 		'vue/component-name-in-template-casing': ['error', 'kebab-case'],
 		'max-len': ['error', 140],
@@ -37,12 +42,12 @@ module.exports = {
 			'singleline': 3,
 			'multiline': {
 				'max': 1,
-				'allowFirstLine': true
-			}
+				'allowFirstLine': true,
+			},
 		}],
 		'vue/singleline-html-element-content-newline': 0,
 		'strict': 0,
-		'lines-between-class-members': ["error", "always", { exceptAfterSingleLine: true }],
+		'lines-between-class-members': ['error', 'always', { exceptAfterSingleLine: true }],
 		'no-unused-vars': 0,
-	}
+	},
 };

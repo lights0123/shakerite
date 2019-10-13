@@ -5,6 +5,14 @@ export const SET_COLOR_BG = 'setBGColor';
 export const SET_COLOR_FG = 'setFGColor';
 export const SET_SAVED_ARTICLES = 'setSavedArticles';
 export const SET_BROWSER = 'setBrowser';
+export const SET_THEME = 'setTheme';
 export default {
-	SET_FONT_SIZE, SET_FONT_WEIGHT, SET_FONT_NAME, SET_COLOR_BG, SET_COLOR_FG, SET_SAVED_ARTICLES, SET_BROWSER,
+	SET_FONT_SIZE,
+	SET_FONT_WEIGHT,
+	SET_FONT_NAME,
+	SET_COLOR_BG,
+	SET_COLOR_FG,
+	SET_SAVED_ARTICLES,
+	SET_BROWSER,
+	SET_THEME,
 };

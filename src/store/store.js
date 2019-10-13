@@ -25,6 +25,7 @@ export async function getData(store) {
 		Actions.SET_COLOR_BG,
 		Actions.SET_COLOR_FG,
 		Actions.SET_BROWSER,
+		Actions.SET_THEME,
 	];
 	actions.forEach(key => data.push(Storage.get({ key })));
 	(await Promise.all(data)).forEach(({ value }, index) => {
@@ -53,6 +54,7 @@ export default new Vuex.Store({
 		cachedImages: [],
 		savedArticles: [],
 		browser: 'inapp',
+		theme: 'default',
 	},
 	mutations: {
 		[Mutations.SET_FONT_SIZE](state, size) {
@@ -96,6 +98,9 @@ export default new Vuex.Store({
 		[Mutations.SET_BROWSER](state, browser) {
 			state.browser = browser;
 		},
+		[Mutations.SET_THEME](state, theme) {
+			state.theme = theme;
+		},
 	},
 	getters: {
 		getCachedArticle: state => id => state.cachedArticles.find(article => article.id === id),
@@ -129,6 +134,10 @@ export default new Vuex.Store({
 		async [Actions.SET_BROWSER]({ commit }, browser) {
 			await Storage.set({ key: Actions.SET_BROWSER, value: browser });
 			commit(Mutations.SET_BROWSER, browser);
+		},
+		async [Actions.SET_THEME]({ commit }, theme) {
+			await Storage.set({ key: Actions.SET_THEME, value: theme });
+			commit(Mutations.SET_THEME, theme);
 		},
 	},
 });

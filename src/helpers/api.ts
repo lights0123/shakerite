@@ -1,6 +1,6 @@
-import {decode} from 'he';
-import {Category} from './categories';
-import {ADD_CACHED, ADD_CACHED_IMAGE} from '../store/mutations';
+import { decode } from 'he';
+import { Category } from './categories';
+import { ADD_CACHED, ADD_CACHED_IMAGE } from '../store/mutations';
 
 function joinPromise(target: Object, key: string | symbol, descriptor: TypedPropertyDescriptor<any>) {
 	let p = null;
@@ -80,7 +80,7 @@ export class Search<T> extends Paginate<T> {
 	readonly author?: string;
 	readonly name?: string;
 
-	constructor(wp, {term, categories, author, name, ids}: { term?: string, categories?: Array<number> | number, author?: string, name?: string, ids?: number[] }) {
+	constructor(wp, { term, categories, author, name, ids }: { term?: string, categories?: Array<number> | number, author?: string, name?: string, ids?: number[] }) {
 		super(wp);
 		this.term = term;
 		this.categories = categories;
@@ -118,7 +118,7 @@ export class Post {
 	media?: Media;
 
 	constructor(
-		{id, content, categories, date, excerpt, title, subtitle, media}: { id, content, categories, date, excerpt, title, subtitle?, media?: Media }) {
+		{ id, content, categories, date, excerpt, title, subtitle, media }: { id, content, categories, date, excerpt, title, subtitle?, media?: Media }) {
 		this.id = id;
 		this.content = content;
 		this.categories = categories;
@@ -145,11 +145,11 @@ export class Post {
 
 	protected static APITransform({
 		                              id,
-		                              content: {rendered: content},
+		                              content: { rendered: content },
 		                              categories,
 		                              modified_gmt,
-		                              excerpt: {rendered: excerpt},
-		                              title: {rendered: title},
+		                              excerpt: { rendered: excerpt },
+		                              title: { rendered: title },
 		                              sno_deck,
 		                              featured_media,
 		                              _embedded,
@@ -184,14 +184,14 @@ export class Article extends Post {
 	jobTitle?: string;
 	writers?: Array<string>;
 
-	constructor({id, content, categories, date, excerpt, title, subtitle, media, jobTitle, writers}:
+	constructor({ id, content, categories, date, excerpt, title, subtitle, media, jobTitle, writers }:
 		            { id, content, categories, date, excerpt, title, subtitle?, media?, jobTitle?, writers? }) {
-		super({id, content, categories, date, excerpt, title, subtitle, media});
+		super({ id, content, categories, date, excerpt, title, subtitle, media });
 		this.jobTitle = jobTitle;
 		this.writers = writers;
 	}
 
-	static fromAPI({jobtitle, writer, ...data}) {
+	static fromAPI({ jobtitle, writer, ...data }) {
 		return new Article({
 			jobTitle: jobtitle ? jobtitle[0] : undefined,
 			writers: writer,
@@ -206,15 +206,15 @@ export class Author extends Post {
 	position: string;
 	schoolYear: number;
 
-	constructor({id, content, categories, date, excerpt, media, title, name, position, schoolYear}:
+	constructor({ id, content, categories, date, excerpt, media, title, name, position, schoolYear }:
 		            { id, content, categories, date, excerpt, media?, title, name?, position?, schoolYear? }) {
-		super({id, content, categories, date, excerpt, title, media});
+		super({ id, content, categories, date, excerpt, title, media });
 		this.name = name;
 		this.position = position;
 		this.schoolYear = schoolYear;
 	}
 
-	static fromAPI({name, staffposition, schoolyear, ...data}) {
+	static fromAPI({ name, staffposition, schoolyear, ...data }) {
 		const year = schoolyear ? parseInt(/"([0-9]{4,})-[0-9]{4,}"/g.exec(schoolyear[0])[1]) : undefined;
 		return new Author({
 			name: name ? name[0] : undefined,
@@ -258,7 +258,7 @@ export class Media {
 		this.sizes = [];
 	}
 
-	static fromAPI({id, caption: {rendered: caption}, date_gmt: date, media_details: {sizes}}): Media {
+	static fromAPI({ id, caption: { rendered: caption }, date_gmt: date, media_details: { sizes } }): Media {
 		let media = new Media(id);
 		media.caption = caption;
 		media.date = date;
@@ -282,7 +282,7 @@ export class Media {
 				return this;
 			}
 		}
-		const {caption: {rendered: caption}, date_gmt: date, media_details: {sizes}} = await wp.media().id(this.id);
+		const { caption: { rendered: caption }, date_gmt: date, media_details: { sizes } } = await wp.media().id(this.id);
 		this.caption = caption;
 		this.date = date;
 		this.loaded = true;

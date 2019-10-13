@@ -10,6 +10,7 @@ export const ADD_CACHED = 'addCache';
 export const ADD_CACHED_IMAGE = 'addCacheImage';
 export const SET_SAVED_ARTICLES = 'setSavedArticles';
 export const SET_BROWSER = 'setBrowser';
+export const SET_THEME = 'setTheme';
 export default {
 	SET_FONT_SIZE,
 	SET_FONT_WEIGHT,
@@ -23,4 +24,5 @@ export default {
 	ADD_CACHED_IMAGE,
 	SET_SAVED_ARTICLES,
 	SET_BROWSER,
+	SET_THEME,
 };

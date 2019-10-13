@@ -1,5 +1,5 @@
 <template>
-<div :style="{'padding-top': aspect}"><img :src="src"/></div>
+	<div :style="{'padding-top': aspect}"><img :src="src" /></div>
 </template>
 
 <script>
