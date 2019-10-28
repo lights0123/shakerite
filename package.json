@@ -32,7 +32,7 @@
     "@ionic/core": "4.0.1",
     "@modus/ionic-vue": "1.1.2",
     "array-to-sentence": "^2.0.0",
-    "axios": "0.18.0",
+    "axios": "0.18.1",
     "cordova-launch-review": "^3.1.1",
     "cordova-plugin-advanced-http": "^2.0.1",
     "cordova-plugin-file": "^6.0.1",
