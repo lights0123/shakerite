@@ -25,15 +25,15 @@
 		</ion-header>
 		<ion-content :style="cssProps" class="content">
 			<small v-if="article.categories" class="categories"><span v-for="category in article.categories"
-				:key="category.id"
+			                                                          :key="category.id"
 			>{{ category.name }}</span>
 			</small>
 			<h1>{{ article.title }}</h1>
 			<h2 v-if="article.subtitle">{{ article.subtitle }}</h2>
 			<small v-if="article.writers">
 				<span v-for="writer in article.writers"
-					:key="writer"
-					class="author"
+				      :key="writer"
+				      class="author"
 				>
 					<router-link :to="`/author/${writer}/${id}`">{{ writer }}</router-link>
 				</span>
@@ -47,138 +47,146 @@
 </template>
 
 <script lang="ts">
+import { Component, Inject, Mixins, Prop, Vue } from 'vue-property-decorator';
 import sanitizeHtml from 'sanitize-html';
-import { mapState } from 'vuex';
 import { Plugins } from '@capacitor/core';
-import { Popover } from '@ionic/core/dist/types/components/popover/popover';
-import FontPopover from '@/components/FontPopover.vue';
+import FontPopover from '../components/FontPopover.vue';
 import MediaComponent from '../components/Media.vue';
 import A from '../components/A.vue';
 import { Article, Media } from '@/helpers/api';
 import SaveScroll from '../mixins/SaveScroll';
-import { SET_SAVED_ARTICLES } from '../store/actions';
-import Logo from '@/components/Logo.vue';
+import { SET_SAVED_ARTICLES } from '@/store/actions';
+import Logo from '../components/Logo.vue';
+import AsyncComputed from '@/components/asyncComputed';
+import { Category } from '@/helpers/categories';
 
 const { Share } = Plugins;
-export default {
-	name: 'Article',
-	components: { Media: MediaComponent, Logo },
-	mixins: [SaveScroll],
-	props: ['id'],
-	methods: {
-		openFonts(event: MouseEvent) {
-			this.$ionic.popoverController.create({
-				component: FontPopover,
-				componentProps: { parent: this },
-				event,
-			}).then((p: Popover) => p.present());
-		},
-		share() {
-			Share.share({
-				title: this.article.title,
-				text: this.article.title,
-				url: `https://shakerite.com/?p=${this.id}`,
-				dialogTitle: 'Share',
-			});
-		},
+@Component({
+	components: {
+		Media: MediaComponent, Logo,
 	},
-	computed: {
-		...mapState({
-			fontFamily: state => state.font.family,
-			fontWeight: state => state.font.weight,
-			fontSize: state => state.font.size,
-			bg: state => state.font.bg,
-			fg: state => state.font.fg,
-		}),
-		cssProps() {
-			return {
-				'--color': this.fg,
-				'--background': this.bg,
-				'--font-family': this.fontFamily,
-				'--font-weight': this.fontWeight,
-				'--font-size': `${this.fontSize}px`,
-			};
-		},
-		saved: {
-			get() {
-				return this.$store.state.savedArticles.includes(this.id);
+})
+export default class ArticlePage extends Mixins(SaveScroll) {
+	@Prop(String)
+	id;
+
+	openFonts(event: MouseEvent) {
+		this.$ionic.popoverController.create({
+			component: FontPopover,
+			componentProps: { parent: this },
+			event,
+		}).then(p => (p as unknown as { present(): Promise<void> }).present());
+	}
+
+	share() {
+		if (!this.article) return;
+		Share.share({
+			title: this.article.title,
+			text: this.article.title,
+			url: `https://shakerite.com/?p=${this.id}`,
+			dialogTitle: 'Share',
+		});
+	}
+
+	get fontFamily() {return this.$store.state.font.family;}
+
+	get fontWeight() {return this.$store.state.font.weight;}
+
+	get fontSize() {return this.$store.state.font.size;}
+
+	get bg() {return this.$store.state.font.bg;}
+
+	get fg() {return this.$store.state.font.fg;}
+
+	get cssProps() {
+		return {
+			'--color': this.fg,
+			'--background': this.bg,
+			'--font-family': this.fontFamily,
+			'--font-weight': this.fontWeight,
+			'--font-size': `${this.fontSize}px`,
+		};
+	}
+
+	get saved() {
+		return this.$store.state.savedArticles.includes(this.id);
+	}
+
+	set saved(state) {
+		if (state) this.$store.dispatch(SET_SAVED_ARTICLES, [...this.$store.state.savedArticles, this.id]);
+		else {
+			const otherArticles = this.$store.state.savedArticles.filter(article => article !== this.id);
+			this.$store.dispatch(SET_SAVED_ARTICLES, otherArticles);
+		}
+	}
+
+	// @ts-ignore
+	article?: { media: Media, title: string, subtitle?: string, content: Vue, categories: Category[], writers: string[], excerpt: string };
+
+	@AsyncComputed({ default: {} })
+	// @ts-ignore
+	async article() {
+		const article: Article = await Article.getPost(this.API, parseInt(this.id, 10), this.$store);
+		let content = sanitizeHtml(article.content, {
+			allowedTags: [...sanitizeHtml.defaults.allowedTags, 'img'],
+			allowedAttributes: {
+				img: ['src', 'srcset', 'class'],
+				iframe: ['src', 'allowfullscreen'],
+				a: ['href', 'target'],
 			},
-			set(state) {
-				if (state) this.$store.dispatch(SET_SAVED_ARTICLES, [...this.$store.state.savedArticles, this.id]);
-				else {
-					const otherArticles = this.$store.state.savedArticles.filter(article => article !== this.id);
-					this.$store.dispatch(SET_SAVED_ARTICLES, otherArticles);
-				}
+			allowedClasses: {
+				div: ['pullquote'],
+				p: ['pullquotetext', 'quotespeaker'],
 			},
-		},
-	},
-	asyncComputed: {
-		article: {
-			async get() {
-				const article = await Article.getPost(this.API, parseInt(this.id, 10), this.$store);
-				let content = sanitizeHtml(article.content, {
-					allowedTags: [...sanitizeHtml.defaults.allowedTags, 'img'],
-					allowedAttributes: {
-						img: ['src', 'srcset', 'class'],
-						iframe: ['src', 'allowfullscreen'],
-						a: ['href', 'target'],
-					},
-					allowedClasses: {
-						div: ['pullquote'],
-						p: ['pullquotetext', 'quotespeaker'],
-					},
-					transformTags: {
-						a: sanitizeHtml.simpleTransform('a', { target: '_blank' }),
-					},
-				});
-				const parser = new DOMParser().parseFromString(content, 'text/html');
-				const images = {};
-				parser.querySelectorAll('a').forEach((e) => {
-					if (e.children.length !== 1 || e.children[0].tagName !== 'IMG') {
-						const link = document.createElement('smart-link');
-						link.setAttribute('href', e.getAttribute('href'));
-						link.innerHTML = e.innerHTML;
-						e.replaceWith(link);
-						return;
-					}
-					// Wordpress saved the image ID as a class on the <a> element. An example is wp-image-18655.
-					const parsedClass = /wp-image-(\d+)/i.exec(e.children[0].className);
-					if (!parsedClass) return;
-					const imageID = parsedClass[1];
-					images[imageID] = new Media(imageID);
-					const media = document.createElement('media');
-					media.setAttribute(':media', `images[${imageID}]`);
-					e.replaceWith(media);
-				});
-				content = {
-					data() {
-						return { images };
-					},
-					components: { Media: MediaComponent, SmartLink: A },
-					template: parser.body.innerHTML,
-				};
-				let categories = [];
-				article.categories.forEach((category) => {
-					categories.push(category.fetch());
-				});
-				categories = await Promise.all(categories);
-				let writers = article.writers || [];
-				writers = writers.filter(writer => writer !== '');
-				return {
-					media: article.media,
-					title: article.title,
-					subtitle: article.subtitle,
-					content,
-					categories,
-					writers,
-					excerpt: article.excerpt,
-				};
+			transformTags: {
+				a: sanitizeHtml.simpleTransform('a', { target: '_blank' }),
 			},
-			default: {},
-		},
-	},
-	inject: ['API'],
-};
+		});
+		const parser = new DOMParser().parseFromString(content, 'text/html');
+		const images: { [id: string]: Media } = {};
+		parser.querySelectorAll('a').forEach((e) => {
+			if (e.children.length !== 1 || e.children[0].tagName !== 'IMG') {
+				const link = document.createElement('smart-link');
+				link.setAttribute('href', e.getAttribute('href') || '');
+				link.innerHTML = e.innerHTML;
+				e.replaceWith(link);
+				return;
+			}
+			// Wordpress saved the image ID as a class on the <a> element. An example is wp-image-18655.
+			const parsedClass = /wp-image-(\d+)/i.exec(e.children[0].className);
+			if (!parsedClass) return;
+			const imageID = parsedClass[1];
+			images[imageID] = new Media(imageID);
+			const media = document.createElement('media');
+			media.setAttribute(':media', `images[${imageID}]`);
+			e.replaceWith(media);
+		});
+		content = {
+			data() {
+				return { images };
+			},
+			components: { Media: MediaComponent, SmartLink: A },
+			template: parser.body.innerHTML,
+		};
+		const categoriesPromises: Promise<Category>[] = [];
+		article.categories.forEach((category) => {
+			categoriesPromises.push(category.fetch(this.API));
+		});
+		const categories: Category[] = await Promise.all(categoriesPromises);
+		const writers: string[] = (article.writers || []).filter(writer => writer !== '');
+		return {
+			media: article.media,
+			title: article.title,
+			subtitle: article.subtitle,
+			content,
+			categories,
+			writers,
+			excerpt: article.excerpt,
+		};
+	}
+
+	@Inject() readonly API!: any;
+}
 </script>
 
 <style scoped>

@@ -18,6 +18,7 @@ module.exports = {
 			  .use('html-loader')
 			  .loader('html-loader')
 			  .end();
+		if (!process.env.WEBPACK_DEV_SERVER) config.plugins.delete('fork-ts-checker');
 	},
 
 	outputDir: undefined,

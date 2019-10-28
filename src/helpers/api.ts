@@ -2,18 +2,6 @@ import { decode } from 'he';
 import { Category } from './categories';
 import { ADD_CACHED, ADD_CACHED_IMAGE } from '../store/mutations';
 
-function joinPromise(target: Object, key: string | symbol, descriptor: TypedPropertyDescriptor<any>) {
-	let p = null;
-	return {
-		value: function () {
-			if (p) return p;
-			p = descriptor.value.apply(this, arguments);
-			p.finally(() => p = null);
-			return p;
-		},
-	};
-}
-
 export class Paginate<T> extends Array<T> {
 	protected wp;
 
@@ -215,7 +203,8 @@ export class Author extends Post {
 	}
 
 	static fromAPI({ name, staffposition, schoolyear, ...data }) {
-		const year = schoolyear ? parseInt(/"([0-9]{4,})-[0-9]{4,}"/g.exec(schoolyear[0])[1]) : undefined;
+		const yearString = schoolyear ? /"([0-9]{4,})-[0-9]{4,}"/g.exec(schoolyear[0]) : undefined;
+		const year = yearString ? parseInt(yearString[1], 10) : undefined;
 		return new Author({
 			name: name ? name[0] : undefined,
 			position: staffposition ? staffposition[0] : undefined,
@@ -269,7 +258,6 @@ export class Media {
 		return media;
 	}
 
-	// @joinPromise
 	async fetch(wp, store?) {
 		if (this.loaded) return this;
 		if (store) {

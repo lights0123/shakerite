@@ -5,15 +5,17 @@ import uniqBy from 'lodash/uniqBy';
 import property from 'lodash/property';
 import Mutations from './mutations';
 import Actions from './actions';
-import { Article, Search } from '../helpers/api';
+import { Article, Media, Search } from '../helpers/api';
 import { defaultCategories } from '../helpers/categories';
 
 const wp = new WPAPI({ endpoint: 'https://shakerite.com/wp-json' });
+// @ts-ignore
 window.wp = wp;
 wp.posts().then((articles) => {
 	console.log(articles);
 	return wp.posts().id(articles[0].id);
 }).then(post => console.log(Article.fromAPI(post))).catch(console.error);
+// @ts-ignore
 window.Search = Search;
 
 export async function getData(store) {
@@ -39,7 +41,24 @@ export async function getData(store) {
 	}
 }
 
-export default new Vuex.Store({
+export interface RootStore {
+	font: {
+		family: string,
+		size: number,
+		weight?: number,
+		fg: string,
+		bg: string,
+	},
+	articles: Article[],
+	category: { name: string, id: number },
+	cachedArticles: Article[],
+	cachedImages: Media[],
+	savedArticles: number[],
+	browser: string,
+	theme: string,
+}
+
+export default new Vuex.Store<RootStore>({
 	state: {
 		font: {
 			family: '-apple-system',

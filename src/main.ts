@@ -11,7 +11,6 @@ import { faBookmark as faBookmarkRegular } from '@fortawesome/free-regular-svg-i
 import WPAPI from 'wpapi';
 import VueShave from 'vue-shave';
 import AsyncComputed from 'vue-async-computed';
-import { Popover } from '@ionic/core/dist/types/components/popover/popover';
 import * as helpers from './helpers';
 import returnBody from './helpers/WPResponse';
 import { enableReviews } from './helpers/review';
@@ -108,9 +107,9 @@ getData(store).then(() => {
 			SplashScreen.hide().catch(console.error);
 			if (Capacitor.platform === 'ios') initNavGesture(this);
 
-			let activePopover: Popover | undefined;
+			let activePopover: {dismiss(): void} | undefined;
 			document.addEventListener('ionPopoverDidPresent', ({ target }) => {
-				activePopover = target as unknown as Popover;
+				activePopover = target as unknown as {dismiss(): void};
 			});
 			document.addEventListener('ionPopoverDidDismiss', () => {
 				activePopover = undefined;
