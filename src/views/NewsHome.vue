@@ -31,6 +31,7 @@
 
 <script lang="ts">
 import { Component, Inject, Mixins, Ref, Watch } from 'vue-property-decorator';
+// eslint-disable-next-line no-unused-vars
 import { RefresherEventDetail } from '@ionic/core';
 import SaveScroll from '../mixins/SaveScroll';
 import CategoryChooser from '../components/CategoryChooser.vue';
@@ -38,6 +39,7 @@ import Media from '../components/Media.vue';
 import ArticlePreview from '../components/ArticlePreview.vue';
 import { ADD_ARTICLE, SET_ARTICLES, SET_CATEGORY } from '@/store/mutations';
 import { defaultCategories } from '@/helpers/categories';
+// eslint-disable-next-line no-unused-vars
 import { Article, Search } from '@/helpers/api';
 import Logo from '../components/Logo.vue';
 

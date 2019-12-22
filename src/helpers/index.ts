@@ -12,7 +12,7 @@ export enum Platform {
 
 export function getActiveComponent(app) {
 	const tab = document.querySelector('body > ion-tabs > ion-tab:not(.tab-hidden)');
-	return app.$children.find(child => tab.contains(child.$el));
+	return app.$children.find(child => tab?.contains(child.$el));
 }
 
 export const iOSAppID = env('IOS_APP_ID');

@@ -8,15 +8,16 @@
 		<ion-content class="outer-content">
 
 			<ion-refresher :disabled="articles.length === 0" @ionRefresh="refresh" ref="refresh" slot="fixed">
-				<ion-refresher-content></ion-refresher-content>
+				<ion-refresher-content />
 			</ion-refresher>
 			<!--<ion-searchbar animated="true" show-cancel-button debounce="500"/>-->
 			<div class="center">
-				<ion-spinner v-if="articles.length === 0 && hasArticles"></ion-spinner>
+				<ion-spinner v-if="articles.length === 0 && hasArticles" />
 			</div>
 			<article-preview :article="article"
 			                 :key="article.id" :large="index === 0"
-			                 @click.native="$router.push('/article/' + article.id)" v-for="(article, index) in articles" />
+			                 @click.native="$router.push('/article/' + article.id)"
+			                 v-for="(article, index) in articles" />
 
 			<div class="noArticles" v-if="!hasArticles">
 				<ion-label>Save articles with the bookmark button</ion-label>
@@ -31,7 +32,6 @@
 
 <script>
 import SaveScroll from '../mixins/SaveScroll';
-import Media from '../components/Media';
 import ArticlePreview from '../components/ArticlePreview';
 import { Search } from '../helpers/api';
 // TODO: fix bug where adding new articles causes next pagination to return fewer results
@@ -40,7 +40,7 @@ let s;
 let articles = [];
 export default {
 	name: 'SavedHome',
-	components: { ArticlePreview, Media },
+	components: { ArticlePreview },
 	mixins: [SaveScroll],
 	data() {
 		return {

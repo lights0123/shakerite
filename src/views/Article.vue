@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Inject, Mixins, Prop, Vue } from 'vue-property-decorator';
+import { Component, Inject, Mixins, Prop } from 'vue-property-decorator';
 import sanitizeHtml from 'sanitize-html';
 import { Plugins } from '@capacitor/core';
 import FontPopover from '../components/FontPopover.vue';
@@ -58,6 +58,7 @@ import SaveScroll from '../mixins/SaveScroll';
 import { SET_SAVED_ARTICLES } from '@/store/actions';
 import Logo from '../components/Logo.vue';
 import AsyncComputed from '@/components/asyncComputed';
+// eslint-disable-next-line no-unused-vars
 import { Category } from '@/helpers/categories';
 
 const { Share } = Plugins;

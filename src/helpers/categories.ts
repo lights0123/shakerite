@@ -19,7 +19,7 @@ export class Category {
 	}
 
 	static fromAPI({ id, name }) {
-		let cat = new Category(id);
+		const cat = new Category(id);
 		cat.name = decode(name);
 		cat.loaded = true;
 		return cat;
