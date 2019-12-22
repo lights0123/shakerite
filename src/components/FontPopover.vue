@@ -14,7 +14,7 @@
 				</ion-col>
 			</ion-row>
 			<ion-row class="row-dots">
-				<ion-col @click="selectedColor = dot" v-for="dot in dots">
+				<ion-col @click="selectedColor = dot" v-for="dot in dots" :key="dot.fg + dot.bg">
 					<div :class="{ 'selected': selectedColor.fg === dot.fg && selectedColor.bg === dot.bg }"
 					     :style="{ 'background-color': dot.bg }"
 					     class="dot"
@@ -24,7 +24,7 @@
 		</ion-grid>
 
 		<ion-radio-group :value="selectedFont" @ionChange="selectedFont = $event.target.value" name="font-family">
-			<ion-item v-for="font in fonts">
+			<ion-item v-for="font in fonts" :key="font.name + font.weight">
 				<ion-label :style="{ '--ion-font-family': font.name, 'font-weight': font.weight }">
 					{{ font.displayName }}
 				</ion-label>

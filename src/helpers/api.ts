@@ -145,7 +145,7 @@ export class Post {
 		let media;
 		if (_embedded && _embedded['wp:featuredmedia'] && _embedded['wp:featuredmedia'][0]) media = Media.fromAPI(_embedded['wp:featuredmedia'][0]);
 		else if (featured_media) media = new Media(featured_media);
-		let categoryList = [];
+		let categoryList: Category[] = [];
 		if (_embedded && _embedded['wp:term'] && _embedded['wp:term'][0]) {
 			_embedded['wp:term'][0].forEach(category => {
 				if (category['taxonomy'] === 'category') categoryList.push(Category.fromAPI(category));
@@ -238,8 +238,8 @@ export class MediaSize {
 export class Media {
 	id: number;
 	sizes: Array<MediaSize>;
-	caption: string;
-	date: Date;
+	caption?: string;
+	date?: Date;
 	loaded: boolean = false;
 
 	constructor(id) {
