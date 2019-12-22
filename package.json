@@ -29,7 +29,7 @@
 		"@fortawesome/vue-fontawesome": "^0.1.9",
 		"@ionic-native/core": "^5.18.0",
 		"@ionic-native/keyboard": "^5.18.0",
-		"@ionic/core": "4.0.1",
+		"@ionic/core": "4.4.0",
 		"@modus/ionic-vue": "1.1.2",
 		"array-to-sentence": "^2.0.0",
 		"axios": "0.18.0",

@@ -888,12 +888,12 @@
   dependencies:
     "@types/cordova" latest
 
-"@ionic/core@4.0.1":
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/@ionic/core/-/core-4.0.1.tgz#b038b10a25bf677f55a2e1aaa3276144345469b2"
-  integrity sha512-2Zgrs8C+SiGUTPKIAjcVomrPd7cT1A09kSt6CiGDoXtKYRaaF1bVr5NvrjyPa2rfplCtKH5TGhgiAvCvzxLLZQ==
+"@ionic/core@4.4.0":
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/@ionic/core/-/core-4.4.0.tgz#250dbd85000558416b34317cadcc365aefb818c0"
+  integrity sha512-GKu2qwapAG7dipvBG9RdzSxt/CmQXzO7eIa6Wg6uxuNmGE0WSc6fPZmE0YlFD1dkgvhzSY23XBiWVZMgnH/Wdg==
   dependencies:
-    ionicons "4.5.5"
+    ionicons "4.5.6"
 
 "@modus/ionic-vue@1.1.2":
   version "1.1.2"
@@ -4814,10 +4814,10 @@ invert-kv@^2.0.0:
   resolved "https://registry.yarnpkg.com/invert-kv/-/invert-kv-2.0.0.tgz#7393f5afa59ec9ff5f67a27620d11c226e3eec02"
   integrity sha512-wPVv/y/QQ/Uiirj/vh3oP+1Ww+AWehmi1g5fFWGPF6IpCBCDVrhgHRMvrLfdYcwDh3QJbGXDW4JAuzxElLSqKA==
 
-ionicons@4.5.5:
-  version "4.5.5"
-  resolved "https://registry.yarnpkg.com/ionicons/-/ionicons-4.5.5.tgz#b059958a54dd45cfa127acc0baf11503b8671e51"
-  integrity sha512-dIGI73XG6Fg2Ps77ry5Ywe36Pq7wUGkDkl0pBhC4uhsiyoW+oXe+pplmarXEnKEcB5fmlkRrBOxYYzZaoRiUGw==
+ionicons@4.5.6:
+  version "4.5.6"
+  resolved "https://registry.yarnpkg.com/ionicons/-/ionicons-4.5.6.tgz#f3b5d2446e7e1b30e67ddcd1fc563271acc60f3c"
+  integrity sha512-/F3U/rxdLPGl8eUW5dMouhBBoJuUPrlFO6rkoz4VNuw1lxP6l+bFtsDA8MaVM1dHABp+gIHxtpt+IhwmB3oIfA==
 
 ip-regex@^2.1.0:
   version "2.1.0"
