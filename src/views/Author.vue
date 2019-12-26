@@ -4,7 +4,7 @@
 			<ion-toolbar>
 				<ion-buttons slot="start">
 					<ion-button @click="$router.back()">
-						<ion-icon name="arrow-back"></ion-icon>
+						<ion-icon name="arrow-back" />
 						<span v-if="$isIOS">Back</span>
 					</ion-button>
 				</ion-buttons>
@@ -16,10 +16,11 @@
 		<ion-content class="outer-content">
 			<h1>{{article.title}}</h1>
 			<media :media="article.media" />
-			<div v-html="article.content" />
+			<div class="content" v-html="article.content" />
 			<article-preview :article="article"
 			                 :key="article.id" :large="index === 0"
-			                 @click.native="$router.push('/article/' + article.id)" v-for="(article, index) in articles" />
+			                 @click.native="$router.push('/article/' + article.id)"
+			                 v-for="(article, index) in articles" />
 			<ion-infinite-scroll :disabled="articles.length === 0" @ionInfinite="loadContent">
 				<ion-infinite-scroll-content />
 			</ion-infinite-scroll>
@@ -33,7 +34,7 @@ import uniqBy from 'lodash/uniqBy';
 import property from 'lodash/property';
 import ArticlePreview from '../components/ArticlePreview';
 import MediaComponent from '../components/Media.vue';
-import { Search } from '../helpers/api';
+import { AuthorSearch, Search } from '../helpers/api';
 import SaveScroll from '../mixins/SaveScroll';
 import Logo from '@/components/Logo';
 
@@ -50,10 +51,10 @@ export default {
 	asyncComputed: {
 		article: {
 			async get() {
-				const search = new Search(this.API, { name: this.name });
-				await search.next();
-				if (search[0]) {
-					const article = search[0];
+				const search = new AuthorSearch(this.API, { name: this.name, search: false });
+				await search.next(1);
+				if (search.items[0]) {
+					const article = search.items[0];
 					const content = sanitizeHtml(article.content);
 					return {
 						media: article.media,
@@ -72,7 +73,7 @@ export default {
 	},
 	methods: {
 		async loadContent(e) {
-			const articles = (await this.s.next(10)).filter(article => article.id.toString() !== this.from);
+			const articles = (await this.s.next(10)).items.filter(article => article.id.toString() !== this.from);
 			this.articles.push(...articles);
 			this.articles = uniqBy(this.articles, property('id')).sort(({ date1 }, { date2 }) => date2 - date1);
 			if (e) e.target.complete();
@@ -81,3 +82,10 @@ export default {
 	inject: ['API'],
 };
 </script>
+
+<style lang="scss" scoped>
+.content {
+	margin-left: 1em;
+	margin-right: 1em;
+}
+</style>

@@ -9,20 +9,30 @@
 			<CategoryChooser :categories="categories" v-model="selCategory" />
 		</ion-header>
 		<ion-content class="outer-content">
-			<ion-refresher :disabled="articles.length === 0" @ionRefresh="refresh" ref="refresh" slot="fixed">
-				<ion-refresher-content></ion-refresher-content>
+			<ion-refresher :disabled="refreshing" @ionRefresh="refresh" ref="refresh" slot="fixed">
+				<ion-refresher-content />
 			</ion-refresher>
-			<ion-searchbar animated="true" show-cancel-button debounce="500" @ionInput="log" />
+			<ion-searchbar animated="true" show-cancel-button="focus" debounce="500"
+			               @ionInput="searchTerm = $event.target.value" :value="searchTerm"
+			               @ionCancel="searchTerm = ''" />
 			<div class="center">
-				<ion-spinner v-if="articles.length === 0"></ion-spinner>
+				<ion-spinner v-if="refreshing" />
+				<p v-else-if="articles.length === 0">No articles found</p>
 			</div>
+			<ion-item v-for="author in authors" :key="author.id" detail @click="$router.push(`/author/${author.name}`)">
+				<ion-avatar slot="start">
+					<media v-if="author.media" :media="author.media" avatar />
+					<ion-icon v-else class="contact-icon" name="contact" />
+				</ion-avatar>
+				<ion-label>{{ author.name }}</ion-label>
+			</ion-item>
 			<article-preview :article="article"
-			                 :key="article.id"
+			                 :key="`searchTerm ${selCategory.id} ${article.id}`"
 			                 :large="index === 0"
 			                 @click.native="$router.push('/article/' + article.id)"
 			                 v-for="(article, index) in articles" />
 
-			<ion-infinite-scroll :disabled="articles.length === 0" @ionInfinite="loadContent" ref="infinite">
+			<ion-infinite-scroll :disabled="refreshing" @ionInfinite="loadContent" ref="infinite">
 				<ion-infinite-scroll-content />
 			</ion-infinite-scroll>
 		</ion-content>
@@ -37,11 +47,13 @@ import SaveScroll from '../mixins/SaveScroll';
 import CategoryChooser from '../components/CategoryChooser.vue';
 import Media from '../components/Media.vue';
 import ArticlePreview from '../components/ArticlePreview.vue';
-import { ADD_ARTICLE, SET_ARTICLES, SET_CATEGORY } from '@/store/mutations';
+import { SET_CATEGORY, SET_SEARCH_TERM } from '@/store/mutations';
 import { defaultCategories } from '@/helpers/categories';
 // eslint-disable-next-line no-unused-vars
-import { Article, Search } from '@/helpers/api';
+import { Article, Author, AuthorSearch, Post, Search } from '@/helpers/api';
 import Logo from '../components/Logo.vue';
+
+const searches: { articles: Search<Article>, authors: AuthorSearch }[] = [];
 
 type RefresherEvent = { target: RefresherEventDetail };
 @Component({
@@ -51,40 +63,79 @@ type RefresherEvent = { target: RefresherEventDetail };
 })
 export default class NewsHome extends Mixins(SaveScroll) {
 	categories = defaultCategories;
-	s!: Search<Article>;
+	s: Search<Article> | null = null;
+	authorSearch: AuthorSearch | null = null;
+	authors: Author[] = [];
+	articles: Post[] = [];
+	refreshing: Search<Article> | null = null;
+	refreshingAuthors: AuthorSearch | null = null;
 
 	@Inject() readonly API!: any;
-	@Ref('infinite') readonly infiniteScroll?: {complete(): void};
-	@Ref('refresh') readonly refreshComponent?: {cancel(): void};
+	@Ref('infinite') readonly infiniteScroll?: { complete(): void };
+	@Ref('refresh') readonly refreshComponent?: { cancel(): void };
 
-	created() {
-		this.load();
+	@Watch('selCategory')
+	onCategoryChange() {
+		this.searchTerm = '';
+	}
+
+	@Watch('selCategory', { immediate: true })
+	@Watch('searchTerm')
+	onSearchChange() {
+		this.infiniteScroll?.complete();
+		this.refreshComponent?.cancel();
+		let search = searches.find(search => search.articles.categories === this.selCategory.id && search.articles.term === this.searchTerm);
+		if (!search) {
+			search = {
+				articles: new Search(this.API, { categories: this.selCategory.id, term: this.searchTerm }),
+				authors: new AuthorSearch(this.API, { name: this.searchTerm }),
+			};
+			searches.push(search);
+			this.s = search.articles;
+			this.authorSearch = search.authors;
+			this.articles = search.articles.items;
+			this.authors = search.authors.items as Author[];
+			this.refresh();
+		}
+		this.s = search.articles;
+		this.authorSearch = search.authors;
+		this.articles = search.articles.items;
+		this.authors = search.authors.items as Author[];
 	}
 
 	log(e: any) { console.log(e); }
 
 	async loadContent(e?: RefresherEvent) {
-		const category = this.s.categories;
-		const articles = await this.s.next(10);
-		if (category === this.selCategory.id) this.$store.commit(ADD_ARTICLE, articles);
-		if (e) e.target.complete();
+		let search = this.s;
+		if (!search) return;
+		await search.next(10);
+		if (this.s === search) this.articles = search.items;
+		e?.target.complete();
+	}
+
+	async refreshAuthors() {
+		let { authorSearch } = this;
+		if (!authorSearch || !authorSearch.name) return;
+		if (this.refreshingAuthors === authorSearch) return;
+		this.refreshingAuthors = authorSearch;
+		authorSearch.reset();
+		await authorSearch.next(5);
+		console.log(authorSearch);
+		if (this.authorSearch === authorSearch) this.authors = authorSearch.items as Author[];
+		this.refreshingAuthors = null;
 	}
 
 	async refresh(e?: RefresherEvent) {
-		const category = this.s.categories;
-		this.s.reset();
-		const articles = await this.s.next(10);
-		if (category === this.selCategory.id) this.$store.commit(SET_ARTICLES, articles);
-		if (e) e.target.complete();
-	}
-
-	async load() {
-		if (this.infiniteScroll) this.infiniteScroll.complete();
-		if (this.refreshComponent) this.refreshComponent.cancel();
-		if (this.s && this.s.categories === this.selCategory.id) return;
-		this.$store.commit(SET_ARTICLES, []);
-		this.s = new Search(this.API, { categories: this.selCategory.id });
-		this.refresh();
+		let search = this.s;
+		if (!search) return;
+		this.refreshAuthors();
+		if (this.refreshing === search) return;
+		this.refreshing = search;
+		search.reset();
+		await search.next(10);
+		if (this.s === search) this.articles = search.items;
+		e?.target.complete();
+		this.refreshing = null;
 	}
 
 	get selCategory() {
@@ -95,18 +146,12 @@ export default class NewsHome extends Mixins(SaveScroll) {
 		this.$store.commit(SET_CATEGORY, category);
 	}
 
-	get articles() {
-		return this.$store.state.articles;
+	get searchTerm() {
+		return this.$store.state.searchTerm;
 	}
 
-	/*computed: {
-		...mapState({
-			articles: state => state.articles,
-		}),
-	},*/
-	@Watch('selCategory')
-	selectedCategory() {
-		this.load();
+	set searchTerm(term) {
+		this.$store.commit(SET_SEARCH_TERM, term);
 	}
 };
 </script>
@@ -126,5 +171,10 @@ a {
 
 .logo {
 	max-height: 1.5em;
+}
+
+.contact-icon {
+	width: 100%;
+	height: 100%;
 }
 </style>

@@ -14,7 +14,7 @@ const router = new VueRouter({
 	routes: [
 		{ path: '/', component: Home },
 		{ path: '/article/:id', component: Article, props: true },
-		{ path: '/author/:name/:from', component: Author, props: true },
+		{ path: '/author/:name/:from?', component: Author, props: true },
 	],
 });
 router.push('/');

@@ -2,16 +2,12 @@ import { decode } from 'he';
 import { Category } from './categories';
 import { ADD_CACHED, ADD_CACHED_IMAGE } from '../store/mutations';
 
-export class Paginate<T> extends Array<T> {
+export class Paginate<T> {
 	protected wp;
+	public items: Post[] = [];
 
 	constructor(wp) {
-		super();
 		this.wp = wp;
-	}
-
-	static get [Symbol.species]() {
-		return Array;
 	}
 
 	protected _offset = 0;
@@ -29,7 +25,7 @@ export class Paginate<T> extends Array<T> {
 	reset() {
 		this._finished = false;
 		this._offset = 0;
-		super.length = 0;
+		this.items.length = 0;
 	}
 
 	async next(items: number = 25) {
@@ -37,11 +33,10 @@ export class Paginate<T> extends Array<T> {
 		const posts = await this.query(items);
 		posts.forEach(post => {
 			try {
-				// @ts-ignore
-				super.push(this.parse(post));
+				this.items.push(this.parse(post));
 			} catch (e) {
 				console.log(post);
-				console.log(e);
+				console.error(e);
 			}
 		});
 		this._offset += posts.length;
@@ -95,23 +90,46 @@ export class Search<T> extends Paginate<T> {
 	}
 }
 
+export class AuthorSearch extends Paginate<Author> {
+	readonly ids?: Array<number>;
+	readonly name?: string;
+	readonly search?: boolean;
+
+	constructor(wp, { name, ids, search = true }: { name?: string, ids?: number[], search?: boolean }) {
+		super(wp);
+		this.name = name;
+		this.ids = ids;
+		this.search = search;
+	}
+
+	protected query(items: number = 25) {
+		let q = this.wp.writers().offset(this._offset).perPage(items).embed();
+		if (this.ids) q = q.include(this.ids);
+		if (this.name) {
+			q = q.param('filter[meta_key]', 'name');
+			q = q.param('filter[meta_value]', this.name);
+			if (this.search) q = q.param('filter[meta_compare]', 'LIKE');
+		}
+
+		return q;
+	}
+}
+
 export class Post {
 	id: number;
 	content: string;
 	categories: Array<Category>;
 	date: Date;
-	excerpt: string;
 	title: string;
 	subtitle?: string;
 	media?: Media;
 
 	constructor(
-		{ id, content, categories, date, excerpt, title, subtitle, media }: { id, content, categories, date, excerpt, title, subtitle?, media?: Media }) {
+		{ id, content, categories, date, title, subtitle, media }: { id, content, categories, date, title, subtitle?, media?: Media }) {
 		this.id = id;
 		this.content = content;
 		this.categories = categories;
 		this.date = date;
-		this.excerpt = excerpt;
 		this.title = decode(title);
 		this.subtitle = subtitle;
 		this.media = media;
@@ -136,7 +154,6 @@ export class Post {
 		                              content: { rendered: content },
 		                              categories,
 		                              modified_gmt,
-		                              excerpt: { rendered: excerpt },
 		                              title: { rendered: title },
 		                              sno_deck,
 		                              featured_media,
@@ -160,7 +177,6 @@ export class Post {
 			content,
 			categories: categoryList,
 			date: new Date(modified_gmt),
-			excerpt,
 			title,
 			subtitle: sno_deck ? sno_deck[0] : undefined,
 			media,
@@ -171,18 +187,24 @@ export class Post {
 export class Article extends Post {
 	jobTitle?: string;
 	writers?: Array<string>;
+	excerpt: string;
 
 	constructor({ id, content, categories, date, excerpt, title, subtitle, media, jobTitle, writers }:
 		            { id, content, categories, date, excerpt, title, subtitle?, media?, jobTitle?, writers? }) {
-		super({ id, content, categories, date, excerpt, title, subtitle, media });
+		super({ id, content, categories, date, title, subtitle, media });
 		this.jobTitle = jobTitle;
 		this.writers = writers;
+		this.excerpt = excerpt;
 	}
 
-	static fromAPI({ jobtitle, writer, ...data }) {
+	static fromAPI({
+		               jobtitle, writer,
+		               excerpt: { rendered: excerpt }, ...data
+	               }) {
 		return new Article({
 			jobTitle: jobtitle ? jobtitle[0] : undefined,
 			writers: writer,
+			excerpt,
 			// @ts-ignore
 			...super.APITransform(data),
 		});
@@ -196,7 +218,7 @@ export class Author extends Post {
 
 	constructor({ id, content, categories, date, excerpt, media, title, name, position, schoolYear }:
 		            { id, content, categories, date, excerpt, media?, title, name?, position?, schoolYear? }) {
-		super({ id, content, categories, date, excerpt, title, media });
+		super({ id, content, categories, date, title, media });
 		this.name = name;
 		this.position = position;
 		this.schoolYear = schoolYear;

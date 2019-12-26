@@ -1,6 +1,5 @@
 import Vuex from 'vuex';
 import { Storage } from '@capacitor/core';
-import WPAPI from 'wpapi';
 import uniqBy from 'lodash/uniqBy';
 import property from 'lodash/property';
 import Mutations from './mutations';
@@ -8,13 +7,6 @@ import Actions from './actions';
 import { Article, Media, Search } from '../helpers/api';
 import { defaultCategories } from '../helpers/categories';
 
-const wp = new WPAPI({ endpoint: 'https://shakerite.com/wp-json' });
-// @ts-ignore
-window.wp = wp;
-wp.posts().then((articles) => {
-	console.log(articles);
-	return wp.posts().id(articles[0].id);
-}).then(post => console.log(Article.fromAPI(post))).catch(console.error);
 // @ts-ignore
 window.Search = Search;
 
@@ -51,6 +43,7 @@ export interface RootStore {
 	},
 	articles: Article[],
 	category: { name: string, id: number },
+	searchTerm: string,
 	cachedArticles: Article[],
 	cachedImages: Media[],
 	savedArticles: number[],
@@ -69,6 +62,7 @@ export default new Vuex.Store<RootStore>({
 		},
 		articles: [],
 		category: defaultCategories[0],
+		searchTerm: '',
 		cachedArticles: [],
 		cachedImages: [],
 		savedArticles: [],
@@ -99,6 +93,9 @@ export default new Vuex.Store<RootStore>({
 			state.articles = [];
 			state.articles.push(...articles);
 			state.articles = uniqBy(state.articles, property('id')).sort(({ date1 }, { date2 }) => date2 - date1);
+		},
+		[Mutations.SET_SEARCH_TERM](state, term) {
+			state.searchTerm = term;
 		},
 		[Mutations.SET_CATEGORY](state, category) {
 			state.category = category;

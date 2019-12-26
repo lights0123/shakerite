@@ -5,6 +5,7 @@ export const SET_COLOR_BG = 'setBGColor';
 export const SET_COLOR_FG = 'setFGColor';
 export const ADD_ARTICLE = 'addArticle';
 export const SET_ARTICLES = 'setArticle';
+export const SET_SEARCH_TERM = 'setSearchTerm';
 export const SET_CATEGORY = 'setCategory';
 export const ADD_CACHED = 'addCache';
 export const ADD_CACHED_IMAGE = 'addCacheImage';
@@ -19,6 +20,7 @@ export default {
 	SET_COLOR_FG,
 	ADD_ARTICLE,
 	SET_ARTICLES,
+	SET_SEARCH_TERM,
 	SET_CATEGORY,
 	ADD_CACHED,
 	ADD_CACHED_IMAGE,

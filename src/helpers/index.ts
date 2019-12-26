@@ -11,7 +11,7 @@ export enum Platform {
 }
 
 export function getActiveComponent(app) {
-	const tab = document.querySelector('body > ion-tabs > ion-tab:not(.tab-hidden)');
+	const tab = document.querySelector('body ion-tab:not(.tab-hidden)');
 	return app.$children.find(child => tab?.contains(child.$el));
 }
 

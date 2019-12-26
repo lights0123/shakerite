@@ -32,18 +32,19 @@
 </template>
 
 <script lang="ts">
-import {
-	Component, Ref, Vue, Watch,
-} from 'vue-property-decorator';
+import { Component, Ref, Vue, Watch } from 'vue-property-decorator';
 import Settings from './views/Settings.vue';
 import Saved from './views/Saved.vue';
 import News from './views/News.vue';
 import { getActiveComponent } from './helpers';
+import * as helpers from '@/helpers';
+import { Plugins } from '@capacitor/core';
 
+const { App } = Plugins;
 @Component({
 	components: { Settings, Saved, News },
 })
-export default class SettingsHome extends Vue {
+export default class Main extends Vue {
 	bookmarkURL = require('@fortawesome/fontawesome-free/svgs/solid/bookmark.svg');
 	activeTab = 'news';
 	isSystemDark = false;
@@ -69,6 +70,22 @@ export default class SettingsHome extends Vue {
 			this.tabBar.classList.remove('hidden');
 			if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
 		});
+		let activePopover: { dismiss(): void } | undefined;
+		document.addEventListener('ionPopoverDidPresent', ({ target }) => {
+			activePopover = target as unknown as { dismiss(): void };
+		});
+		document.addEventListener('ionPopoverDidDismiss', () => {
+			activePopover = undefined;
+		});
+		window.addEventListener('ionBackButton', (e) => {
+			if (activePopover) {
+				activePopover.dismiss();
+			} else {
+				const component = helpers.getActiveComponent(this);
+				if (component.$router.history.index > 0) component.$router.history.go(-1); else App.exitApp();
+			}
+			e.stopPropagation();
+		}, true);
 
 		const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)') as any;
 		this.isSystemDark = mediaQuery.matches;
@@ -83,6 +100,7 @@ export default class SettingsHome extends Vue {
 			component.$router.history.go(-component.$router.history.index);
 		}
 		this.activeTab = e;
+		this.$router.replace(e);
 	}
 }
 </script>

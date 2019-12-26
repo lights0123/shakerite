@@ -136,7 +136,7 @@ export default class ArticlePage extends Mixins(SaveScroll) {
 				a: ['href', 'target'],
 			},
 			allowedClasses: {
-				div: ['pullquote'],
+				div: ['pullquote', 'storysidebar'],
 				p: ['pullquotetext', 'quotespeaker'],
 			},
 			transformTags: {
@@ -190,7 +190,7 @@ export default class ArticlePage extends Mixins(SaveScroll) {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 h1 {
 	font-size: calc(var(--font-size) * 1.8);
 	text-align: center;
@@ -215,33 +215,37 @@ small {
 	font-size: var(--font-size);
 }
 
-.article >>> iframe {
+.article::v-deep iframe {
 	width: 100vw;
 }
 
-.article >>> iframe[src*="://youtube.com"], .article >>> iframe[src*="://www.youtube.com"] {
+.article::v-deep iframe[src*="://youtube.com"], .article::v-deep iframe[src*="://www.youtube.com"] {
 	height: 56.25vw;
 }
 
-.article >>> h1, .article >>> h2, .article >>> h3, .article >>> h4, .article >>> h5, .article >>> h6, .article >>> p {
+.article::v-deep h1, .article::v-deep h2, .article::v-deep h3, .article::v-deep h4, .article::v-deep h5, .article::v-deep h6, .article::v-deep p {
 	margin-left: 15px;
 	margin-right: 15px;
 }
 
-.article >>> .pullquote {
+.article::v-deep .storysidebar {
+	font-size: calc(var(--font-size) * 1.4);
+}
+
+.article::v-deep .pullquote {
 	/* Hide everything except for .pullquotetext and .quotespeaker */
 	font-size: 0;
 }
 
-.article >>> .pullquotetext {
+.article::v-deep .pullquotetext {
 	font-size: calc(var(--font-size) * 2);
 }
 
-.article >>> .pullquotetext:before {
+.article::v-deep .pullquotetext:before {
 	content: "“";
 }
 
-.article >>> .quotespeaker {
+.article::v-deep .quotespeaker {
 	font-size: calc(var(--font-size) * 1.3);
 }
 
@@ -266,7 +270,7 @@ small {
 	content: ", and ";
 }
 
-.author >>> a {
+.author::v-deep a {
 	text-decoration: none;
 	color: inherit;
 	font-weight: bolder;

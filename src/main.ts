@@ -2,7 +2,8 @@ import 'mdn-polyfills/Node.prototype.replaceWith';
 import Vue from 'vue';
 import Vuex from 'vuex';
 import './theme/common.css';
-import { Ionic, IonicAPI } from '@modus/ionic-vue';
+import Ionic from '@modus/ionic-vue';
+import '@ionic/core/css/ionic.bundle.css';
 import { Capacitor, Plugins, StatusBarStyle } from '@capacitor/core';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -15,7 +16,23 @@ import * as helpers from './helpers';
 import returnBody from './helpers/WPResponse';
 import { enableReviews } from './helpers/review';
 import Main from './Main.vue';
+import VueRouter from '@/router';
+import { addIcons } from 'ionicons';
+import * as allIcons from 'ionicons/icons';
 
+const currentIcons = Object.keys(allIcons).map(i => {
+	if (typeof allIcons[i] === 'string') {
+		return {
+			[i.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`)]: allIcons[i],
+		};
+	}
+	return {
+		['ios-' + i]: allIcons[i].ios,
+		['md-' + i]: allIcons[i].md,
+	};
+});
+const iconsObject = Object.assign({}, ...currentIcons);
+addIcons(iconsObject);
 enableReviews();
 const {
 	SplashScreen, Network, StatusBar, Browser, App,
@@ -24,8 +41,7 @@ Vue.config.productionTip = false;
 library.add(faBookmark, faFont, faBookmarkRegular);
 // window.HTTP = HTTP;
 Vue.component('font-awesome-icon', FontAwesomeIcon);
-Ionic.init();
-Vue.use(IonicAPI);
+Vue.use(Ionic);
 Vue.use(Vuex);
 Vue.use(VueShave, { character: '…' });
 Vue.use(AsyncComputed);
@@ -104,25 +120,9 @@ getData(store).then(() => {
 		render: h => h(Main),
 		mounted() {
 			console.log('mounted!');
+
 			SplashScreen.hide().catch(console.error);
 			if (Capacitor.platform === 'ios') initNavGesture(this);
-
-			let activePopover: {dismiss(): void} | undefined;
-			document.addEventListener('ionPopoverDidPresent', ({ target }) => {
-				activePopover = target as unknown as {dismiss(): void};
-			});
-			document.addEventListener('ionPopoverDidDismiss', () => {
-				activePopover = undefined;
-			});
-			window.addEventListener('ionBackButton', (e) => {
-				if (activePopover) {
-					activePopover.dismiss();
-				} else {
-					const component = helpers.getActiveComponent(this);
-					if (component.$router.history.index > 0) component.$router.history.go(-1); else App.exitApp();
-				}
-				e.stopPropagation();
-			}, true);
 		},
 		provide() {
 			let transport = {};
@@ -149,9 +149,20 @@ getData(store).then(() => {
 					},
 				};
 			}
+			const wpapi = new WPAPI({ endpoint: 'https://shakerite.com/wp-json', transport });
+			wpapi.writers = wpapi.registerRoute('wp/v2', 'staff-profile/(?P<id>)');
+			// @ts-ignore
+			window.wp = wpapi;
 			return {
-				API: new WPAPI({ endpoint: 'https://shakerite.com/wp-json', transport }),
+				API: wpapi,
 			};
 		},
+		router: new VueRouter({
+			mode: 'history',
+			base: process.env.BASE_URL,
+			routes: [
+				{ path: '/', redirect: '/news' },
+			],
+		}),
 	}).$mount('#app');
 });
