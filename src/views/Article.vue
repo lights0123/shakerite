@@ -38,7 +38,8 @@
 					<router-link :to="`/author/${writer}/${id}`">{{ writer }}</router-link>
 				</span>
 			</small>
-			<media :media="article.media" />
+			<gallery v-if="gallery" :pictures="gallery" />
+			<media v-else :media="article.media" />
 			<div class="article">
 				<component :is="article.content" />
 			</div>
@@ -60,16 +61,20 @@ import Logo from '../components/Logo.vue';
 import AsyncComputed from '@/components/asyncComputed';
 // eslint-disable-next-line no-unused-vars
 import { Category } from '@/helpers/categories';
+import Gallery from '@/components/Gallery.vue';
 
 const { Share } = Plugins;
 @Component({
 	components: {
+		Gallery,
 		Media: MediaComponent, Logo,
 	},
 })
 export default class ArticlePage extends Mixins(SaveScroll) {
 	@Prop(String)
 	id;
+
+	gallery: number[] | null = null;
 
 	openFonts(event: MouseEvent) {
 		this.$ionic.popoverController.create({
@@ -127,63 +132,73 @@ export default class ArticlePage extends Mixins(SaveScroll) {
 	@AsyncComputed({ default: {} })
 	// @ts-ignore
 	async article() {
-		const article: Article = await Article.getPost(this.API, parseInt(this.id, 10), this.$store);
-		let content = sanitizeHtml(article.content, {
-			allowedTags: [...sanitizeHtml.defaults.allowedTags, 'img'],
-			allowedAttributes: {
-				img: ['src', 'srcset', 'class'],
-				iframe: ['src', 'allowfullscreen'],
-				a: ['href', 'target'],
-			},
-			allowedClasses: {
-				div: ['pullquote', 'storysidebar'],
-				p: ['pullquotetext', 'quotespeaker'],
-			},
-			transformTags: {
-				a: sanitizeHtml.simpleTransform('a', { target: '_blank' }),
-			},
-		});
-		const parser = new DOMParser().parseFromString(content, 'text/html');
-		const images: { [id: string]: Media } = {};
-		parser.querySelectorAll('a').forEach((e) => {
-			if (e.children.length !== 1 || e.children[0].tagName !== 'IMG') {
-				const link = document.createElement('smart-link');
-				link.setAttribute('href', e.getAttribute('href') || '');
-				link.innerHTML = e.innerHTML;
-				e.replaceWith(link);
-				return;
-			}
-			// Wordpress saved the image ID as a class on the <a> element. An example is wp-image-18655.
-			const parsedClass = /wp-image-(\d+)/i.exec(e.children[0].className);
-			if (!parsedClass) return;
-			const imageID = parsedClass[1];
-			images[imageID] = new Media(imageID);
-			const media = document.createElement('media');
-			media.setAttribute(':media', `images[${imageID}]`);
-			e.replaceWith(media);
-		});
-		content = {
-			data() {
-				return { images };
-			},
-			components: { Media: MediaComponent, SmartLink: A },
-			template: parser.body.innerHTML,
-		};
-		const categoriesPromises: Promise<Category>[] = [];
-		article.categories.forEach((category) => {
-			categoriesPromises.push(category.fetch(this.API));
-		});
-		const categories: Category[] = await Promise.all(categoriesPromises);
-		const writers: string[] = (article.writers || []).filter(writer => writer !== '');
-		return {
-			media: article.media,
-			title: article.title,
-			subtitle: article.subtitle,
-			content,
-			categories,
-			writers,
-			excerpt: article.excerpt,
-		};
+		try {
+			const article: Article = this.$route.query.slug ? await Article.getPostBySlug(this.API, this.id) : await Article.getPost(this.API, parseInt(this.id, 10), this.$store);
+			const galleryIDs = /var photoids = '([\d,]+)';/.exec(article.content)?.[1];
+			if (galleryIDs) {
+				this.gallery = JSON.parse(`[${galleryIDs}]`);
+			} else this.gallery = null;
+			let content = sanitizeHtml(article.content, {
+				allowedTags: [...sanitizeHtml.defaults.allowedTags, 'img'],
+				allowedAttributes: {
+					img: ['src', 'srcset', 'class'],
+					iframe: ['src', 'allowfullscreen'],
+					a: ['href', 'target'],
+				},
+				allowedClasses: {
+					div: ['pullquote', 'storysidebar', 'photowrap', 'remodal'],
+					p: ['pullquotetext', 'quotespeaker'],
+				},
+				transformTags: {
+					a: sanitizeHtml.simpleTransform('a', { target: '_blank' }),
+				},
+			});
+			const parser = new DOMParser().parseFromString(content, 'text/html');
+			const images: { [id: string]: Media } = {};
+			parser.querySelectorAll('a').forEach((e) => {
+				if (e.children.length !== 1 || e.children[0].tagName !== 'IMG') {
+					const link = document.createElement('smart-link');
+					link.setAttribute('href', e.getAttribute('href') || '');
+					link.innerHTML = e.innerHTML;
+					e.replaceWith(link);
+					return;
+				}
+				// Wordpress saved the image ID as a class on the <a> element. An example is wp-image-18655.
+				const parsedClass = /wp-image-(\d+)/i.exec(e.children[0].className);
+				if (!parsedClass) return;
+				const imageID = parsedClass[1];
+				images[imageID] = new Media(imageID);
+				const media = document.createElement('media');
+				media.setAttribute(':media', `images[${imageID}]`);
+				e.replaceWith(media);
+			});
+			content = {
+				data() {
+					return { images };
+				},
+				components: { Media: MediaComponent, SmartLink: A },
+				template: parser.body.innerHTML,
+			};
+			const categoriesPromises: Promise<Category>[] = [];
+			article.categories.forEach((category) => {
+				categoriesPromises.push(category.fetch(this.API));
+			});
+			const categories: Category[] = await Promise.all(categoriesPromises);
+			const writers: string[] = (article.writers || []).filter(writer => writer !== '');
+			this.$el.getElementsByTagName('ion-content')[0]?.shadowRoot?.querySelector('.inner-scroll')?.scrollTo(0, 0);
+			return {
+				media: article.media,
+				title: article.title,
+				subtitle: article.subtitle,
+				content,
+				categories,
+				writers,
+				excerpt: article.excerpt,
+			};
+		} catch (e) {
+			console.error(e);
+			this.$router.back();
+		}
 	}
 
 	@Inject() readonly API!: any;
@@ -239,6 +254,15 @@ small {
 
 .article::v-deep .pullquotetext {
 	font-size: calc(var(--font-size) * 2);
+}
+
+.article::v-deep {
+	.photowrap, .remodal {
+		display: none;
+	}
+	.remodal + div + p {
+		display: none;
+	}
 }
 
 .article::v-deep .pullquotetext:before {

@@ -120,7 +120,6 @@ export default class NewsHome extends Mixins(SaveScroll) {
 		this.refreshingAuthors = authorSearch;
 		authorSearch.reset();
 		await authorSearch.next(5);
-		console.log(authorSearch);
 		if (this.authorSearch === authorSearch) this.authors = authorSearch.items as Author[];
 		this.refreshingAuthors = null;
 	}

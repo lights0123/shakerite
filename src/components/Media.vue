@@ -1,20 +1,27 @@
 <template>
-	<div class="wrapper" :class="avatar ? 'avatar' : ''" :style="avatar ? {} : {'padding-top': aspect}">
-		<img :src="src" />
+	<div>
+		<div class="wrapper" :class="avatar ? 'avatar' : ''" :style="avatar ? {} : {'padding-top': aspect}">
+			<img :src="src" />
+		</div>
+		<p v-if="caption" class="caption">{{ sanitize(captionText) }}</p>
 	</div>
 </template>
 
 <script lang="ts">
 import { Component, Inject, Prop, Vue, Watch } from 'vue-property-decorator';
-
+import sanitizeHtml from 'sanitize-html';
+// eslint-disable-next-line no-unused-vars
+import { Media as MediaAPI } from '@/helpers/api';
 
 @Component
 export default class Media extends Vue {
-	@Prop() media!: any;
+	@Prop() media!: MediaAPI;
 	@Prop({ type: Boolean, default: false }) avatar!: boolean;
+	@Prop({ type: Boolean, default: false }) caption!: boolean;
 	aspect: string | null = null;
 	src: string | null = null;
 	image = null;
+	captionText: string | null = null;
 
 	@Watch('media', { immediate: true })
 	async onMedia() {
@@ -26,10 +33,15 @@ export default class Media extends Vue {
 				const selectedSize = this.media.sizes.find(size => size.width >= idealWidth) || sizes[sizes.length - 1];
 				this.src = selectedSize.url;
 				this.aspect = `${selectedSize.aspectRatio}%`;
+				this.captionText = this.media.caption ?? null;
 			}
 		} catch (e) {
 			console.error(e);
 		}
+	}
+
+	sanitize(text: string) {
+		return sanitizeHtml(text, { allowedTags: [] });
 	}
 
 	@Inject() readonly API!: any;
@@ -59,5 +71,10 @@ export default class Media extends Vue {
 		object-fit: cover;
 		border-radius: 50%;
 	}
+}
+
+.caption {
+	font-size: calc(var(--font-size) * 0.8);
+	word-break: break-word;
 }
 </style>

@@ -94,17 +94,20 @@ export class AuthorSearch extends Paginate<Author> {
 	readonly ids?: Array<number>;
 	readonly name?: string;
 	readonly search?: boolean;
+	readonly slug?: string;
 
-	constructor(wp, { name, ids, search = true }: { name?: string, ids?: number[], search?: boolean }) {
+	constructor(wp, { name, ids, slug, search = true }: { name?: string, ids?: number[], slug?: string, search?: boolean }) {
 		super(wp);
 		this.name = name;
 		this.ids = ids;
+		this.slug = slug;
 		this.search = search;
 	}
 
 	protected query(items: number = 25) {
 		let q = this.wp.writers().offset(this._offset).perPage(items).embed();
 		if (this.ids) q = q.include(this.ids);
+		if (this.slug) q = q.slug(this.slug);
 		if (this.name) {
 			q = q.param('filter[meta_key]', 'name');
 			q = q.param('filter[meta_value]', this.name);
@@ -147,6 +150,10 @@ export class Post {
 		let article = this.fromAPI(await wp.posts().id(id).embed());
 		if (store) store.commit(ADD_CACHED, article);
 		return article;
+	}
+
+	static async getPostBySlug(wp, slug: string) {
+		return this.fromAPI((await wp.posts().slug(slug).embed())[0]);
 	}
 
 	protected static APITransform({
@@ -240,11 +247,11 @@ export class Author extends Post {
 export class MediaSize {
 	width: number;
 	height: number;
-	url: URL;
+	url: string;
 	name?: string;
 	size?: number;
 
-	constructor(width: number, height: number, url: URL, name?: string, size?: number) {
+	constructor(width: number, height: number, url: string, name?: string, size?: number) {
 		this.width = width;
 		this.height = height;
 		this.size = size;
