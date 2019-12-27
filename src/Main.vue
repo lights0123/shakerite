@@ -1,3 +1,4 @@
+import { StatusBarStyle } from '@capacitor/core';
 <template>
 	<ion-tabs>
 		<ion-tab tab="news">
@@ -38,9 +39,9 @@ import Saved from './views/Saved.vue';
 import News from './views/News.vue';
 import { getActiveComponent } from './helpers';
 import * as helpers from '@/helpers';
-import { Plugins } from '@capacitor/core';
+import { Plugins, StatusBarStyle } from '@capacitor/core';
 
-const { App } = Plugins;
+const { App, StatusBar } = Plugins;
 @Component({
 	components: { Settings, Saved, News },
 })
@@ -60,6 +61,8 @@ export default class Main extends Vue {
 	changeTheme(data: boolean) {
 		if (data) document.body.classList.add('dark');
 		else document.body.classList.remove('dark');
+		StatusBar.setBackgroundColor({ color: data ? '#000000' : '#ffffff' }).catch(console.error);
+		StatusBar.setStyle({ style: data ? StatusBarStyle.Dark : StatusBarStyle.Light }).catch(console.error);
 	}
 
 	mounted() {

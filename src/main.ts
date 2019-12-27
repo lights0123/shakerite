@@ -4,7 +4,7 @@ import Vuex from 'vuex';
 import './theme/common.css';
 import Ionic from '@modus/ionic-vue';
 import '@ionic/core/css/ionic.bundle.css';
-import { Capacitor, Plugins, StatusBarStyle } from '@capacitor/core';
+import { Capacitor, Plugins } from '@capacitor/core';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faBookmark, faFont } from '@fortawesome/free-solid-svg-icons';
@@ -21,14 +21,15 @@ import { addIcons } from 'ionicons';
 import * as allIcons from 'ionicons/icons';
 
 const currentIcons = Object.keys(allIcons).map(i => {
-	if (typeof allIcons[i] === 'string') {
+	const key = i.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`)
+	if(typeof allIcons[i] === 'string') {
 		return {
-			[i.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`)]: allIcons[i],
-		};
+			[key]: allIcons[i],
+		}
 	}
 	return {
-		['ios-' + i]: allIcons[i].ios,
-		['md-' + i]: allIcons[i].md,
+		['ios-' + key]: allIcons[i].ios,
+		['md-' + key]: allIcons[i].md,
 	};
 });
 const iconsObject = Object.assign({}, ...currentIcons);
@@ -57,10 +58,6 @@ async function initCapacitor() {
 	// Platform checks
 	Vue.prototype.$isWeb = Capacitor.platform === 'web';
 	Vue.prototype.$isIOS = Capacitor.platform === 'ios';
-
-	// Set status-bar background and style
-	StatusBar.setBackgroundColor({ color: '#ffffff' }).catch(console.error);
-	StatusBar.setStyle({ style: StatusBarStyle.Light }).catch(console.error);
 
 	// Set network checks
 	Network.getStatus()

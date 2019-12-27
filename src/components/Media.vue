@@ -1,16 +1,14 @@
 <template>
-	<div>
-		<div class="wrapper" :class="avatar ? 'avatar' : ''" :style="avatar ? {} : {'padding-top': aspect}">
-			<img :src="src" />
-		</div>
-		<p v-if="caption" class="caption">{{ sanitize(captionText) }}</p>
+	<div class="wrapper" :class="[avatar ? 'avatar' : '', caption ? 'caption' : '']"
+	     :style="avatar || caption ? {} : {'padding-top': aspect}">
+		<img :src="src" />
+		<p v-if="caption">{{ sanitize(captionText) }}</p>
 	</div>
 </template>
 
 <script lang="ts">
 import { Component, Inject, Prop, Vue, Watch } from 'vue-property-decorator';
 import sanitizeHtml from 'sanitize-html';
-// eslint-disable-next-line no-unused-vars
 import { Media as MediaAPI } from '@/helpers/api';
 
 @Component
@@ -49,7 +47,7 @@ export default class Media extends Vue {
 </script>
 
 <style scoped lang="scss">
-.wrapper:not(.avatar) {
+.wrapper:not(.avatar):not(.caption) {
 	width: 100%;
 	position: relative;
 
@@ -74,7 +72,13 @@ export default class Media extends Vue {
 }
 
 .caption {
-	font-size: calc(var(--font-size) * 0.8);
-	word-break: break-word;
+	img {
+		max-height: 67vw;
+	}
+
+	p {
+		font-size: calc(var(--font-size) * 0.8);
+		word-break: break-word;
+	}
 }
 </style>

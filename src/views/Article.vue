@@ -59,7 +59,6 @@ import SaveScroll from '../mixins/SaveScroll';
 import { SET_SAVED_ARTICLES } from '@/store/actions';
 import Logo from '../components/Logo.vue';
 import AsyncComputed from '@/components/asyncComputed';
-// eslint-disable-next-line no-unused-vars
 import { Category } from '@/helpers/categories';
 import Gallery from '@/components/Gallery.vue';
 
@@ -222,7 +221,7 @@ small {
 	display: block;
 }
 
-.article {
+.content {
 	user-select: auto;
 }
 

@@ -15,15 +15,16 @@
 		</ion-header>
 		<ion-content class="content">
 			<div class="padding">
-				<ion-text>
+				<ion-text class="text">
 					<h1>Content</h1>
 					All content shown in the app is Copyright © {{ year }} The Shakerite, all rights reserved, unless
 					otherwise noted.
 
 					<h1>App</h1>
 					<p>
-						The Shakerite app is Copyright © {{ year }} Ben Schattinger, released under the following
-						license:
+						The Shakerite app is Copyright © {{ year }} Ben Schattinger,
+						<smart-link href="https://github.com/lights0123/shakerite/">released</smart-link>
+						under the following license:
 					</p>
 					<h1 id="mozilla-public-license-version-2.0">Mozilla Public License<br>Version 2.0</h1>
 					<h2 id="definitions">1. Definitions</h2>
@@ -401,10 +402,11 @@
 
 <script>
 import Logo from '@/components/Logo';
+import A from '@/components/A';
 
 export default {
 	name: 'About',
-	components: { Logo },
+	components: { Logo, SmartLink: A },
 	computed: {
 		year() {
 			return (new Date()).getFullYear();
@@ -416,5 +418,9 @@ export default {
 <style scoped>
 .padding {
 	padding: 15px;
+}
+
+.text {
+	user-select: auto;
 }
 </style>

@@ -15,11 +15,13 @@
 		</ion-header>
 		<ion-content class="content">
 			<div class="padding">
-				<ion-text>
-					<h1>The New Shakerite App</h1>
+				<ion-text class="text">
+					<h1>The Shakerite App</h1>
 
 					<p>
-						The new Shakerite app was created by Ben Schattinger. Contact us to submit feedback.
+						The Shakerite app was created by
+						<smart-link href="https://lights0123.com">Ben Schattinger</smart-link>.
+						Contact us to submit feedback.
 					</p>
 				</ion-text>
 			</div>
@@ -30,15 +32,20 @@
 <script>
 
 import Logo from '@/components/Logo';
+import A from '@/components/A';
 
 export default {
 	name: 'About',
-	components: { Logo },
+	components: { Logo, SmartLink: A },
 };
 </script>
 
 <style scoped>
 .padding {
 	padding: 15px;
+}
+
+.text {
+	user-select: auto;
 }
 </style>

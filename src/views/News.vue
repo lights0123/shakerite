@@ -7,6 +7,7 @@ import VueRouter from '../router';
 import Home from './NewsHome.vue';
 import Article from './Article.vue';
 import Author from './Author.vue';
+import Dinosaur from '@/views/Dinosaur.vue';
 
 const router = new VueRouter({
 	mode: 'abstract',
@@ -15,6 +16,7 @@ const router = new VueRouter({
 		{ path: '/', component: Home },
 		{ path: '/article/:id', component: Article, props: true },
 		{ path: '/author/:name/:from?', component: Author, props: true },
+		{ path: '/dino', component: Dinosaur },
 	],
 });
 router.push('/');

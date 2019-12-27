@@ -14,9 +14,10 @@
 			</ion-toolbar>
 		</ion-header>
 		<ion-content class="outer-content">
-			<h1>{{article.title}}</h1>
-			<media :media="article.media" />
-			<div class="content" v-html="article.content" />
+			<p class="center" v-if="error">Author not found!</p>
+			<h1 class="select">{{article.title}}</h1>
+			<media class="select" :media="article.media" />
+			<div class="select content" v-html="article.content" />
 			<article-preview :article="article"
 			                 :key="article.id" :large="index === 0"
 			                 @click.native="$router.push('/article/' + article.id)"
@@ -34,14 +35,12 @@ import uniqBy from 'lodash/uniqBy';
 import property from 'lodash/property';
 import ArticlePreview from '@/components/ArticlePreview.vue';
 import MediaComponent from '@/components/Media.vue';
-// eslint-disable-next-line no-unused-vars
 import { AuthorSearch, Post, Search } from '@/helpers/api';
 import SaveScroll from '@/mixins/SaveScroll';
 import Logo from '@/components/Logo.vue';
 import { Component, Inject, Mixins, Prop, Watch } from 'vue-property-decorator';
 import AsyncComputed from '@/components/asyncComputed';
 import openLink from '@/helpers/link';
-// eslint-disable-next-line no-unused-vars
 import { RefresherEventDetail } from '@ionic/core';
 
 type RefresherEvent = { target: RefresherEventDetail };
@@ -53,6 +52,7 @@ export default class Author extends Mixins(SaveScroll) {
 	articles: Post[] = [];
 	authorName: string | null = null;
 	s: Search<Post> | null = null;
+	error = false;
 
 	@AsyncComputed({ default: {} })
 	async article() {
@@ -72,7 +72,7 @@ export default class Author extends Mixins(SaveScroll) {
 			};
 		} else if (this.$route.query.slug) {
 			openLink(`https://shakerite.com/staff-profile/${this.name}`, this.$store);
-		}
+		} else this.error = true;
 		return {};
 	}
 
@@ -101,8 +101,16 @@ export default class Author extends Mixins(SaveScroll) {
 </script>
 
 <style lang="scss" scoped>
+.center {
+	text-align: center;
+}
+
 .content {
 	margin-left: 1em;
 	margin-right: 1em;
+}
+
+.select {
+	user-select: auto;
 }
 </style>
