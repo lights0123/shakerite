@@ -1,12 +1,9 @@
 <template>
-	<ion-page class="ion-page">
+	<fragment>
 		<ion-header>
 			<ion-toolbar>
 				<ion-buttons slot="start">
-					<ion-button @click="$router.back()">
-						<ion-icon name="arrow-back" />
-						<span v-if="$isIOS">Back</span>
-					</ion-button>
+					<ion-back-button />
 				</ion-buttons>
 				<ion-title>
 					<logo />
@@ -397,22 +394,29 @@
 				</ion-text>
 			</div>
 		</ion-content>
-	</ion-page>
+	</fragment>
 </template>
 
-<script>
-import Logo from '@/components/Logo';
-import A from '@/components/A';
+<script lang="ts">
+import Logo from '@/components/Logo.vue';
+import A from '@/components/A.vue';
+import { Component, Vue } from 'vue-property-decorator';
+import { injectParent } from '../helpers';
 
-export default {
-	name: 'About',
+@Component({
 	components: { Logo, SmartLink: A },
-	computed: {
-		year() {
-			return (new Date()).getFullYear();
-		},
-	},
-};
+})
+export default class Copyright extends Vue {
+	beforeCreate() {
+		this.$store = this.$parent.$store;
+	}
+
+	get year() {
+		return (new Date()).getFullYear();
+	}
+}
+
+Vue.customElement('app-copyright', (Copyright as any).options, injectParent);
 </script>
 
 <style scoped>

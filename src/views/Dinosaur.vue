@@ -1,32 +1,29 @@
 <template>
-	<ion-page class="ion-page">
+	<fragment>
 		<ion-header>
 			<ion-toolbar>
 				<ion-buttons slot="start">
-					<ion-button @click="$router.back()">
-						<ion-icon name="arrow-back"></ion-icon>
-						<span v-if="$isIOS">Back</span>
-					</ion-button>
+					<ion-back-button />
 				</ion-buttons>
 			</ion-toolbar>
 		</ion-header>
 		<ion-content class="content">
 			<iframe class="dino" :srcdoc="dino"></iframe>
 		</ion-content>
-	</ion-page>
+	</fragment>
 </template>
 
 <script lang="ts">
 import dino from '@/components/dinosaur.html';
+import { Component, Vue } from 'vue-property-decorator';
+import { injectParent } from '@/helpers';
 
-export default {
-	data() {
-		return {
-			dino: dino,
-		};
-	},
-	name: 'Dinosaur',
-};
+@Component
+export default class Dinosaur extends Vue {
+	dino = dino;
+}
+
+Vue.customElement('app-dino', (Dinosaur as any).options, injectParent);
 </script>
 
 <style scoped>

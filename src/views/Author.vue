@@ -1,12 +1,9 @@
 <template>
-	<ion-page class="ion-page">
+	<fragment>
 		<ion-header>
 			<ion-toolbar>
 				<ion-buttons slot="start">
-					<ion-button @click="$router.back()">
-						<ion-icon name="arrow-back" />
-						<span v-if="$isIOS">Back</span>
-					</ion-button>
+					<ion-back-button />
 				</ion-buttons>
 				<ion-title>
 					<logo />
@@ -20,13 +17,13 @@
 			<div class="select content" v-html="article.content" />
 			<article-preview :article="article"
 			                 :key="article.id" :large="index === 0"
-			                 @click.native="$router.push('/article/' + article.id)"
+			                 @click.native="getNav().push('app-article',{id:article.id})"
 			                 v-for="(article, index) in articles" />
 			<ion-infinite-scroll :disabled="articles.length === 0" @ionInfinite="loadContent">
 				<ion-infinite-scroll-content />
 			</ion-infinite-scroll>
 		</ion-content>
-	</ion-page>
+	</fragment>
 </template>
 
 <script lang="ts">
@@ -36,28 +33,33 @@ import property from 'lodash/property';
 import ArticlePreview from '@/components/ArticlePreview.vue';
 import MediaComponent from '@/components/Media.vue';
 import { AuthorSearch, Post, Search } from '@/helpers/api';
-import SaveScroll from '@/mixins/SaveScroll';
 import Logo from '@/components/Logo.vue';
-import { Component, Inject, Mixins, Prop, Watch } from 'vue-property-decorator';
+import { Component, Inject, Prop, Vue, Watch } from 'vue-property-decorator';
 import AsyncComputed from '@/components/asyncComputed';
 import openLink from '@/helpers/link';
 import { RefresherEventDetail } from '@ionic/core';
+import { getNav, injectParent } from '@/helpers';
 
 type RefresherEvent = { target: RefresherEventDetail };
 @Component({ components: { Logo, ArticlePreview, Media: MediaComponent } })
-export default class Author extends Mixins(SaveScroll) {
-	@Prop() name!: string;
-	@Prop() from?: string;
+export default class Author extends Vue {
+	@Prop({ type: String, required: true }) name!: string;
+	@Prop(String) from?: string;
+	@Prop({ type: Boolean, default: false }) slug!: boolean;
 	@Inject() readonly API!: any;
 	articles: Post[] = [];
 	authorName: string | null = null;
 	s: Search<Post> | null = null;
 	error = false;
 
+	beforeCreate() {this.$store = this.$parent.$store;}
+
+	getNav() {return getNav();}
+
 	@AsyncComputed({ default: {} })
 	async article() {
 		const params: ConstructorParameters<typeof AuthorSearch>[1] = { search: false };
-		if (this.$route.query.slug) params.slug = this.name;
+		if (this.slug) params.slug = this.name;
 		else params.name = this.name;
 		const search = new AuthorSearch(this.API, params);
 		await search.next(1);
@@ -70,7 +72,7 @@ export default class Author extends Mixins(SaveScroll) {
 				title: article.title,
 				content,
 			};
-		} else if (this.$route.query.slug) {
+		} else if (this.slug) {
 			openLink(`https://shakerite.com/staff-profile/${this.name}`, this.$store);
 		} else this.error = true;
 		return {};
@@ -83,7 +85,7 @@ export default class Author extends Mixins(SaveScroll) {
 
 	@Watch('authorName', { immediate: true })
 	onArticleChange(authorName: string | null) {
-		if (this.$route.query.slug) {
+		if (this.slug) {
 			if (authorName) this.s = new Search(this.API, { author: authorName });
 			else this.s = null;
 		} else this.s = new Search(this.API, { author: this.name });
@@ -98,6 +100,8 @@ export default class Author extends Mixins(SaveScroll) {
 		if (e) e.target.complete();
 	}
 };
+
+Vue.customElement('app-author', (Author as any).options, injectParent);
 </script>
 
 <style lang="scss" scoped>

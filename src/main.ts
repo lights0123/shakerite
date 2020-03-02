@@ -9,23 +9,23 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faBookmark, faFont } from '@fortawesome/free-solid-svg-icons';
 import { faBookmark as faBookmarkRegular } from '@fortawesome/free-regular-svg-icons';
+import '@/helpers/customElement';
 import WPAPI from 'wpapi';
 import VueShave from 'vue-shave';
 import AsyncComputed from 'vue-async-computed';
 import * as helpers from './helpers';
-import returnBody from './helpers/WPResponse';
 import { enableReviews } from './helpers/review';
 import Main from './Main.vue';
-import VueRouter from '@/router';
 import { addIcons } from 'ionicons';
 import * as allIcons from 'ionicons/icons';
+import { wpapi } from '@/helpers/api';
 
 const currentIcons = Object.keys(allIcons).map(i => {
-	const key = i.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`)
-	if(typeof allIcons[i] === 'string') {
+	const key = i.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
+	if (typeof allIcons[i] === 'string') {
 		return {
 			[key]: allIcons[i],
-		}
+		};
 	}
 	return {
 		['ios-' + key]: allIcons[i].ios,
@@ -72,33 +72,6 @@ async function initCapacitor() {
 	});
 }
 
-// Navigate through a swipe gesture
-async function initNavGesture(app) {
-	const gesture = await import('@ionic/core/dist/collection/utils/gesture');
-
-	gesture
-		.createGesture({
-			el: document,
-			gestureName: 'swipe',
-			gesturePriority: 40,
-			threshold: 10,
-			queue: window.Ionic.queue,
-			canStart: () => true,
-			onStart: () => {
-			},
-			onMove: () => {
-			},
-			onEnd: (ev) => {
-				const threshold = app.$root.$el.offsetWidth / 2;
-				if (Math.abs(ev.deltaX) < threshold) {
-					return;
-				}
-				helpers.getActiveComponent(app).$router.go(ev.deltaX > 0 ? -1 : 1);
-			},
-		})
-		.setDisabled(false);
-}
-
 // Initialize Capacitor
 initCapacitor();
 // Initialize helpers
@@ -119,47 +92,11 @@ getData(store).then(() => {
 			console.log('mounted!');
 
 			SplashScreen.hide().catch(console.error);
-			if (Capacitor.platform === 'ios') initNavGesture(this);
 		},
 		provide() {
-			let transport = {};
-			if (isNative) {
-				transport = {
-					get(wpreq, cb?: (err: Error | null, data?: object) => any) {
-						const url = wpreq.toString();
-						console.log(url);
-						return new Promise((resolve, reject) => {
-							function req() {
-								window.cordova.plugin.http.get(url, {}, {}, (res) => {
-									const body = returnBody(wpreq, res);
-									if (cb && typeof cb === 'function') cb(null, body);
-									resolve(body);
-								}, (err: Error) => {
-									if (cb && typeof cb === 'function') cb(err);
-									reject(err);
-								});
-							}
-
-							if (deviceReady) req();
-							else document.addEventListener('deviceready', req, false);
-						});
-					},
-				};
-			}
-			const wpapi = new WPAPI({ endpoint: 'https://shakerite.com/wp-json', transport });
-			wpapi.writers = wpapi.registerRoute('wp/v2', 'staff-profile/(?P<id>)');
-			// @ts-ignore
-			window.wp = wpapi;
 			return {
 				API: wpapi,
 			};
 		},
-		router: new VueRouter({
-			mode: 'history',
-			base: process.env.BASE_URL,
-			routes: [
-				{ path: '/', redirect: '/news' },
-			],
-		}),
 	}).$mount('#app');
 });

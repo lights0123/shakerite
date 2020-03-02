@@ -1,49 +1,61 @@
-import { StatusBarStyle } from '@capacitor/core';
 <template>
-	<ion-tabs>
-		<ion-tab tab="news">
-			<news />
-		</ion-tab>
+	<ion-app>
+		<ion-tabs>
+			<ion-tab tab="news">
+				<ion-nav root="app-news" />
+			</ion-tab>
 
-		<ion-tab tab="saved">
-			<saved />
-		</ion-tab>
+			<ion-tab tab="saved">
+				<ion-nav root="app-saved" />
+			</ion-tab>
 
-		<ion-tab tab="settings">
-			<settings />
-		</ion-tab>
+			<ion-tab tab="settings">
+				<ion-nav root="app-settings" />
+			</ion-tab>
 
-		<ion-tab-bar slot="bottom" ref="tabBar">
-			<ion-tab-button tab="news" @click="click('news')">
-				<ion-icon name="paper" />
-				<ion-label>News</ion-label>
-			</ion-tab-button>
+			<ion-tab-bar slot="bottom" ref="tabBar">
+				<ion-tab-button tab="news" @click="click('news')">
+					<ion-icon name="paper" />
+					<ion-label>News</ion-label>
+				</ion-tab-button>
 
-			<ion-tab-button tab="saved" @click="click('saved')">
-				<ion-icon :src="bookmarkURL" class="bookmark-icon" />
-				<ion-label>Saved</ion-label>
-			</ion-tab-button>
+				<ion-tab-button tab="saved" @click="click('saved')">
+					<ion-icon :src="bookmarkURL" class="bookmark-icon" />
+					<ion-label>Saved</ion-label>
+				</ion-tab-button>
 
-			<ion-tab-button tab="settings" @click="click('settings')">
-				<ion-icon name="settings" />
-				<ion-label>Settings</ion-label>
-			</ion-tab-button>
-		</ion-tab-bar>
-	</ion-tabs>
+				<ion-tab-button tab="settings" @click="click('settings')">
+					<ion-icon name="settings" />
+					<ion-label>Settings</ion-label>
+				</ion-tab-button>
+			</ion-tab-bar>
+		</ion-tabs>
+	</ion-app>
 </template>
 
 <script lang="ts">
 import { Component, Ref, Vue, Watch } from 'vue-property-decorator';
-import Settings from './views/Settings.vue';
-import Saved from './views/Saved.vue';
-import News from './views/News.vue';
-import { getActiveComponent } from './helpers';
-import * as helpers from '@/helpers';
+import '@/views/Settings.vue';
+import '@/views/Saved.vue';
+import '@/views/Article.vue';
+import '@/views/Author.vue';
+import '@/views/News.vue';
+import '@/views/Dinosaur.vue';
+import '@/views/About.vue';
+import '@/views/Copyright.vue';
+import { getNav } from './helpers';
 import { Plugins, StatusBarStyle } from '@capacitor/core';
+import VueRouter from '@/router';
 
 const { App, StatusBar } = Plugins;
 @Component({
-	components: { Settings, Saved, News },
+	router: new VueRouter({
+		mode: 'history',
+		base: process.env.BASE_URL,
+		routes: [
+			{ path: '/', redirect: '/news' },
+		],
+	}),
 })
 export default class Main extends Vue {
 	bookmarkURL = require('@fortawesome/fontawesome-free/svgs/solid/bookmark.svg');
@@ -65,6 +77,8 @@ export default class Main extends Vue {
 		StatusBar.setStyle({ style: data ? StatusBarStyle.Dark : StatusBarStyle.Light }).catch(console.error);
 	}
 
+	shouldGoBack = true;
+
 	mounted() {
 		window.addEventListener('keyboardWillShow', (event) => {
 			if (event.keyboardHeight) this.tabBar.classList.add('hidden');
@@ -80,14 +94,18 @@ export default class Main extends Vue {
 		document.addEventListener('ionPopoverDidDismiss', () => {
 			activePopover = undefined;
 		});
-		window.addEventListener('ionBackButton', (e) => {
+		window.addEventListener('ionBackButton', async (e) => {
+			e.stopPropagation();
+			if (!this.shouldGoBack) return;
+			this.shouldGoBack = false;
+			setTimeout(() => this.shouldGoBack = true, 500);
 			if (activePopover) {
 				activePopover.dismiss();
 			} else {
-				const component = helpers.getActiveComponent(this);
-				if (component.$router.history.index > 0) component.$router.history.go(-1); else App.exitApp();
+				const nav = getNav();
+				console.log(e);
+				if (await nav.canGoBack()) nav.pop(); else App.exitApp();
 			}
-			e.stopPropagation();
 		}, true);
 
 		const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)') as any;
@@ -99,8 +117,8 @@ export default class Main extends Vue {
 
 	click(e) {
 		if (this.activeTab === e) {
-			const component = getActiveComponent(this);
-			component.$router.history.go(-component.$router.history.index);
+			getNav().popToRoot();
+			return;
 		}
 		this.activeTab = e;
 		this.$router.replace(e);

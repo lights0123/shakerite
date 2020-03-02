@@ -4,11 +4,12 @@ import uniqBy from 'lodash/uniqBy';
 import property from 'lodash/property';
 import Mutations from './mutations';
 import Actions from './actions';
-import { Article, Media, Search } from '../helpers/api';
-import { defaultCategories } from '../helpers/categories';
-
+import { Article, Media, Search } from '@/helpers/api';
+import { defaultCategories } from '@/helpers/categories';
+import Vue from 'vue';
 // @ts-ignore
 window.Search = Search;
+Vue.use(Vuex);
 
 export async function getData(store) {
 	const data = [];

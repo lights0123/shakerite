@@ -57,7 +57,10 @@
 		"vue-router": "^3.0.1",
 		"vue-shave": "^1.0.3",
 		"vuex": "^3.1.2",
-		"wpapi": "^1.1.2"
+		"wpapi": "^1.1.2",
+		"@vue/web-component-wrapper": "latest",
+		"vue-custom-element": "latest",
+		"vue-fragment": "latest"
 	},
 	"devDependencies": {
 		"@babel/plugin-proposal-nullish-coalescing-operator": "^7.7.4",

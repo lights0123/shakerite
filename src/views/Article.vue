@@ -1,11 +1,9 @@
 <template>
-	<ion-page class="ion-page">
+	<fragment>
 		<ion-header>
 			<ion-toolbar>
 				<ion-buttons slot="start">
-					<ion-button @click="$router.back()">
-						<ion-icon name="arrow-back" />
-					</ion-button>
+					<ion-back-button text="" />
 					<ion-button @click="saved = !saved">
 						<font-awesome-icon :icon="[saved ? 'fas' : 'far', 'bookmark']" size="lg" />
 					</ion-button>
@@ -35,7 +33,8 @@
 				      :key="writer"
 				      class="author"
 				>
-					<router-link :to="`/author/${writer}/${id}`">{{ writer }}</router-link>
+					<nav-link component="app-author"
+					          :componentProps="{name: writer, from:id}">{{ writer }}</nav-link>
 				</span>
 			</small>
 			<gallery v-if="gallery" :pictures="gallery" />
@@ -44,36 +43,41 @@
 				<component :is="article.content" />
 			</div>
 		</ion-content>
-	</ion-page>
+	</fragment>
 </template>
 
 <script lang="ts">
-import { Component, Inject, Mixins, Prop } from 'vue-property-decorator';
+import { Component, Inject, Prop, Vue, Watch } from 'vue-property-decorator';
 import sanitizeHtml from 'sanitize-html';
 import { Plugins } from '@capacitor/core';
 import FontPopover from '../components/FontPopover.vue';
 import MediaComponent from '../components/Media.vue';
 import A from '../components/A.vue';
 import { Article, Media } from '@/helpers/api';
-import SaveScroll from '../mixins/SaveScroll';
 import { SET_SAVED_ARTICLES } from '@/store/actions';
 import Logo from '../components/Logo.vue';
-import AsyncComputed from '@/components/asyncComputed';
 import { Category } from '@/helpers/categories';
 import Gallery from '@/components/Gallery.vue';
+import { getNav, injectParent } from '@/helpers';
+import NavLink from '@/components/NavLink.vue';
 
 const { Share } = Plugins;
 @Component({
 	components: {
 		Gallery,
-		Media: MediaComponent, Logo,
+		Media: MediaComponent, Logo, NavLink,
 	},
 })
-export default class ArticlePage extends Mixins(SaveScroll) {
-	@Prop(String)
-	id;
+export default class ArticlePage extends Vue {
+	@Prop(String) id;
+	@Prop({ type: Boolean, default: false }) slug;
+	@Inject() readonly API!: any;
 
 	gallery: number[] | null = null;
+
+	getNav() {return getNav();}
+
+	beforeCreate() {this.$store = this.$parent.$store;}
 
 	openFonts(event: MouseEvent) {
 		this.$ionic.popoverController.create({
@@ -84,7 +88,7 @@ export default class ArticlePage extends Mixins(SaveScroll) {
 	}
 
 	share() {
-		if (!this.article) return;
+		if (!('title' in this.article)) return;
 		Share.share({
 			title: this.article.title,
 			text: this.article.title,
@@ -102,6 +106,7 @@ export default class ArticlePage extends Mixins(SaveScroll) {
 	get bg() {return this.$store.state.font.bg;}
 
 	get fg() {return this.$store.state.font.fg;}
+
 
 	get cssProps() {
 		return {
@@ -125,27 +130,33 @@ export default class ArticlePage extends Mixins(SaveScroll) {
 		}
 	}
 
-	// @ts-ignore
-	article?: { media: Media, title: string, subtitle?: string, content: Vue, categories: Category[], writers: string[], excerpt: string };
+	article: { media: Media, title: string, subtitle?: string, content: Vue, categories: Category[], writers: string[], excerpt: string } | {} = {};
 
-	@AsyncComputed({ default: {} })
-	// @ts-ignore
-	async article() {
+	get loaded() {
+		return 'title' in this.article;
+	}
+
+	@Watch('id', { immediate: true })
+	async idUpdated() {
+		this.article = {};
 		try {
-			const article: Article = this.$route.query.slug ? await Article.getPostBySlug(this.API, this.id) : await Article.getPost(this.API, parseInt(this.id, 10), this.$store);
+			console.log(this.id);
+			const article: Article = this.slug ? await Article.getPostBySlug(this.API, this.id) : await Article.getPost(this.API, parseInt(this.id, 10), this.$store);
+			// see /data-examples/gallery.html
 			const galleryIDs = /var photoids = '([\d,]+)';/.exec(article.content)?.[1];
 			if (galleryIDs) {
 				this.gallery = JSON.parse(`[${galleryIDs}]`);
 			} else this.gallery = null;
-			let content = sanitizeHtml(article.content, {
+			let content = sanitizeHtml(`<div>${article.content}</div>`, {
 				allowedTags: [...sanitizeHtml.defaults.allowedTags, 'img'],
 				allowedAttributes: {
 					img: ['src', 'srcset', 'class'],
 					iframe: ['src', 'allowfullscreen'],
 					a: ['href', 'target'],
+					div: ['data-photo-ids'],
 				},
 				allowedClasses: {
-					div: ['pullquote', 'storysidebar', 'photowrap', 'remodal'],
+					div: ['pullquote', 'storysidebar', 'photowrap', 'remodal', 'sfiphotowrap'],
 					p: ['pullquotetext', 'quotespeaker'],
 				},
 				transformTags: {
@@ -171,11 +182,19 @@ export default class ArticlePage extends Mixins(SaveScroll) {
 				media.setAttribute(':media', `images[${imageID}]`);
 				e.replaceWith(media);
 			});
+			// see /data-examples/sfiphotowrap.html
+			parser.querySelectorAll('div.photowrap').forEach((e) => {
+				if (e.children[0]?.classList.contains('sfiphotowrap')) {
+					const gallery = document.createElement('gallery');
+					gallery.setAttribute(':pictures', JSON.stringify(JSON.parse(`[${e.children[0].getAttribute('data-photo-ids')}]`)));
+					e.replaceWith(gallery);
+				}
+			});
 			content = {
 				data() {
 					return { images };
 				},
-				components: { Media: MediaComponent, SmartLink: A },
+				components: { Media: MediaComponent, SmartLink: A, Gallery },
 				template: parser.body.innerHTML,
 			};
 			const categoriesPromises: Promise<Category>[] = [];
@@ -184,8 +203,7 @@ export default class ArticlePage extends Mixins(SaveScroll) {
 			});
 			const categories: Category[] = await Promise.all(categoriesPromises);
 			const writers: string[] = (article.writers || []).filter(writer => writer !== '');
-			this.$el.getElementsByTagName('ion-content')[0]?.shadowRoot?.querySelector('.inner-scroll')?.scrollTo(0, 0);
-			return {
+			this.article = {
 				media: article.media,
 				title: article.title,
 				subtitle: article.subtitle,
@@ -196,12 +214,12 @@ export default class ArticlePage extends Mixins(SaveScroll) {
 			};
 		} catch (e) {
 			console.error(e);
-			this.$router.back();
+			this.getNav().pop();
 		}
 	}
-
-	@Inject() readonly API!: any;
 }
+
+Vue.customElement('app-article', (ArticlePage as any).options, injectParent);
 </script>
 
 <style lang="scss" scoped>
@@ -259,6 +277,7 @@ small {
 	.photowrap, .remodal {
 		display: none;
 	}
+
 	.remodal + div + p {
 		display: none;
 	}

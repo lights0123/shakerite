@@ -1,0 +1,222 @@
+<div class="pf-content">
+	<p>&nbsp;</p>
+	<div class="photowrap">
+		<div class='sfiphotowrap sfiphotowrap445048 modal-photo445048'>
+			<div id='storypageslideshow445048' style=''>
+				<div class="slideshowwrap"><img
+						src="https://shakerite.com/wp-content/uploads/2019/03/DSC01716-900x600.jpg" style="width:100%;"
+						class="catboxphoto slideshow-photo" />
+					<a class='modal-photo445048' href='#slideshow445048'>
+						<div class='slideshow-enlarge'>
+							<div class="fa fa-clone slideshow-icon"></div>
+							<div class='slideshow-title'>Gallery<span class='v-divider'>|</span>10 Photos</div>
+						</div>
+					</a>
+				</div>
+				<div class="captionboxmittop">
+					<div class="photocredit"><a href="https://shakerite.com/staff/?writer=David%20Vahey">David Vahey</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="photobottom"></div>
+	<div class="clear"></div>
+	<div class='remodal remodal-story-image' data-remodal-id='modal-photo445048'
+	     data-remodal-options='hashTracking: false, closeOnConfirm: false'>
+		<button data-remodal-action="close" class="remodal-close"><span class="icon-hidden-text">Close</span></button>
+		<div class='photo-container445048'>
+			<div id="listloader" class="spinner" style="display:block;float:none;margin:45vh auto;">
+				<div class="bounce1"></div>
+				<div class="bounce2"></div>
+				<div class="bounce3"></div>
+			</div>
+		</div>
+	</div>
+	<script type='text/javascript'>
+	var sno_slideshow_open = 'no';
+	$('html').on('wheel', function(event) {
+		var delta = { y: event.originalEvent.deltaY };
+		if (delta.y > 20 && sno_slideshow_open == 'yes') {
+			$('button.remodal-close').trigger('click');
+			sno_slideshow_open = 'no';
+		}
+	});
+	$('.flexslider').animate({ 'opacity': 1 }, { 'duration': 'slow' });
+	$('.flex-container').css('background', 'unset');
+	$(document).ready(function() {
+		$('html').on('click', 'button.remodal-close', function() {
+			sno_slideshow_open = 'no';
+		});
+		$('html').on('click', '.sfi-return-to-story', function() {
+			sno_slideshow_open = 'no';
+		});
+		$('body').keypress(function(e) {
+			if (e.which == 27 || e.which == 0) { sno_slideshow_open = 'no'; }
+		});
+		$(function() {
+			$('.modal-photo445048').click(function() {
+				var image = $(this).attr('data-image');
+				sno_slideshow_open = 'yes';
+				var inst = $('[data-remodal-id=modal-photo445048]').remodal();
+				var photoids = '19381,19380,19389,19383,19396,19395,19392,19394,19393,19391';
+				var unique = '445048';
+				var storyid = '19376';
+				inst.open();
+				$.ajax({
+					url: '/wp-admin/admin-ajax.php',
+					type: 'POST',
+					data: 'action=getslideshow&photoids=' + photoids + '&unique=' + unique + '&storyid=' + storyid + '&image=' + image,
+					success: function(results) {
+						$('.photo-container445048').replaceWith(results);
+					},
+				});
+			});
+		});
+		$('.sfiphotowrap445048').hover(function() {
+			$('.slideshow-enlarge').css('background', '#990000');
+		}, function() {
+			$('.slideshow-enlarge').css('background', '#000');
+		});
+	});
+	</script>
+	<p><span style="font-weight: 400;">This year’s Sankofa show fostered student leadership, growth and expression through a new format.</span>
+	</p>
+	<p><span style="font-weight: 400;">Sankofa task leader Adonis Fryer, a senior, said that students in Sankofa always have incredible talent, but that the theme of the show is not always cohesive. In previous years, Sankofa performances comprised a series of vignettes. This year, Fryer presented the idea of a play centered on a family reunion in order to unify student talent and integrate personal stories. He said the idea came to him after attending a family reunion in 2016.</span>
+	</p>
+	<p><span style="font-weight: 400;">“I went to a family reunion and, of course, my family doesn’t have the same drama [as the play]. But I oftentimes feel like an outsider. A lot of the play is examining how we outcast people and those feelings,” Fryer said.</span>
+	</p>
+	<p><span style="font-weight: 400;">Fryer outlined the script last summer, so he had a concrete idea for the plot before the writing process began. “It’s incredible how much trust [the advisers] give us to just do what we do and explain and celebrate our history,” he said.</span>
+	</p>
+	<p><span style="font-weight: 400;">Sankofa is an original performance created annually by students and performed near the end of Black History Month. The first Sankofa performance was staged in 1998. The event provides a platform for expression through dance, drama, spoken word and music. Since its debut, Sankofa has become known for its raw creativity and authenticity.</span>
+	</p>
+	<p><span style="font-weight: 400;">This year, students tackled topics such as colorism, sexuality, the Bill Cosby scandals and the intersection of being black and female.</span>
+	</p>
+	<p><span style="font-weight: 400;">“The play is based on the feelings I felt occasionally, from being excluded &#8212; either from the black community, or this or that,” Fryer said. “I wanted us to do a show where we gave ourselves an honest look about some of things we do and say that are problematic, and the way we exclude even members of our own family.”<div
+			class='pullquote center  background-gray shadow borderall sno-animate' style='border-color: #888888;'><div
+			class='largequote' style='color: #888888;'>&ldquo;</div>
+	<p class='pullquotetext'>The theme is ‘family reunion,’ and it means connecting your loved ones, and your roots, and
+		where you came from.&rdquo;</p>
+	<p class='quotespeaker'>&mdash; Jacqueline Johnson</p></div></span></p>
+<p><span style="font-weight: 400;">Students pour intense hours and effort into the show, including behind the scenes. Stage crew began working on the show in December. Sophomore Jacqueline Johnson set up and placed microphones for vocalists. Through stage crew, Johnson said she learned about audio equipment and sound mixing. She chose this position because she wanted to work with technology.</span>
+</p>
+<p><span style="font-weight: 400;">Johnson said Sankofa portrays African-American history accurately.</span></p>
+<p><span style="font-weight: 400;">“The theme is ‘family reunion,’ and it means connecting your loved ones, and your roots, and where you came from,” Johnson said.</span>
+</p>
+<p><span style="font-weight: 400;">Senior Kaela Ruffin performed a spoken word poem in the show.</span></p>
+<p><span style="font-weight: 400;">“In my personal view, the whole reason for Sankofa is because African-American History isn’t a regular class here. It’s offered, but you have to have room in your schedule and you have to have the time to take it,” she said. “And not everybody has that opportunity. [Sankofa] is very educating for our parents and our students because they get to see how things were and not just the dumbed-down version.”</span>
+</p>
+<p><span style="font-weight: 400;">Fryer said Sankofa advisers were cautious but receptive when he pitched the idea of a play.</span>
+</p>
+<div id="attachment_19386" style="width: 485px" class="wp-caption alignright">
+	<a href="https://shakerite.com/wp-content/uploads/2019/03/DSC01905.jpg"><img
+			aria-describedby="caption-attachment-19386" class="size-medium wp-image-19386"
+			src="https://shakerite.com/wp-content/uploads/2019/03/DSC01905-475x317.jpg" alt="" width="475" height="317"
+			srcset="https://shakerite.com/wp-content/uploads/2019/03/DSC01905-475x317.jpg 475w, https://shakerite.com/wp-content/uploads/2019/03/DSC01905-768x512.jpg 768w, https://shakerite.com/wp-content/uploads/2019/03/DSC01905-900x600.jpg 900w, https://shakerite.com/wp-content/uploads/2019/03/DSC01905-122x80.jpg 122w, https://shakerite.com/wp-content/uploads/2019/03/DSC01905-300x200.jpg 300w, https://shakerite.com/wp-content/uploads/2019/03/DSC01905.jpg 1501w"
+			sizes="(max-width: 475px) 100vw, 475px" /></a>
+	<p id="caption-attachment-19386" class="wp-caption-text"><span class="photocreditinline"><a
+			href="https://shakerite.com/staff/david-vahey-visuals-managing-editor/10/2017/">David Vahey</a></span><br />Senior
+		Adonis Fryer takes the stage during an acting scene in Sankofa Feb. 23.</p>
+</div>
+<p><span style="font-weight: 400;">“People were really apprehensive in the beginning, but they’ve really given me a shot to tell the story I’ve wanted to tell, genuinely, the way I wanted to tell it,” Fryer said.</span>
+</p>
+<p><span style="font-weight: 400;">Art teacher Keaf Holliday has been Sankofa adviser for 12 years. He enjoys helping students embrace their history and grow as individuals. He said he hopes students learn the inclusivity of black history through their participation.</span>
+</p>
+<p><span style="font-weight: 400;">“When a young person realizes their history, then they can navigate their future. That’s what the Sankofa bird is representing,” Holliday said.</span>
+</p>
+<p><span style="font-weight: 400;">The symbol of the show is a bird, tilting its head backward and holding an egg in its beak. The image is depicted on Sankofa T-shirts and posters. </span>
+</p>
+<p><span style="font-weight: 400;">This year, Sankofa T-shirts were sold in the weeks leading up to the performance. A portion of the proceeds were donated to the </span><a
+		href="https://www.gofundme.com/aisha-fraser-fund"><span style="font-weight: 400;">GoFundMe</span></a><span
+		style="font-weight: 400;"> campaign for the daughters of  </span><a
+		href="https://shakerite.com/campus-and-city/aisha-fraser-killed/18/2018/"><span style="font-weight: 400;">Aisha Fraser</span></a><span
+		style="font-weight: 400;">, the Woodbury Elementary School teacher killed in November.</span></p>
+<p><span style="font-weight: 400;">Freshman Rielle Hubbard said the Sankofa bird is symbolic of applying lessons from the past. “To me, it kind of means just moving forward, while still looking back on our history, so that it doesn’t repeat and so that we know where we came from,” she said.</span>
+</p>
+<p><span style="font-weight: 400;">The script-writing process took place in early fall before Sankofa tryouts, with Fryer and senior Ima Umosen heading the effort.</span>
+</p>
+<p><span style="font-weight: 400;">The resulting Sankofa script depicted the story of a fictional family, the Leverts, and their reunion in Alabama. The play followed two cousins from Ohio who are reconnecting with relatives. It included time travel and history lessons, as well as music, dance and spoken word throughout.</span>
+</p>
+<p><span style="font-weight: 400;">Fryer encouraged students to take ownership of their parts. “Even me, as a writer, when I was going through the scenes, I told everybody from the beginning, ‘This is your part and you gotta own it. I may have written these words on the page, but if that’s not how you naturally say it, switch it,’ ” Fryer said.</span>
+</p>
+<p><span style="font-weight: 400;">Embracing roles was crucial to the Sankofa performance.</span></p>
+<p><span style="font-weight: 400;">“Even with drama, even though you’re playing a different person, you can still let some of you shine through that character, and you can connect with what they are saying or what they are doing,” Umosen said.</span>
+</p>
+<p><span style="font-weight: 400;">“It gives a voice to [black] kids who aren’t always represented,” Fryer said. </span>
+</p>
+<p><span style="font-weight: 400;">Senior Jeremiah Caver was an actor and stage crew task leader for this year&#8217;s show. He has performed in Sankofa since sophomore year, and this was his first year acting. He said Sankofa is a stage for students to show off their skills and tell stories. Caver said the themes of the show hit close to home.</span>
+</p>
+<p><span style="font-weight: 400;">“The show is personal to me because it kind of tackles some subjects that are happening around the world now, like Bill Cosby and certain deaths, like Aretha Franklin and Aisha Fraser as well,” Caver said.</span>
+</p>
+<p><span style="font-weight: 400;">Freshman dancer Najea Holt said she learned about black history and culture through Sankofa. She said she aspired to be a part of the show since middle school.</span>
+</p>
+<p><span style="font-weight: 400;">“We’re showing everyone what black culture looks like. I think it’s important that people understood what we went through back in the day,” Holt said. </span>
+</p>
+<p><span style="font-weight: 400;">Hubbard shared a spoken word piece in the show during the scene in which the Levert family attends church together. “In the church scene,” said Hubbard, “I touch on a lot of personal aspects, and it helps me to be myself and show my personal black experience and my personal church experience.”</span>
+</p>
+<div id="attachment_19387" style="width: 485px" class="wp-caption alignleft">
+	<a href="https://shakerite.com/wp-content/uploads/2019/03/DSC02049.jpg"><img
+			aria-describedby="caption-attachment-19387" class="size-medium wp-image-19387"
+			src="https://shakerite.com/wp-content/uploads/2019/03/DSC02049-475x317.jpg" alt="" width="475" height="317"
+			srcset="https://shakerite.com/wp-content/uploads/2019/03/DSC02049-475x317.jpg 475w, https://shakerite.com/wp-content/uploads/2019/03/DSC02049-768x512.jpg 768w, https://shakerite.com/wp-content/uploads/2019/03/DSC02049-900x600.jpg 900w, https://shakerite.com/wp-content/uploads/2019/03/DSC02049-122x80.jpg 122w, https://shakerite.com/wp-content/uploads/2019/03/DSC02049-300x200.jpg 300w, https://shakerite.com/wp-content/uploads/2019/03/DSC02049.jpg 1501w"
+			sizes="(max-width: 475px) 100vw, 475px" /></a>
+	<p id="caption-attachment-19387" class="wp-caption-text"><span class="photocreditinline"><a
+			href="https://shakerite.com/staff/david-vahey-visuals-managing-editor/10/2017/">David Vahey</a></span><br />Sophomore
+		Aunya McFadden sings on stage while dancers go along with the theme of family reunion on Feb. 23.</p>
+</div>
+<p><span style="font-weight: 400;">This is Umosen’s third year in Sankofa. After hearing a monologue in the show during freshman year, she was inspired to try out. “It was just so powerful and I was like, ‘I want to be up there. I want other people to be able to connect with me.’ So then I auditioned the next year,” Umosen said.</span>
+</p>
+<p><span style="font-weight: 400;">“I think it was seventh grade — that was my first year ever seeing Sankofa — and I really enjoyed it. That’s when I was like, ‘I’m gonna be in this when I’m a freshman.’ And so I did it,” Holt said.</span>
+</p>
+<p><span style="font-weight: 400;">Sophomore Kemari Speight is a singer — he said singing in the show allows him to unleash all of his emotions and let the crowd hear what he is feeling.</span>
+</p>
+<p><span style="font-weight: 400;">“It finally gives me a chance to let go and show the world what I really got, and just give good vibes to other people,” Speight said.</span>
+</p>
+<p><span style="font-weight: 400;">Sankofa serves as a reminder of the struggles African-Americans faced during slavery and Jim Crow. “We should never forget as a race that we had blacks that were killed and lynched to get the freedoms we have now and the freedoms we take for granted,” Holliday said. “Something as simple as voting &#8212; people were killed. Couldn’t eat at the same restaurant, couldn’t use the same bathroom, couldn’t drink out the same water fountains.”</span>
+</p>
+<p><span style="font-weight: 400;">Holliday said the students in Sankofa are not merely “embracing past history, but the history that’s being made in their lifetime, like the Bill Cosby scandals and President [Barack] Obama, the first black president,” he said. </span>
+</p>
+<p><span style="font-weight: 400;">Sophomore and singing leader Aunya McFadden said she’s been singing since she could walk. McFadden sang pieces including “I Never Loved a Man the Way I Love You” by Aretha Franklin and “Rock With You” by Michael Jackson.</span>
+</p>
+<p><span style="font-weight: 400;">“I use singing as a way to express myself when I’m down or happy, and Sankofa just gives me an outlet to do what I love to do,” said McFadden.</span>
+</p>
+<p><span style="font-weight: 400;">Students said that being a part of Sankofa feels unifying. “We’re just a big family, and it represents the African-American community and how we bring everyone in that community together — and their talent,” McFadden said.</span>
+</p>
+<p><span style="font-weight: 400;">Senior Brianna Jarrell has participated in Sankofa for three years. “I’m not the same person I was when I first joined Sankofa, and just to see that development and celebration is exciting. It’s like a team, but not really a team — we’re family,” she said.</span>
+</p>
+<p><span style="font-weight: 400;">“I feel like I matured more and I got more involved and experienced with managing and how I carry myself. My performance level has gotten to the point where I’m a lot more confident than I was when I first started,” Jarrell said.<div
+		class='pullquote right  background-gray shadow borderall sno-animate' style='border-color: #888888;'><div
+		class='largequote' style='color: #888888;'>&ldquo;</div><p class='pullquotetext'>It gives a voice to [black]
+	kids who aren’t always represented.&rdquo;</p><p class='quotespeaker'>&mdash; Adonis Fryer</p></div></span></p>
+<p><span style="font-weight: 400;">Senior Nya Christian is a dance task leader who works in choreography, and she assisted in choreographing every dance. Christian has been a dance leader the past three years and said she’s grown throughout her involvement. </span>
+</p>
+<p><span style="font-weight: 400;">“Sankofa is really just a family and a place where black students at Shaker, as well as people with many different backgrounds, can just come together and show off their creations,” Christian said.</span>
+</p>
+<p><span style="font-weight: 400;">Umosen said the unity Sankofa evokes expands beyond the African-American community in Shaker to touch all races. “It’s not even black students coming together. It’s black, white, Asian, Hispanic, whatever — everyone coming together to celebrate black culture and everything black people have done to help support their own people,” she said.</span>
+</p>
+<p><span style="font-weight: 400;">“I’m really excited we’re starting to have kids of other races be a part of Sankofa,” Holliday said. Five students who are not African American participated in Sankofa this year. </span>
+</p>
+<p><span style="font-weight: 400;">Junior Abe Arenberg, lead guitarist, first saw Sankofa when he was a middle school student.</span>
+</p>
+<p><span style="font-weight: 400;">“I always wanted to do Sankofa, but I almost felt like it was wrong for me as a white person to be in Sankofa. But like Mr. Holliday said, this history is our history,” he said. </span>
+</p>
+<p><span style="font-weight: 400;">Arenberg said that before getting involved in the show as a guitarist, “I didn’t understand the depth of what Sankofa really met and how these things we look as a show or entertainment are really meaningful and have power and history.”</span>
+</p>
+<p><span style="font-weight: 400;">Arenberg said as an audience member, he knew the music in Sankofa was by black artists, and he enjoyed it because it was entertaining. “After being in Sankofa, and talking about how this opened the door for other musicians, this helped me to break that barrier of seeing this side of music I wouldn’t have been exposed to just sticking to my realms of what I’m used to playing,” he said.</span>
+</p>
+<p><span style="font-weight: 400;">Jarrell said Sankofa is an important part of her identity. “It just really feels like home to me. This is where I can act and just expand myself beyond what I typically thought I could do. I feel like I have something to be a part of,” she said.</span>
+</p>
+<p><span style="font-weight: 400;">“The show is personal to me because I’ve been in Shaker all my life, and this is one of the few things in Shaker that shows black culture,” said Jarrell. “I feel like this is where people really listen.”<div
+		class='pullquote left  background-gray shadow borderall sno-animate' style='border-color: #888888;'><div
+		class='largequote' style='color: #888888;'>&ldquo;</div><p class='pullquotetext'>The show is personal to me
+	because I’ve been in Shaker all my life, and this is one of the few things in Shaker that shows black culture. I
+	feel like this is where people really listen.&rdquo;</p><p class='quotespeaker'>&mdash; Brianna
+	Jarrell</p></div></span></p>
+<p><span style="font-weight: 400;">Christian said being able to transform her ideas into art is powerful. She said she thinks the transition this year from vignettes to a play was worthwhile. “[The audience] will take away different portions of the black experience in America as well as black people finding their identity within different stages of life and the things that they go through,” she said.</span>
+</p>
+<p><span style="font-weight: 400;">Senior Lewie Fletcher is following in the footsteps of his older siblings by participating in Sankofa. He’s become more passionate about black history through his involvement. </span>
+</p>
+<p><span style="font-weight: 400;">Fletcher said, “Hopefully, people have the courage to listen. Hopefully, people will look at it as not a talent show, but another perspective.” </span>
+</p>
+<p><i><span style="font-weight: 400;">Print Managing Editor Emet Celeste-Cohen, Investigations Financial Reporter Hilary Shakelton, Investigations Social Issues Reporter Ashley Sah and Web Managing Editor Mae Nagusky contributed reporting.</span></i>
+</p></div>

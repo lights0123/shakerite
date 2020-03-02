@@ -1,12 +1,9 @@
 <template>
-	<ion-page class="ion-page">
+	<fragment>
 		<ion-header>
 			<ion-toolbar>
 				<ion-buttons slot="start">
-					<ion-button @click="$router.back()">
-						<ion-icon name="arrow-back"></ion-icon>
-						<span v-if="$isIOS">Back</span>
-					</ion-button>
+					<ion-back-button />
 				</ion-buttons>
 				<ion-title>
 					<logo />
@@ -26,18 +23,25 @@
 				</ion-text>
 			</div>
 		</ion-content>
-	</ion-page>
+	</fragment>
 </template>
 
-<script>
+<script lang="ts">
+import Logo from '@/components/Logo.vue';
+import A from '@/components/A.vue';
+import { Component, Vue } from 'vue-property-decorator';
+import { injectParent } from '@/helpers';
 
-import Logo from '@/components/Logo';
-import A from '@/components/A';
-
-export default {
-	name: 'About',
+@Component({
 	components: { Logo, SmartLink: A },
-};
+})
+export default class About extends Vue {
+	beforeCreate() {
+		this.$store = this.$parent.$store;
+	}
+}
+
+Vue.customElement('app-about', (About as any).options, injectParent);
 </script>
 
 <style scoped>

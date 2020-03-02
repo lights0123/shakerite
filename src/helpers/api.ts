@@ -1,6 +1,10 @@
 import { decode } from 'he';
 import { Category } from './categories';
 import { ADD_CACHED, ADD_CACHED_IMAGE } from '../store/mutations';
+import { Capacitor } from '@capacitor/core';
+import returnBody from '@/helpers/WPResponse';
+import { deviceReady } from '@/helpers';
+import WPAPI from 'wpapi';
 
 export class Paginate<T> {
 	protected wp;
@@ -315,3 +319,32 @@ export class Media {
 window.Media = Media;
 // @ts-ignore
 window.Author = Author;
+const isNative = Capacitor.platform !== 'web';
+let transport = {};
+if (isNative) {
+	transport = {
+		get(wpreq, cb?: (err: Error | null, data?: object) => any) {
+			const url = wpreq.toString();
+			console.log(url);
+			return new Promise((resolve, reject) => {
+				function req() {
+					window.cordova.plugin.http.get(url, {}, {}, (res) => {
+						const body = returnBody(wpreq, res);
+						if (cb && typeof cb === 'function') cb(null, body);
+						resolve(body);
+					}, (err: Error) => {
+						if (cb && typeof cb === 'function') cb(err);
+						reject(err);
+					});
+				}
+
+				if (deviceReady) req();
+				else document.addEventListener('deviceready', req, false);
+			});
+		},
+	};
+}
+export const wpapi = new WPAPI({ endpoint: 'https://shakerite.com/wp-json', transport });
+wpapi.writers = wpapi.registerRoute('wp/v2', 'staff-profile/(?P<id>)');
+// @ts-ignore
+window.wp = wpapi;

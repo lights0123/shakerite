@@ -5,3 +5,4 @@ declare module '*.vue' {
 declare module '*.html' {
   export default string
 }
+declare var vue: Vue;
