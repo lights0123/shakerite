@@ -85,7 +85,8 @@ export default class Main extends Vue {
 		});
 		window.addEventListener('keyboardWillHide', () => {
 			this.tabBar.classList.remove('hidden');
-			if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+			const activeElement = document.activeElement as HTMLOrSVGElement | null;
+			if (activeElement?.blur) activeElement.blur();
 		});
 		let activePopover: { dismiss(): void } | undefined;
 		document.addEventListener('ionPopoverDidPresent', ({ target }) => {

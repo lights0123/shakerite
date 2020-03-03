@@ -1,6 +1,6 @@
 import { decode } from 'he';
 import { Category } from './categories';
-import { ADD_CACHED, ADD_CACHED_IMAGE } from '../store/mutations';
+import { ADD_CACHED, ADD_CACHED_IMAGE } from '@/store/mutations';
 import { Capacitor } from '@capacitor/core';
 import returnBody from '@/helpers/WPResponse';
 import { deviceReady } from '@/helpers';

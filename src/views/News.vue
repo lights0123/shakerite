@@ -24,7 +24,7 @@
 				  v-for="author in authors"
 				  :key="author.id"
 				  detail
-				  @click="$router.push(`/author/${author.name}`)"
+				  @click="getNav().push('app-author',{name:author.name})"
 			>
 				<ion-avatar slot="start">
 					<media v-if="author.media" :media="author.media" avatar />

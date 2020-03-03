@@ -32,7 +32,7 @@ import uniqBy from 'lodash/uniqBy';
 import property from 'lodash/property';
 import ArticlePreview from '@/components/ArticlePreview.vue';
 import MediaComponent from '@/components/Media.vue';
-import { AuthorSearch, Post, Search } from '@/helpers/api';
+import { Article, AuthorSearch, Post, Search } from '@/helpers/api';
 import Logo from '@/components/Logo.vue';
 import { Component, Inject, Prop, Vue, Watch } from 'vue-property-decorator';
 import AsyncComputed from '@/components/asyncComputed';
@@ -96,7 +96,7 @@ export default class Author extends Vue {
 		if (!this.s) return;
 		const articles = (await this.s.next(10)).items.filter(article => article.id.toString() !== this.from);
 		this.articles.push(...articles);
-		this.articles = uniqBy(this.articles, property('id')).sort(({ date1 }, { date2 }) => date2 - date1);
+		this.articles = uniqBy(this.articles, property('id')).sort((a,b) => +b.date - +a.date);
 		if (e) e.target.complete();
 	}
 };

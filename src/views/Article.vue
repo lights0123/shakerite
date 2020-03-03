@@ -130,7 +130,7 @@ export default class ArticlePage extends Vue {
 		}
 	}
 
-	article: { media: Media, title: string, subtitle?: string, content: Vue, categories: Category[], writers: string[], excerpt: string } | {} = {};
+	article: { media: Media, title: string, subtitle?: string, content: Vue.ComponentOptions<Vue>, categories: Category[], writers: string[], excerpt: string } | {} = {};
 
 	get loaded() {
 		return 'title' in this.article;
@@ -147,7 +147,7 @@ export default class ArticlePage extends Vue {
 			if (galleryIDs) {
 				this.gallery = JSON.parse(`[${galleryIDs}]`);
 			} else this.gallery = null;
-			let content = sanitizeHtml(`<div>${article.content}</div>`, {
+			let contentString = sanitizeHtml(`<div>${article.content}</div>`, {
 				allowedTags: [...sanitizeHtml.defaults.allowedTags, 'img'],
 				allowedAttributes: {
 					img: ['src', 'srcset', 'class'],
@@ -163,7 +163,7 @@ export default class ArticlePage extends Vue {
 					a: sanitizeHtml.simpleTransform('a', { target: '_blank' }),
 				},
 			});
-			const parser = new DOMParser().parseFromString(content, 'text/html');
+			const parser = new DOMParser().parseFromString(contentString, 'text/html');
 			const images: { [id: string]: Media } = {};
 			parser.querySelectorAll('a').forEach((e) => {
 				if (e.children.length !== 1 || e.children[0].tagName !== 'IMG') {
@@ -190,7 +190,7 @@ export default class ArticlePage extends Vue {
 					e.replaceWith(gallery);
 				}
 			});
-			content = {
+			const content = {
 				data() {
 					return { images };
 				},
