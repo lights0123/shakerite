@@ -19,6 +19,8 @@
 				  @ionInput="searchTerm = $event.target.value"
 				  :value="searchTerm"
 				  @ionCancel="searchTerm = ''"
+				  @ionClear="$refs.search.setFocus()"
+				  ref="search"
 			/>
 			<ion-item
 				  v-for="author in authors"
@@ -83,6 +85,17 @@ export default class News extends Vue {
 	articles: Post[] = [];
 	refreshing: Search<Article> | null = null;
 	refreshingAuthors: AuthorSearch | null = null;
+	@Ref('search') searchBar!: HTMLIonSearchbarElement;
+
+	async mounted() {
+		const input = await this.searchBar.getInputElement();
+		input.addEventListener('keyup', e => {
+			if (e.key === 'Enter') {
+				const activeElement = document.activeElement as HTMLOrSVGElement | null;
+				if (activeElement?.blur) activeElement.blur();
+			}
+		});
+	}
 
 	getNav() {return getNav();}
 
