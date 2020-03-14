@@ -15,12 +15,17 @@ export default {
 			}
 		}
 
-		new MutationObserver(callback).observe(content.shadowRoot, { childList: true, subtree: true });
+		new MutationObserver(callback).observe(content.shadowRoot, {
+			childList: true,
+			subtree: true,
+		});
 	},
 	beforeRouteLeave(to, from, next) {
 		const { tag } = this.$router.app.$vnode;
 		if (!pos[tag]) pos[tag] = {};
-		pos[tag][from.path] = this.$el.getElementsByTagName('ion-content')[0].shadowRoot.querySelector('.inner-scroll').scrollTop;
+		pos[tag][from.path] = this.$el
+			.getElementsByTagName('ion-content')[0]
+			.shadowRoot.querySelector('.inner-scroll').scrollTop;
 		next();
 	},
 };

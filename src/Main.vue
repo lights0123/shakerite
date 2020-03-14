@@ -44,17 +44,15 @@ import '@/views/Dinosaur.vue';
 import '@/views/About.vue';
 import '@/views/Copyright.vue';
 import { getNav } from './helpers';
-import { Plugins, StatusBarStyle } from '@capacitor/core';
+import { KeyboardInfo, Plugins, StatusBarStyle } from '@capacitor/core';
 import VueRouter from '@/router';
 
-const { App, StatusBar } = Plugins;
+const { App, StatusBar, Keyboard } = Plugins;
 @Component({
 	router: new VueRouter({
 		mode: 'history',
 		base: process.env.BASE_URL,
-		routes: [
-			{ path: '/', redirect: '/news' },
-		],
+		routes: [{ path: '/', redirect: '/news' }],
 	}),
 })
 export default class Main extends Vue {
@@ -74,40 +72,47 @@ export default class Main extends Vue {
 		if (data) document.body.classList.add('dark');
 		else document.body.classList.remove('dark');
 		StatusBar.setBackgroundColor({ color: data ? '#000000' : '#ffffff' }).catch(console.error);
-		StatusBar.setStyle({ style: data ? StatusBarStyle.Dark : StatusBarStyle.Light }).catch(console.error);
+		StatusBar.setStyle({ style: data ? StatusBarStyle.Dark : StatusBarStyle.Light }).catch(
+			console.error
+		);
 	}
 
 	shouldGoBack = true;
 
 	mounted() {
-		window.addEventListener('keyboardWillShow', (event) => {
+		Keyboard.addListener('keyboardWillShow', (event: KeyboardInfo) => {
 			if (event.keyboardHeight) this.tabBar.classList.add('hidden');
 		});
-		window.addEventListener('keyboardWillHide', () => {
+		Keyboard.addListener('keyboardWillHide', () => {
 			this.tabBar.classList.remove('hidden');
 			const activeElement = document.activeElement as HTMLOrSVGElement | null;
 			if (activeElement?.blur) activeElement.blur();
 		});
 		let activePopover: { dismiss(): void } | undefined;
 		document.addEventListener('ionPopoverDidPresent', ({ target }) => {
-			activePopover = target as unknown as { dismiss(): void };
+			activePopover = (target as unknown) as { dismiss(): void };
 		});
 		document.addEventListener('ionPopoverDidDismiss', () => {
 			activePopover = undefined;
 		});
-		window.addEventListener('ionBackButton', async (e) => {
-			e.stopPropagation();
-			if (!this.shouldGoBack) return;
-			this.shouldGoBack = false;
-			setTimeout(() => this.shouldGoBack = true, 500);
-			if (activePopover) {
-				activePopover.dismiss();
-			} else {
-				const nav = getNav();
-				console.log(e);
-				if (await nav.canGoBack()) nav.pop(); else App.exitApp();
-			}
-		}, true);
+		window.addEventListener(
+			'ionBackButton',
+			async e => {
+				e.stopPropagation();
+				if (!this.shouldGoBack) return;
+				this.shouldGoBack = false;
+				setTimeout(() => (this.shouldGoBack = true), 500);
+				if (activePopover) {
+					activePopover.dismiss();
+				} else {
+					const nav = getNav();
+					console.log(e);
+					if (await nav.canGoBack()) nav.pop();
+					else App.exitApp();
+				}
+			},
+			true
+		);
 
 		const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)') as any;
 		this.isSystemDark = mediaQuery.matches;
@@ -126,7 +131,3 @@ export default class Main extends Vue {
 	}
 }
 </script>
-
-<style scoped>
-
-</style>

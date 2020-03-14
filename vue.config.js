@@ -11,14 +11,13 @@ module.exports = {
 		appleMobileWebAppStatusBarStyle: 'black-translucent',
 	},
 
-	chainWebpack: (config) => {
+	chainWebpack: config => {
 		config.module
-			  .rule('html')
-			  .test(/\.html$/)
-			  .use('html-loader')
-			  .loader('html-loader')
-			  .end();
-		if (!process.env.WEBPACK_DEV_SERVER) config.plugins.delete('fork-ts-checker');
+			.rule('html')
+			.test(/\.html$/)
+			.use('html-loader')
+			.loader('html-loader')
+			.end();
 	},
 
 	outputDir: undefined,

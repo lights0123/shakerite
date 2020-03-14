@@ -22,19 +22,18 @@
 			</ion-toolbar>
 		</ion-header>
 		<ion-content :style="cssProps" class="content">
-			<small v-if="article.categories" class="categories"><span v-for="category in article.categories"
-			                                                          :key="category.id"
-			>{{ category.name }}</span>
+			<small v-if="article.categories" class="categories"
+				><span v-for="category in article.categories" :key="category.id">{{
+					category.name
+				}}</span>
 			</small>
 			<h1>{{ article.title }}</h1>
 			<h2 v-if="article.subtitle">{{ article.subtitle }}</h2>
 			<small v-if="article.writers">
-				<span v-for="writer in article.writers"
-				      :key="writer"
-				      class="author"
-				>
-					<nav-link component="app-author"
-					          :componentProps="{name: writer, from:id}">{{ writer }}</nav-link>
+				<span v-for="writer in article.writers" :key="writer" class="author">
+					<nav-link component="app-author" :componentProps="{ name: writer, from: id }">{{
+						writer
+					}}</nav-link>
 				</span>
 			</small>
 			<gallery v-if="gallery" :pictures="gallery" />
@@ -65,7 +64,9 @@ const { Share } = Plugins;
 @Component({
 	components: {
 		Gallery,
-		Media: MediaComponent, Logo, NavLink,
+		Media: MediaComponent,
+		Logo,
+		NavLink,
 	},
 })
 export default class ArticlePage extends Vue {
@@ -75,16 +76,22 @@ export default class ArticlePage extends Vue {
 
 	gallery: number[] | null = null;
 
-	getNav() {return getNav();}
+	getNav() {
+		return getNav();
+	}
 
-	beforeCreate() {this.$store = this.$parent.$store;}
+	beforeCreate() {
+		this.$store = this.$parent.$store;
+	}
 
 	openFonts(event: MouseEvent) {
-		this.$ionic.popoverController.create({
-			component: FontPopover,
-			componentProps: { parent: this },
-			event,
-		}).then(p => (p as unknown as { present(): Promise<void> }).present());
+		this.$ionic.popoverController
+			.create({
+				component: FontPopover,
+				componentProps: { parent: this },
+				event,
+			})
+			.then(p => ((p as unknown) as { present(): Promise<void> }).present());
 	}
 
 	share() {
@@ -97,16 +104,25 @@ export default class ArticlePage extends Vue {
 		});
 	}
 
-	get fontFamily() {return this.$store.state.font.family;}
+	get fontFamily() {
+		return this.$store.state.font.family;
+	}
 
-	get fontWeight() {return this.$store.state.font.weight;}
+	get fontWeight() {
+		return this.$store.state.font.weight;
+	}
 
-	get fontSize() {return this.$store.state.font.size;}
+	get fontSize() {
+		return this.$store.state.font.size;
+	}
 
-	get bg() {return this.$store.state.font.bg;}
+	get bg() {
+		return this.$store.state.font.bg;
+	}
 
-	get fg() {return this.$store.state.font.fg;}
-
+	get fg() {
+		return this.$store.state.font.fg;
+	}
 
 	get cssProps() {
 		return {
@@ -123,14 +139,27 @@ export default class ArticlePage extends Vue {
 	}
 
 	set saved(state) {
-		if (state) this.$store.dispatch(SET_SAVED_ARTICLES, [...this.$store.state.savedArticles, this.id]);
+		if (state)
+			this.$store.dispatch(SET_SAVED_ARTICLES, [...this.$store.state.savedArticles, this.id]);
 		else {
-			const otherArticles = this.$store.state.savedArticles.filter(article => article !== this.id);
+			const otherArticles = this.$store.state.savedArticles.filter(
+				article => article !== this.id
+			);
 			this.$store.dispatch(SET_SAVED_ARTICLES, otherArticles);
 		}
 	}
 
-	article: { media: Media, title: string, subtitle?: string, content: Vue.ComponentOptions<Vue>, categories: Category[], writers: string[], excerpt: string } | {} = {};
+	article:
+		| {
+				media: Media;
+				title: string;
+				subtitle?: string;
+				content: Vue.ComponentOptions<Vue>;
+				categories: Category[];
+				writers: string[];
+				excerpt: string;
+		  }
+		| {} = {};
 
 	get loaded() {
 		return 'title' in this.article;
@@ -141,7 +170,9 @@ export default class ArticlePage extends Vue {
 		this.article = {};
 		try {
 			console.log(this.id);
-			const article: Article = this.slug ? await Article.getPostBySlug(this.API, this.id) : await Article.getPost(this.API, parseInt(this.id, 10), this.$store);
+			const article: Article = this.slug
+				? await Article.getPostBySlug(this.API, this.id)
+				: await Article.getPost(this.API, parseInt(this.id, 10), this.$store);
 			// see /data-examples/gallery.html
 			const galleryIDs = /var photoids = '([\d,]+)';/.exec(article.content)?.[1];
 			if (galleryIDs) {
@@ -165,7 +196,7 @@ export default class ArticlePage extends Vue {
 			});
 			const parser = new DOMParser().parseFromString(contentString, 'text/html');
 			const images: { [id: string]: Media } = {};
-			parser.querySelectorAll('a').forEach((e) => {
+			parser.querySelectorAll('a').forEach(e => {
 				if (e.children.length !== 1 || e.children[0].tagName !== 'IMG') {
 					const link = document.createElement('smart-link');
 					link.setAttribute('href', e.getAttribute('href') || '');
@@ -183,10 +214,15 @@ export default class ArticlePage extends Vue {
 				e.replaceWith(media);
 			});
 			// see /data-examples/sfiphotowrap.html
-			parser.querySelectorAll('div.photowrap').forEach((e) => {
+			parser.querySelectorAll('div.photowrap').forEach(e => {
 				if (e.children[0]?.classList.contains('sfiphotowrap')) {
 					const gallery = document.createElement('gallery');
-					gallery.setAttribute(':pictures', JSON.stringify(JSON.parse(`[${e.children[0].getAttribute('data-photo-ids')}]`)));
+					gallery.setAttribute(
+						':pictures',
+						JSON.stringify(
+							JSON.parse(`[${e.children[0].getAttribute('data-photo-ids')}]`)
+						)
+					);
 					e.replaceWith(gallery);
 				}
 			});
@@ -198,7 +234,7 @@ export default class ArticlePage extends Vue {
 				template: parser.body.innerHTML,
 			};
 			const categoriesPromises: Promise<Category>[] = [];
-			article.categories.forEach((category) => {
+			article.categories.forEach(category => {
 				categoriesPromises.push(category.fetch(this.API));
 			});
 			const categories: Category[] = await Promise.all(categoriesPromises);
@@ -243,7 +279,8 @@ small {
 	user-select: auto;
 }
 
-.article, p {
+.article,
+p {
 	font-size: var(--font-size);
 }
 
@@ -255,7 +292,13 @@ small {
 	height: 56.25vw;
 }
 
-.article::v-deep h1, .article::v-deep h2, .article::v-deep h3, .article::v-deep h4, .article::v-deep h5, .article::v-deep h6, .article::v-deep p {
+.article::v-deep h1,
+.article::v-deep h2,
+.article::v-deep h3,
+.article::v-deep h4,
+.article::v-deep h5,
+.article::v-deep h6,
+.article::v-deep p {
 	margin-left: 15px;
 	margin-right: 15px;
 }
@@ -274,7 +317,8 @@ small {
 }
 
 .article::v-deep {
-	.photowrap, .remodal {
+	.photowrap,
+	.remodal {
 		display: none;
 	}
 
@@ -284,7 +328,7 @@ small {
 }
 
 .article::v-deep .pullquotetext:before {
-	content: "“";
+	content: '“';
 }
 
 .article::v-deep .quotespeaker {
@@ -292,7 +336,7 @@ small {
 }
 
 * {
-	font-family: var(--font-family, "Open Sans");
+	font-family: var(--font-family, 'Open Sans');
 	font-weight: var(--font-weight, normal);
 }
 
@@ -301,15 +345,15 @@ small {
 }
 
 .author:first-child:nth-last-child(2):after {
-	content: " and ";
+	content: ' and ';
 }
 
 .author:not(:nth-last-child(2)):not(:last-child):after {
-	content: ", ";
+	content: ', ';
 }
 
 .author:nth-last-child(2):after {
-	content: ", and ";
+	content: ', and ';
 }
 
 .author::v-deep a {

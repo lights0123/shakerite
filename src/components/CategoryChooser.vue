@@ -1,11 +1,16 @@
 <template>
 	<ion-toolbar>
 		<div>
-			<ion-button :color="category.selected ? 'primary' : 'medium'" :key="category.id" :strong="category.selected"
-			            :style="{selected: category.selected}"
-			            @click="$emit('input', category.category)" fill="clear"
-			            v-for="category in cat">
-				<span>{{category.category.name}}</span>
+			<ion-button
+				:color="category.selected ? 'primary' : 'medium'"
+				:key="category.id"
+				:strong="category.selected"
+				:style="{ selected: category.selected }"
+				@click="$emit('input', category.category)"
+				fill="clear"
+				v-for="category in cat"
+			>
+				<span>{{ category.category.name }}</span>
 			</ion-button>
 		</div>
 	</ion-toolbar>
@@ -22,7 +27,10 @@ export default {
 	},
 	computed: {
 		cat() {
-			return this.categories.map(category => ({ category, selected: this.value.id === category.id }));
+			return this.categories.map(category => ({
+				category,
+				selected: this.value.id === category.id,
+			}));
 		},
 	},
 };

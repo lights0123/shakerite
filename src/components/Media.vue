@@ -1,6 +1,9 @@
 <template>
-	<div class="wrapper" :class="[avatar ? 'avatar' : '', caption ? 'caption' : '']"
-	     :style="avatar || caption ? {} : {'padding-top': aspect}">
+	<div
+		class="wrapper"
+		:class="[avatar ? 'avatar' : '', caption ? 'caption' : '']"
+		:style="avatar || caption ? {} : { 'padding-top': aspect }"
+	>
 		<img :src="src" />
 		<p v-if="caption">{{ sanitize(captionText) }}</p>
 	</div>
@@ -28,7 +31,9 @@ export default class Media extends Vue {
 				await this.media.fetch(this.API, this.$store);
 				const idealWidth = window.devicePixelRatio * window.screen.width;
 				const sizes = this.media.sizes.sort((a, b) => a.width - b.width);
-				const selectedSize = this.media.sizes.find(size => size.width >= idealWidth) || sizes[sizes.length - 1];
+				const selectedSize =
+					this.media.sizes.find(size => size.width >= idealWidth) ||
+					sizes[sizes.length - 1];
 				this.src = selectedSize.url;
 				this.aspect = `${selectedSize.aspectRatio}%`;
 				this.captionText = this.media.caption ?? null;

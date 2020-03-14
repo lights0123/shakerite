@@ -36,7 +36,7 @@ function createPaginationObject(result, options, httpTransport) {
 	}
 
 	// Guard against capitalization inconsistencies in returned headers
-	Object.keys(result.headers).forEach((header) => {
+	Object.keys(result.headers).forEach(header => {
 		result.headers[header.toLowerCase()] = result.headers[header];
 	});
 
@@ -53,9 +53,7 @@ function createPaginationObject(result, options, httpTransport) {
 	}
 
 	// Decode the link header object
-	const links = result.headers.link
-		  ? parseLinkHeader(result.headers.link)
-		  : {};
+	const links = result.headers.link ? parseLinkHeader(result.headers.link) : {};
 
 	// Store pagination data from response headers on the response collection
 	_paging = {

@@ -21,7 +21,9 @@ export default {
 		for (const selector of metaSelectors) {
 			document.querySelector(selector).content = this.initialStatusbarColor;
 		}
-		StatusBar.setBackgroundColor({ color: this.initialStatusbarColor }).catch(this.$helpers.err);
+		StatusBar.setBackgroundColor({ color: this.initialStatusbarColor }).catch(
+			this.$helpers.err
+		);
 		StatusBar.setStyle({ style: StatusBarStyle.Light }).catch(this.$helpers.err);
 		next();
 	},

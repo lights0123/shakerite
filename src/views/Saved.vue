@@ -2,28 +2,41 @@
 	<fragment>
 		<ion-header>
 			<ion-toolbar>
-				<ion-title><img alt="Shakerite logo" class="logo" src="../images/shakerite.png" /></ion-title>
+				<ion-title
+					><img alt="Shakerite logo" class="logo" src="../images/shakerite.png"
+				/></ion-title>
 			</ion-toolbar>
 		</ion-header>
 		<ion-content class="outer-content">
-
-			<ion-refresher :disabled="articles.length === 0" @ionRefresh="refresh" ref="refresh" slot="fixed">
+			<ion-refresher
+				:disabled="articles.length === 0"
+				@ionRefresh="refresh"
+				ref="refresh"
+				slot="fixed"
+			>
 				<ion-refresher-content />
 			</ion-refresher>
 			<!--<ion-searchbar animated="true" show-cancel-button debounce="500"/>-->
 			<div class="center">
 				<ion-spinner v-if="articles.length === 0 && hasArticles" />
 			</div>
-			<article-preview :article="article"
-			                 :key="article.id" :large="index === 0"
-			                 @click.native="getNav().push('app-article',{id:article.id})"
-			                 v-for="(article, index) in articles" />
+			<article-preview
+				:article="article"
+				:key="article.id"
+				:large="index === 0"
+				@click.native="getNav().push('app-article', { id: article.id })"
+				v-for="(article, index) in articles"
+			/>
 
 			<div class="noArticles" v-if="!hasArticles">
 				<ion-label>Save articles with the bookmark button</ion-label>
 			</div>
 
-			<ion-infinite-scroll :disabled="articles.length === 0" @ionInfinite="loadContent" ref="infinite">
+			<ion-infinite-scroll
+				:disabled="articles.length === 0"
+				@ionInfinite="loadContent"
+				ref="infinite"
+			>
 				<ion-infinite-scroll-content />
 			</ion-infinite-scroll>
 		</ion-content>
@@ -46,13 +59,17 @@ export default class Saved extends Vue {
 	articles = articles;
 	@Inject() readonly API!: any;
 
-	beforeCreate() {this.$store = this.$parent.$store;}
+	beforeCreate() {
+		this.$store = this.$parent.$store;
+	}
 
 	created() {
 		this.refresh();
 	}
 
-	getNav() {return getNav();}
+	getNav() {
+		return getNav();
+	}
 
 	async loadContent(e) {
 		if (this.hasArticles) this.articles = (await s.next(10)).items.slice();

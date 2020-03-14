@@ -15,15 +15,22 @@
 			</ion-row>
 			<ion-row class="row-dots">
 				<ion-col @click="selectedColor = dot" v-for="dot in dots" :key="dot.fg + dot.bg">
-					<div :class="{ 'selected': selectedColor.fg === dot.fg && selectedColor.bg === dot.bg }"
-					     :style="{ 'background-color': dot.bg }"
-					     class="dot"
+					<div
+						:class="{
+							selected: selectedColor.fg === dot.fg && selectedColor.bg === dot.bg,
+						}"
+						:style="{ 'background-color': dot.bg }"
+						class="dot"
 					/>
 				</ion-col>
 			</ion-row>
 		</ion-grid>
 
-		<ion-radio-group :value="selectedFont" @ionChange="selectedFont = $event.target.value" name="font-family">
+		<ion-radio-group
+			:value="selectedFont"
+			@ionChange="selectedFont = $event.target.value"
+			name="font-family"
+		>
 			<ion-item v-for="font in fonts" :key="font.name + font.weight">
 				<ion-label :style="{ '--ion-font-family': font.name, 'font-weight': font.weight }">
 					{{ font.displayName }}
@@ -45,7 +52,8 @@ export default {
 				{ bg: '#fff', fg: '#000' },
 				{ bg: '#f9f1e4', fg: '#000' },
 				{ bg: '#4c4b50', fg: '#fff' },
-				{ bg: '#000', fg: '#fff' }],
+				{ bg: '#000', fg: '#fff' },
+			],
 		};
 	},
 	computed: {
@@ -81,8 +89,9 @@ export default {
 			get() {
 				const { font } = this.$store.state;
 				try {
-					return this.fonts.find(({ name, weight }) => font.family === name && font.weight === weight)
-							.displayName;
+					return this.fonts.find(
+						({ name, weight }) => font.family === name && font.weight === weight
+					).displayName;
 				} catch (e) {
 					return undefined;
 				}
@@ -135,7 +144,6 @@ export default {
 </script>
 
 <style scoped>
-
 ion-list {
 	margin-bottom: 0;
 }
@@ -193,10 +201,12 @@ ion-grid {
 }
 
 .row-dots {
-	border-bottom: 1px solid rgba(var(--ion-item-md-border-color-rgb, var(--ion-item-border-color-rgb, 0, 0, 0)), .13);
+	border-bottom: 1px solid
+		rgba(var(--ion-item-md-border-color-rgb, var(--ion-item-border-color-rgb, 0, 0, 0)), 0.13);
 }
 
 .dot {
-	border: 1px solid rgba(var(--ion-item-md-border-color-rgb, var(--ion-item-border-color-rgb, 0, 0, 0)), .13);
+	border: 1px solid
+		rgba(var(--ion-item-md-border-color-rgb, var(--ion-item-border-color-rgb, 0, 0, 0)), 0.13);
 }
 </style>

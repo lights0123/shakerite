@@ -4,7 +4,7 @@
 			<ion-slide v-for="picture in media" :key="picture.id">
 				<div>
 					<media :media="picture" caption />
-					<br>
+					<br />
 				</div>
 			</ion-slide>
 		</ion-slides>
@@ -32,5 +32,4 @@ export default class Gallery extends Vue {
 }
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

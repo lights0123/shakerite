@@ -25,10 +25,5 @@ export default class A extends Vue {
 		}
 		openLink(url, this.$store);
 	}
-
-};
+}
 </script>
-
-<style scoped>
-
-</style>

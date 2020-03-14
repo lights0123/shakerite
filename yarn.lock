@@ -881,6 +881,13 @@
   dependencies:
     "@types/cordova" latest
 
+"@ionic-native/http@^5.22.0":
+  version "5.22.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/http/-/http-5.22.0.tgz#24937c93617f80dbc00c086eee76a00088bb4061"
+  integrity sha512-RA3gp1vTBGKGSO+zN2X9yMJBvsypxB0Ad83+vozJ6A7U8u9JHIze1pXkFKq/Mxcja44uG5gPNae1E8PguEGZ8Q==
+  dependencies:
+    "@types/cordova" latest
+
 "@ionic-native/keyboard@^5.18.0":
   version "5.18.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/keyboard/-/keyboard-5.18.0.tgz#35bf414740af3917eaa27a23d52c909a9510b70d"

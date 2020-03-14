@@ -15,7 +15,7 @@ module.exports = {
 		'no-debugger': 'off',
 		'no-mixed-spaces-and-tabs': 'off',
 		'prettier/prettier':
-			  process.env.NODE_ENV === 'production' ? 'error' : 'off',
+			process.env.NODE_ENV === 'production' || 'LINT' in process.env ? 'error' : 'warn',
 		'no-unused-vars': 'off',
 	},
 	parserOptions: {

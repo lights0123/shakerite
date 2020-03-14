@@ -12,14 +12,12 @@
 		"sourceMap": true,
 		"noImplicitAny": false,
 		"baseUrl": ".",
-		"types": [
-			"webpack-env"
-		],
 		"paths": {
 			"@/*": [
 				"src/*"
 			]
 		},
+		"typeRoots": ["./src/types", "./node_modules/@types"],
 		"lib": [
 			"esnext",
 			"dom",

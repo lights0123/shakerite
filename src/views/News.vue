@@ -13,20 +13,20 @@
 				<ion-refresher-content />
 			</ion-refresher>
 			<ion-searchbar
-				  animated="true"
-				  show-cancel-button="focus"
-				  debounce="500"
-				  @ionInput="searchTerm = $event.target.value"
-				  :value="searchTerm"
-				  @ionCancel="searchTerm = ''"
-				  @ionClear="$refs.search.setFocus()"
-				  ref="search"
+				animated="true"
+				show-cancel-button="focus"
+				debounce="500"
+				@ionInput="searchTerm = $event.target.value"
+				:value="searchTerm"
+				@ionCancel="searchTerm = ''"
+				@ionClear="$refs.search.setFocus()"
+				ref="search"
 			/>
 			<ion-item
-				  v-for="author in authors"
-				  :key="author.id"
-				  detail
-				  @click="getNav().push('app-author',{name:author.name})"
+				v-for="author in authors"
+				:key="author.id"
+				detail
+				@click="getNav().push('app-author', { name: author.name })"
 			>
 				<ion-avatar slot="start">
 					<media v-if="author.media" :media="author.media" avatar />
@@ -39,11 +39,11 @@
 				<p v-else-if="articles.length === 0">No articles found</p>
 			</div>
 			<article-preview
-				  :article="article"
-				  :key="`searchTerm ${selCategory.id} ${article.id}`"
-				  :large="index === 0"
-				  @click.native="getNav().push('app-article',{id:article.id})"
-				  v-for="(article, index) in articles"
+				:article="article"
+				:key="`searchTerm ${selCategory.id} ${article.id}`"
+				:large="index === 0"
+				@click.native="getNav().push('app-article', { id: article.id })"
+				v-for="(article, index) in articles"
 			/>
 
 			<ion-infinite-scroll :disabled="refreshing" @ionInfinite="loadContent" ref="infinite">
@@ -64,7 +64,6 @@ import { defaultCategories } from '@/helpers/categories';
 import { Article, Author, AuthorSearch, Post, Search } from '@/helpers/api';
 import { getNav, injectParent } from '@/helpers';
 import Logo from '../components/Logo.vue';
-
 
 const searches: { articles: Search<Article>; authors: AuthorSearch }[] = [];
 
@@ -97,7 +96,9 @@ export default class News extends Vue {
 		});
 	}
 
-	getNav() {return getNav();}
+	getNav() {
+		return getNav();
+	}
 
 	@Ref('infinite') readonly infiniteScroll?: { complete(): void };
 	@Ref('refresh') readonly refreshComponent?: { cancel(): void };
@@ -119,9 +120,9 @@ export default class News extends Vue {
 		this.infiniteScroll?.complete();
 		this.refreshComponent?.cancel();
 		let search = searches.find(
-			  search =>
-					search.articles.categories === this.selCategory.id &&
-					search.articles.term === this.searchTerm,
+			search =>
+				search.articles.categories === this.selCategory.id &&
+				search.articles.term === this.searchTerm
 		);
 		if (!search) {
 			search = {

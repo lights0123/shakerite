@@ -3,8 +3,8 @@ import { Category } from './categories';
 import { ADD_CACHED, ADD_CACHED_IMAGE } from '@/store/mutations';
 import { Capacitor } from '@capacitor/core';
 import returnBody from '@/helpers/WPResponse';
-import { deviceReady } from '@/helpers';
 import WPAPI from 'wpapi';
+import { HTTP } from '@ionic-native/http';
 
 export class Paginate<T> {
 	protected wp;
@@ -50,7 +50,11 @@ export class Paginate<T> {
 	}
 
 	protected query(items: number = 25) {
-		return this.wp.posts().offset(this._offset).perPage(items).embed();
+		return this.wp
+			.posts()
+			.offset(this._offset)
+			.perPage(items)
+			.embed();
 	}
 
 	protected parse(post) {
@@ -67,7 +71,22 @@ export class Search<T> extends Paginate<T> {
 	readonly author?: string;
 	readonly name?: string;
 
-	constructor(wp, { term, categories, author, name, ids }: { term?: string, categories?: Array<number> | number, author?: string, name?: string, ids?: number[] }) {
+	constructor(
+		wp,
+		{
+			term,
+			categories,
+			author,
+			name,
+			ids,
+		}: {
+			term?: string;
+			categories?: Array<number> | number;
+			author?: string;
+			name?: string;
+			ids?: number[];
+		}
+	) {
 		super(wp);
 		this.term = term;
 		this.categories = categories;
@@ -100,7 +119,15 @@ export class AuthorSearch extends Paginate<Author> {
 	readonly search?: boolean;
 	readonly slug?: string;
 
-	constructor(wp, { name, ids, slug, search = true }: { name?: string, ids?: number[], slug?: string, search?: boolean }) {
+	constructor(
+		wp,
+		{
+			name,
+			ids,
+			slug,
+			search = true,
+		}: { name?: string; ids?: number[]; slug?: string; search?: boolean }
+	) {
 		super(wp);
 		this.name = name;
 		this.ids = ids;
@@ -109,7 +136,11 @@ export class AuthorSearch extends Paginate<Author> {
 	}
 
 	protected query(items: number = 25) {
-		let q = this.wp.writers().offset(this._offset).perPage(items).embed();
+		let q = this.wp
+			.writers()
+			.offset(this._offset)
+			.perPage(items)
+			.embed();
 		if (this.ids) q = q.include(this.ids);
 		if (this.slug) q = q.slug(this.slug);
 		if (this.name) {
@@ -131,8 +162,23 @@ export class Post {
 	subtitle?: string;
 	media?: Media;
 
-	constructor(
-		{ id, content, categories, date, title, subtitle, media }: { id, content, categories, date, title, subtitle?, media?: Media }) {
+	constructor({
+		id,
+		content,
+		categories,
+		date,
+		title,
+		subtitle,
+		media,
+	}: {
+		id;
+		content;
+		categories;
+		date;
+		title;
+		subtitle?;
+		media?: Media;
+	}) {
 		this.id = id;
 		this.content = content;
 		this.categories = categories;
@@ -151,32 +197,46 @@ export class Post {
 			const article = store.getters.getCachedArticle(id);
 			if (article) return article;
 		}
-		let article = this.fromAPI(await wp.posts().id(id).embed());
+		let article = this.fromAPI(
+			await wp
+				.posts()
+				.id(id)
+				.embed()
+		);
 		if (store) store.commit(ADD_CACHED, article);
 		return article;
 	}
 
 	static async getPostBySlug(wp, slug: string) {
-		return this.fromAPI((await wp.posts().slug(slug).embed())[0]);
+		return this.fromAPI(
+			(
+				await wp
+					.posts()
+					.slug(slug)
+					.embed()
+			)[0]
+		);
 	}
 
 	protected static APITransform({
-		                              id,
-		                              content: { rendered: content },
-		                              categories,
-		                              modified_gmt,
-		                              title: { rendered: title },
-		                              sno_deck,
-		                              featured_media,
-		                              _embedded,
-	                              }) {
+		id,
+		content: { rendered: content },
+		categories,
+		modified_gmt,
+		title: { rendered: title },
+		sno_deck,
+		featured_media,
+		_embedded,
+	}) {
 		let media;
-		if (_embedded && _embedded['wp:featuredmedia'] && _embedded['wp:featuredmedia'][0]) media = Media.fromAPI(_embedded['wp:featuredmedia'][0]);
+		if (_embedded && _embedded['wp:featuredmedia'] && _embedded['wp:featuredmedia'][0])
+			media = Media.fromAPI(_embedded['wp:featuredmedia'][0]);
 		else if (featured_media) media = new Media(featured_media);
 		let categoryList: Category[] = [];
 		if (_embedded && _embedded['wp:term'] && _embedded['wp:term'][0]) {
 			_embedded['wp:term'][0].forEach(category => {
-				if (category['taxonomy'] === 'category') categoryList.push(Category.fromAPI(category));
+				if (category['taxonomy'] === 'category')
+					categoryList.push(Category.fromAPI(category));
 			});
 		} else if (categories) {
 			categories.forEach(id => {
@@ -200,18 +260,36 @@ export class Article extends Post {
 	writers?: Array<string>;
 	excerpt: string;
 
-	constructor({ id, content, categories, date, excerpt, title, subtitle, media, jobTitle, writers }:
-		            { id, content, categories, date, excerpt, title, subtitle?, media?, jobTitle?, writers? }) {
+	constructor({
+		id,
+		content,
+		categories,
+		date,
+		excerpt,
+		title,
+		subtitle,
+		media,
+		jobTitle,
+		writers,
+	}: {
+		id;
+		content;
+		categories;
+		date;
+		excerpt;
+		title;
+		subtitle?;
+		media?;
+		jobTitle?;
+		writers?;
+	}) {
 		super({ id, content, categories, date, title, subtitle, media });
 		this.jobTitle = jobTitle;
 		this.writers = writers;
 		this.excerpt = excerpt;
 	}
 
-	static fromAPI({
-		               jobtitle, writer,
-		               excerpt: { rendered: excerpt }, ...data
-	               }) {
+	static fromAPI({ jobtitle, writer, excerpt: { rendered: excerpt }, ...data }) {
 		return new Article({
 			jobTitle: jobtitle ? jobtitle[0] : undefined,
 			writers: writer,
@@ -227,8 +305,29 @@ export class Author extends Post {
 	position: string;
 	schoolYear: number;
 
-	constructor({ id, content, categories, date, excerpt, media, title, name, position, schoolYear }:
-		            { id, content, categories, date, excerpt, media?, title, name?, position?, schoolYear? }) {
+	constructor({
+		id,
+		content,
+		categories,
+		date,
+		excerpt,
+		media,
+		title,
+		name,
+		position,
+		schoolYear,
+	}: {
+		id;
+		content;
+		categories;
+		date;
+		excerpt;
+		media?;
+		title;
+		name?;
+		position?;
+		schoolYear?;
+	}) {
 		super({ id, content, categories, date, title, media });
 		this.name = name;
 		this.position = position;
@@ -264,7 +363,7 @@ export class MediaSize {
 	}
 
 	get aspectRatio() {
-		return this.height / this.width * 100;
+		return (this.height / this.width) * 100;
 	}
 }
 
@@ -280,13 +379,20 @@ export class Media {
 		this.sizes = [];
 	}
 
-	static fromAPI({ id, caption: { rendered: caption }, date_gmt: date, media_details: { sizes } }): Media {
+	static fromAPI({
+		id,
+		caption: { rendered: caption },
+		date_gmt: date,
+		media_details: { sizes },
+	}): Media {
 		let media = new Media(id);
 		media.caption = caption;
 		media.date = date;
 		media.loaded = true;
 		for (const size in sizes) {
-			media.sizes.push(new MediaSize(sizes[size].width, sizes[size].height, sizes[size].source_url, size));
+			media.sizes.push(
+				new MediaSize(sizes[size].width, sizes[size].height, sizes[size].source_url, size)
+			);
 		}
 		return media;
 	}
@@ -303,12 +409,18 @@ export class Media {
 				return this;
 			}
 		}
-		const { caption: { rendered: caption }, date_gmt: date, media_details: { sizes } } = await wp.media().id(this.id);
+		const {
+			caption: { rendered: caption },
+			date_gmt: date,
+			media_details: { sizes },
+		} = await wp.media().id(this.id);
 		this.caption = caption;
 		this.date = date;
 		this.loaded = true;
 		for (const size in sizes) {
-			this.sizes.push(new MediaSize(sizes[size].width, sizes[size].height, sizes[size].source_url, size));
+			this.sizes.push(
+				new MediaSize(sizes[size].width, sizes[size].height, sizes[size].source_url, size)
+			);
 		}
 		if (store) store.commit(ADD_CACHED_IMAGE, this);
 		return this;
@@ -326,21 +438,15 @@ if (isNative) {
 		get(wpreq, cb?: (err: Error | null, data?: object) => any) {
 			const url = wpreq.toString();
 			console.log(url);
-			return new Promise((resolve, reject) => {
-				function req() {
-					window.cordova.plugin.http.get(url, {}, {}, (res) => {
-						const body = returnBody(wpreq, res);
-						if (cb && typeof cb === 'function') cb(null, body);
-						resolve(body);
-					}, (err: Error) => {
-						if (cb && typeof cb === 'function') cb(err);
-						reject(err);
-					});
+			HTTP.get(url, {}, {}).then(
+				res => {
+					const body = returnBody(wpreq, res);
+					if (cb && typeof cb === 'function') cb(null, body);
+				},
+				(err: Error) => {
+					if (cb && typeof cb === 'function') cb(err);
 				}
-
-				if (deviceReady) req();
-				else document.addEventListener('deviceready', req, false);
-			});
+			);
 		},
 	};
 }

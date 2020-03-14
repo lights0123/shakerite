@@ -16,10 +16,5 @@ export default class NavLink extends Vue {
 	openLink() {
 		getNav().push(this.component, this.componentProps);
 	}
-
-};
+}
 </script>
-
-<style scoped>
-
-</style>

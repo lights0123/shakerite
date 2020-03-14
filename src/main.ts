@@ -35,9 +35,7 @@ const currentIcons = Object.keys(allIcons).map(i => {
 const iconsObject = Object.assign({}, ...currentIcons);
 addIcons(iconsObject);
 enableReviews();
-const {
-	SplashScreen, Network, StatusBar, Browser, App,
-} = Plugins;
+const { SplashScreen, Network, StatusBar, Browser, App } = Plugins;
 Vue.config.productionTip = false;
 library.add(faBookmark, faFont, faBookmarkRegular);
 // window.HTTP = HTTP;
@@ -49,9 +47,13 @@ Vue.use(AsyncComputed);
 
 const isNative = Capacitor.platform !== 'web';
 let deviceReady = false;
-document.addEventListener('deviceready', () => {
-	deviceReady = true;
-}, false);
+document.addEventListener(
+	'deviceready',
+	() => {
+		deviceReady = true;
+	},
+	false
+);
 
 // Initial Capacitor calls
 async function initCapacitor() {
@@ -61,13 +63,13 @@ async function initCapacitor() {
 
 	// Set network checks
 	Network.getStatus()
-		.then((s) => {
+		.then(s => {
 			Vue.prototype.$networkStatus = s;
 		})
 		.catch(console.error);
 
 	// Listen to network changes
-	Network.addListener('networkStatusChange', (s) => {
+	Network.addListener('networkStatusChange', s => {
 		Vue.prototype.$networkStatus = s;
 	});
 }

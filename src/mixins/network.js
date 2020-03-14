@@ -5,12 +5,12 @@ export default {
 		},
 		showNetworkAlert() {
 			return this.$ionic.alertController
-				  .create({
-					  header: 'No internet connection',
-					  message: 'Please check your internet connection.',
-					  buttons: ['OK'],
-				  })
-				  .then(a => a.present());
+				.create({
+					header: 'No internet connection',
+					message: 'Please check your internet connection.',
+					buttons: ['OK'],
+				})
+				.then(a => a.present());
 		},
 	},
 };

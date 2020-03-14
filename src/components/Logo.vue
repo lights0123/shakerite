@@ -1,12 +1,11 @@
 <template>
 	<div>
-		<img alt="Shakerite logo" class="logo logo-light" src="../images/shakerite.png">
-		<img alt="Shakerite logo" class="logo logo-dark" src="../images/shakerite-dark.png">
+		<img alt="Shakerite logo" class="logo logo-light" src="../images/shakerite.png" />
+		<img alt="Shakerite logo" class="logo logo-dark" src="../images/shakerite-dark.png" />
 	</div>
 </template>
 
 <script>
-
 export default {
 	name: 'Logo',
 };

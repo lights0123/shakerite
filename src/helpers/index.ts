@@ -8,7 +8,7 @@ export function env(constant: string) {
 export enum Platform {
 	iOS = 'ios',
 	Android = 'android',
-	Web = 'web'
+	Web = 'web',
 }
 
 export function getActiveComponent(app) {
@@ -17,16 +17,20 @@ export function getActiveComponent(app) {
 }
 
 export function getNav(): Nav {
-	return document.querySelector('body ion-tab:not(.tab-hidden) > ion-nav') as unknown as Nav;
+	return (document.querySelector('body ion-tab:not(.tab-hidden) > ion-nav') as unknown) as Nav;
 }
 
 export const iOSAppID = env('IOS_APP_ID');
 export const { platform } = Capacitor;
 console.log(platform);
 export let deviceReady = false;
-document.addEventListener('deviceready', () => {
-	deviceReady = true;
-}, false);
+document.addEventListener(
+	'deviceready',
+	() => {
+		deviceReady = true;
+	},
+	false
+);
 
 export const injectParent = {
 	beforeCreateVueInstance(RootComponentDefinition) {

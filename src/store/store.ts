@@ -36,20 +36,20 @@ export async function getData(store) {
 
 export interface RootStore {
 	font: {
-		family: string,
-		size: number,
-		weight?: number,
-		fg: string,
-		bg: string,
-	},
-	articles: Article[],
-	category: { name: string, id: number },
-	searchTerm: string,
-	cachedArticles: Article[],
-	cachedImages: Media[],
-	savedArticles: number[],
-	browser: string,
-	theme: string,
+		family: string;
+		size: number;
+		weight?: number;
+		fg: string;
+		bg: string;
+	};
+	articles: Article[];
+	category: { name: string; id: number };
+	searchTerm: string;
+	cachedArticles: Article[];
+	cachedImages: Media[];
+	savedArticles: number[];
+	browser: string;
+	theme: string;
 }
 
 export default new Vuex.Store<RootStore>({
@@ -88,12 +88,16 @@ export default new Vuex.Store<RootStore>({
 		},
 		[Mutations.ADD_ARTICLE](state, articles) {
 			state.articles.push(...articles);
-			state.articles = uniqBy(state.articles, property('id')).sort((a,b) => +b.date - +a.date);
+			state.articles = uniqBy(state.articles, property('id')).sort(
+				(a, b) => +b.date - +a.date
+			);
 		},
 		[Mutations.SET_ARTICLES](state, articles) {
 			state.articles = [];
 			state.articles.push(...articles);
-			state.articles = uniqBy(state.articles, property('id')).sort((a,b) => +b.date - +a.date);
+			state.articles = uniqBy(state.articles, property('id')).sort(
+				(a, b) => +b.date - +a.date
+			);
 		},
 		[Mutations.SET_SEARCH_TERM](state, term) {
 			state.searchTerm = term;

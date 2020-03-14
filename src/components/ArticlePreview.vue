@@ -1,19 +1,19 @@
 <template>
-	<ion-card :class="{small: !large}">
+	<ion-card :class="{ small: !large }">
 		<div class="media">
 			<media v-if="article.media" :media="article.media" />
 		</div>
 		<div>
 			<ion-card-header>
-				<ion-card-title>{{article.title}}</ion-card-title>
+				<ion-card-title>{{ article.title }}</ion-card-title>
 			</ion-card-header>
 			<ion-card-content>
-				<p v-shave="{ height: large ? 100 : 60 }">{{excerpt}}</p>
+				<p v-shave="{ height: large ? 100 : 60 }">{{ excerpt }}</p>
 			</ion-card-content>
 		</div>
 		<ion-card-content class="metadata">
-			<p>{{author}}</p>
-			<p>{{date}}</p>
+			<p>{{ author }}</p>
+			<p>{{ date }}</p>
 		</ion-card-content>
 	</ion-card>
 </template>

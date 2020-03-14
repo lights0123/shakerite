@@ -8,7 +8,7 @@
 			</ion-toolbar>
 		</ion-header>
 		<ion-content class="content outer-content">
-			<br>
+			<br />
 			<!--<ion-list>
 				<ion-item detail @click="true || $router.push('/alerts')">
 					<ion-label>Alerts</ion-label>
@@ -26,14 +26,21 @@
 					<ion-icon slot="start" color="facebook" name="logo-facebook" />
 					<ion-label>Visit us on Facebook</ion-label>
 				</ion-item>
-				<ion-item detail @click="openLinkGlobal('https://soundcloud.com/shakerite-podcast')">
+				<ion-item
+					detail
+					@click="openLinkGlobal('https://soundcloud.com/shakerite-podcast')"
+				>
 					<ion-icon slot="start" :src="logo.soundcloud" color="soundcloud" />
 					<ion-label>Follow us on Soundcloud</ion-label>
 				</ion-item>
 				<ion-item
-					  v-if="$isIOS"
-					  detail
-					  @click="openLinkGlobal('https://itunes.apple.com/us/podcast/the-shake/id1378107204?mt=2&app=podcast')"
+					v-if="$isIOS"
+					detail
+					@click="
+						openLinkGlobal(
+							'https://itunes.apple.com/us/podcast/the-shake/id1378107204?mt=2&app=podcast'
+						)
+					"
 				>
 					<ion-icon slot="start" :src="logo.podcast" />
 					<ion-label>Listen on Apple Podcasts</ion-label>
@@ -73,7 +80,7 @@
 					</ion-item>
 				</ion-radio-group>
 			</ion-list>
-			<br>
+			<br />
 			<ion-list>
 				<ion-item detail @click="getNav().push('app-about')">
 					<ion-label>About</ion-label>
@@ -82,8 +89,11 @@
 					<ion-label>Storage</ion-label>
 					<ion-note slot="end">55MB</ion-note>
 				</ion-item>-->
-				<ion-item detail
-				          @click="openLinkGlobal('mailto:shakeriteadviser@gmail.com?subject=Shakerite%20App')"
+				<ion-item
+					detail
+					@click="
+						openLinkGlobal('mailto:shakeriteadviser@gmail.com?subject=Shakerite%20App')
+					"
 				>
 					<ion-label>Contact Us</ion-label>
 				</ion-item>
@@ -91,7 +101,7 @@
 					<ion-label>Rate us on the App Store</ion-label>
 				</ion-item>
 			</ion-list>
-			<br>
+			<br />
 			<ion-list>
 				<ion-item detail @click="getNav().push('app-copyright')">
 					<ion-label>Copyright</ion-label>
@@ -118,7 +128,6 @@ import { review } from '@/helpers/review';
 import openLink from '@/helpers/link';
 import { getNav, injectParent } from '@/helpers';
 
-
 @Component({
 	components: { Logo },
 })
@@ -127,7 +136,9 @@ export default class Settings extends Vue {
 		this.$store = this.$parent.$store;
 	}
 
-	getNav() {return getNav();}
+	getNav() {
+		return getNav();
+	}
 
 	logo = {
 		podcast: require('../images/apple-podcasts.svg'),
