@@ -25,6 +25,7 @@ export async function getData(store) {
 	actions.forEach(key => data.push(Storage.get({ key })));
 	(await Promise.all(data)).forEach(({ value }, index) => {
 		if (parseFloat(value).toString() === value) value = parseFloat(value);
+		if (value === 'undefined') value = undefined;
 		if (value) store.commit(actions[index], value);
 	});
 	const rawArticles = await Storage.get({ key: Actions.SET_SAVED_ARTICLES });
