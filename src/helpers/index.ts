@@ -16,8 +16,9 @@ export function getActiveComponent(app) {
 	return app.$children.find(child => tab?.contains(child.$el));
 }
 
-export function getNav(): Nav {
-	return (document.querySelector('body ion-tab:not(.tab-hidden) > ion-nav') as unknown) as Nav;
+export function getNav(): Nav & HTMLElement {
+	return (document.querySelector('body ion-tab:not(.tab-hidden) > ion-nav') as unknown) as Nav &
+		HTMLElement;
 }
 
 export const iOSAppID = env('IOS_APP_ID');

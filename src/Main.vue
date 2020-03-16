@@ -86,7 +86,7 @@ export default class Main extends Vue {
 		Keyboard.addListener('keyboardWillHide', () => {
 			this.tabBar.classList.remove('hidden');
 			const activeElement = document.activeElement as HTMLOrSVGElement | null;
-			if (activeElement?.blur) activeElement.blur();
+			activeElement?.blur();
 		});
 		let activePopover: { dismiss(): void } | undefined;
 		document.addEventListener('ionPopoverDidPresent', ({ target }) => {
@@ -107,7 +107,12 @@ export default class Main extends Vue {
 				} else {
 					const nav = getNav();
 					console.log(e);
-					if (await nav.canGoBack()) nav.pop();
+					const searchBar: HTMLIonSearchbarElement | null = nav.querySelector(
+						'.ion-page:not(.ion-page-hidden) > ion-content ion-searchbar'
+					);
+					if (searchBar?.value) {
+						searchBar.dispatchEvent(new Event('ionCancel'));
+					} else if (await nav.canGoBack()) await nav.pop();
 					else App.exitApp();
 				}
 			},

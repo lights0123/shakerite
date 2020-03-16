@@ -1,15 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-
     buildToolsVersion = '28.0.3'
-    compileSdkVersion 28
+    compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.shakeritemobile.com"
-        minSdkVersion 21
-        targetSdkVersion 28
-        versionCode 2
-        versionName "3.0.1"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 3
+        versionName "3.1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -31,18 +30,16 @@ repositories {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     implementation project(':capacitor-android')
-    testImplementation 'junit:junit:4.13-beta-3'
+    testImplementation "junit:junit:$junitVersion"
     androidTestImplementation 'tools.fastlane:screengrab:1.0.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
     androidTestImplementation 'androidx.test.espresso:espresso-web:3.2.0'
+    androidTestImplementation 'androidx.test:rules:1.3.0-alpha04'
     implementation project(':capacitor-cordova-android-plugins')
-    implementation 'com.google.firebase:firebase-messaging:19.0.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    androidTestImplementation 'androidx.test:rules:1.3.0-alpha02'
 }
 
 apply from: 'capacitor.build.gradle'

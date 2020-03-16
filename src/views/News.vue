@@ -18,7 +18,7 @@
 				debounce="500"
 				@ionInput="searchTerm = $event.target.value"
 				:value="searchTerm"
-				@ionCancel="searchTerm = ''"
+				@ionCancel="cancelSearch"
 				@ionClear="$refs.search.setFocus()"
 				ref="search"
 			/>
@@ -40,7 +40,7 @@
 			</div>
 			<article-preview
 				:article="article"
-				:key="`searchTerm ${selCategory.id} ${article.id}`"
+				:key="`${searchTerm} ${selCategory.id} ${article.id}`"
 				:large="index === 0"
 				@click.native="getNav().push('app-article', { id: article.id })"
 				v-for="(article, index) in articles"
@@ -98,6 +98,14 @@ export default class News extends Vue {
 
 	getNav() {
 		return getNav();
+	}
+
+	cancelSearch() {
+		this.searchTerm = '';
+		setTimeout(() => {
+			const activeElement = document.activeElement as HTMLOrSVGElement | null;
+			activeElement?.blur();
+		}, 0);
 	}
 
 	@Ref('infinite') readonly infiniteScroll?: { complete(): void };

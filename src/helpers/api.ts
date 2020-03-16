@@ -437,14 +437,15 @@ if (isNative) {
 	transport = {
 		get(wpreq, cb?: (err: Error | null, data?: object) => any) {
 			const url = wpreq.toString();
-			console.log(url);
-			HTTP.get(url, {}, {}).then(
+			return HTTP.get(url, {}, {}).then(
 				res => {
 					const body = returnBody(wpreq, res);
 					if (cb && typeof cb === 'function') cb(null, body);
+					return body;
 				},
 				(err: Error) => {
 					if (cb && typeof cb === 'function') cb(err);
+					return err;
 				}
 			);
 		},

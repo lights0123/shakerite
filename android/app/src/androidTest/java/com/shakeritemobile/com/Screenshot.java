@@ -43,8 +43,8 @@ public class Screenshot {
         }
     }
 
-    private static void clickPath(String XPath){
-        Atom<ElementReference> element = DriverAtoms.findElement(Locator.XPATH, XPath);
+    private static void clickPath(String css){
+        Atom<ElementReference> element = DriverAtoms.findElement(Locator.CSS_SELECTOR, css);
         Web.onWebView().withElement(element).perform(webClick());
     }
 
@@ -52,18 +52,18 @@ public class Screenshot {
     public void screenshot() {
         sleep(10000);
         Screengrab.screenshot("01Home");
-        clickPath("//*[@id=\"app\"]/ion-tabs/ion-tab[1]/ion-router-outlet/ion-page/ion-content/ion-card[1]");
+        clickPath("app-news > ion-content > ion-card:not(.small)");
         sleep(5000);
         Screengrab.screenshot("02Article");
-        clickPath("//*[@id=\"app\"]/ion-tabs/ion-tab[1]/ion-router-outlet/ion-page/ion-header/ion-toolbar/ion-buttons[2]/ion-button[1]");
+        clickPath("app-article > ion-header > ion-toolbar > ion-buttons.buttons-last-slot > ion-button:first-child");
         sleep(2000);
         Screengrab.screenshot("03Fonts");
         Espresso.pressBack();
-        clickPath("//*[@id=\"tab-button-saved\"]");
+        clickPath("#tab-button-saved");
         sleep(2000);
         Screengrab.screenshot("04Saved");
         sleep(500);
-        clickPath("//*[@id=\"tab-button-settings\"]");
+        clickPath("#tab-button-settings");
         sleep(500);
         Screengrab.screenshot("05Social");
     }

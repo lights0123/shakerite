@@ -1,6 +1,6 @@
 {
 	"name": "shakerite",
-	"version": "3.0.1",
+	"version": "3.1.0",
 	"description": "The app for the Shakerite",
 	"author": "Ben Schattinger <developer@lights0123.com>",
 	"scripts": {
