@@ -120,7 +120,7 @@ export default class News extends Vue {
 	@Watch('selCategory', { immediate: true })
 	@Watch('searchTerm')
 	onSearchChange() {
-		if (this.searchTerm.startsWith('bruh moment')) {
+		if (this.searchTerm.toLowerCase().startsWith('bruh moment')) {
 			this.searchTerm = '';
 			getNav().push('app-dino');
 			return;
