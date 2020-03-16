@@ -6,7 +6,7 @@ class Snapshotfile: SnapshotfileProtocol {
         "iPhone 6",
         "iPhone 6 Plus",
         "iPhone 5",
-        "iPad Pro (12.9-inch)",
+        "iPad Pro (12.9-inch) (3rd generation)",
         "iPad Pro (9.7-inch)"
         ]
     }

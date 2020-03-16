@@ -220,6 +220,8 @@
 			 */
 			loadSounds: function () {
 				if (!IS_IOS) {
+var AudioContext = window.AudioContext          // Default
+              || window.webkitAudioContext
 					this.audioContext = new AudioContext();
 					var resourceTemplate =
 							document.getElementById(this.config.RESOURCE_TEMPLATE_ID).content;

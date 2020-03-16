@@ -1,0 +1,49 @@
+{
+	"device_frame_version": "latest",
+	"default": {
+		"title": {
+			"font": "./fonts/Lato-Regular.ttf",
+			"color": "#333333"
+		},
+		"background": "./background.png",
+		"padding": 50,
+		"show_complete_frame": false,
+		"stack_title": false,
+		"title_below_image": false,
+		"frame": "WHITE"
+	},
+	"data": [
+		{
+			"filter": "01Home",
+			"title": {
+				"text": "Browse categories"
+			}
+		},
+		{
+			"filter": "02Article",
+			"title": {
+				"text": "Read news articles"
+			}
+		},
+		{
+			"filter": "03Fonts",
+			"title": {
+				"text": "Change text for ideal reading"
+			}
+		},
+		{
+			"filter": "04Saved",
+			"title": {
+				"text": "Save favorite articles"
+			},
+			"title_below_image": true
+		},
+		{
+			"filter": "05Social",
+			"title": {
+				"text": "Share with friends",
+				"title_below_image": true
+			}
+		}
+	]
+}
