@@ -66,7 +66,7 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
-fastlane/metadata/android/**/images
+fastlane/metadata/android/**/images/phoneScreenshots
 fastlane/metadata/android/screenshots.html
 fastlane/README.md
 

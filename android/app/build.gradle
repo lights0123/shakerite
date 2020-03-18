@@ -33,7 +33,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     implementation project(':capacitor-android')
     testImplementation "junit:junit:$junitVersion"
-    androidTestImplementation 'tools.fastlane:screengrab:1.0.0'
+    androidTestImplementation 'tools.fastlane:screengrab:2.0.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
     androidTestImplementation 'androidx.test.espresso:espresso-web:3.2.0'

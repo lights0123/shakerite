@@ -2,38 +2,46 @@ package com.shakeritemobile.com;
 
 
 import androidx.test.espresso.Espresso;
-import androidx.test.espresso.web.model.Atom;
-import androidx.test.espresso.web.model.ElementReference;
+import androidx.test.espresso.web.model.Atoms;
 import androidx.test.espresso.web.sugar.Web;
-import androidx.test.espresso.web.webdriver.DriverAtoms;
-import androidx.test.espresso.web.webdriver.Locator;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
-import androidx.test.runner.AndroidJUnit4;
 
+import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import tools.fastlane.screengrab.Screengrab;
 import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy;
-import tools.fastlane.screengrab.locale.LocaleTestRule;
-
-import static androidx.test.espresso.web.webdriver.DriverAtoms.webClick;
+import tools.fastlane.screengrab.cleanstatusbar.BluetoothState;
+import tools.fastlane.screengrab.cleanstatusbar.CleanStatusBar;
+import tools.fastlane.screengrab.cleanstatusbar.MobileDataType;
 
 @LargeTest
-@RunWith(AndroidJUnit4.class)
+@RunWith(JUnit4.class)
 public class Screenshot {
-
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Before
     public void setUp() {
         Screengrab.setDefaultScreenshotStrategy(new UiAutomatorScreenshotStrategy());
+
+        new CleanStatusBar()
+                .setBluetoothState(BluetoothState.DISCONNECTED)
+                .setClock("0941")
+                .setShowNotifications(false)
+                .enable();
     }
+
+    @AfterClass
+    public static void afterAll() {
+        CleanStatusBar.disable();
+    }
+
 
     private static void sleep(long millis) {
         try {
@@ -43,14 +51,13 @@ public class Screenshot {
         }
     }
 
-    private static void clickPath(String css){
-        Atom<ElementReference> element = DriverAtoms.findElement(Locator.CSS_SELECTOR, css);
-        Web.onWebView().withElement(element).perform(webClick());
+    private static void clickPath(String css) {
+        Web.onWebView().perform(Atoms.script("return document.querySelector('" + css + "').click()"));
     }
 
     @Test
     public void screenshot() {
-        sleep(10000);
+        sleep(5000);
         Screengrab.screenshot("01Home");
         clickPath("app-news > ion-content > ion-card:not(.small)");
         sleep(5000);
