@@ -22,23 +22,24 @@
 			</ion-toolbar>
 		</ion-header>
 		<ion-content :style="cssProps" class="content">
-			<small v-if="article.categories" class="categories"
-				><span v-for="category in article.categories" :key="category.id">{{
-					category.name
-				}}</span>
+			<small v-if="article.categories" class="categories">
+				<span v-for="category in article.categories" :key="category.id">
+					{{ category.name }}
+				</span>
 			</small>
 			<h1>{{ article.title }}</h1>
 			<h2 v-if="article.subtitle">{{ article.subtitle }}</h2>
 			<small v-if="article.writers">
 				<span v-for="writer in article.writers" :key="writer" class="author">
-					<nav-link component="app-author" :componentProps="{ name: writer, from: id }">{{
-						writer
-					}}</nav-link>
+					<nav-link component="app-author" :componentProps="{ name: writer, from: id }">
+						{{ writer }}
+					</nav-link>
 				</span>
 			</small>
 			<gallery v-if="gallery" :pictures="gallery" />
 			<media v-else :media="article.media" />
 			<div class="article">
+				<div v-html="article.mediaCaption" class="wp-caption" />
 				<component :is="article.content" />
 			</div>
 		</ion-content>
@@ -86,12 +87,12 @@ export default class ArticlePage extends Vue {
 
 	openFonts(event: MouseEvent) {
 		this.$ionic.popoverController
-			.create({
-				component: FontPopover,
-				componentProps: { parent: this },
-				event,
-			})
-			.then(p => ((p as unknown) as { present(): Promise<void> }).present());
+			  .create({
+				  component: FontPopover,
+				  componentProps: { parent: this },
+				  event,
+			  })
+			  .then(p => ((p as unknown) as { present(): Promise<void> }).present());
 	}
 
 	share() {
@@ -143,23 +144,23 @@ export default class ArticlePage extends Vue {
 			this.$store.dispatch(SET_SAVED_ARTICLES, [...this.$store.state.savedArticles, this.id]);
 		else {
 			const otherArticles = this.$store.state.savedArticles.filter(
-				article => article !== this.id
+				  article => article !== this.id,
 			);
 			this.$store.dispatch(SET_SAVED_ARTICLES, otherArticles);
 		}
 	}
 
 	article:
-		| {
-				media: Media;
-				title: string;
-				subtitle?: string;
-				content: Vue.ComponentOptions<Vue>;
-				categories: Category[];
-				writers: string[];
-				excerpt: string;
-		  }
-		| {} = {};
+		  | {
+		media: Media;
+		title: string;
+		subtitle?: string;
+		content: Vue.ComponentOptions<Vue>;
+		categories: Category[];
+		writers: string[];
+		excerpt: string;
+	}
+		  | {} = {};
 
 	get loaded() {
 		return 'title' in this.article;
@@ -171,13 +172,16 @@ export default class ArticlePage extends Vue {
 		try {
 			console.log(this.id);
 			const article: Article = this.slug
-				? await Article.getPostBySlug(this.API, this.id)
-				: await Article.getPost(this.API, parseInt(this.id, 10), this.$store);
+				  ? await Article.getPostBySlug(this.API, this.id)
+				  : await Article.getPost(this.API, parseInt(this.id, 10), this.$store);
 			// see /data-examples/gallery.html
 			const galleryIDs = /var photoids = '([\d,]+)';/.exec(article.content)?.[1];
 			if (galleryIDs) {
 				this.gallery = JSON.parse(`[${galleryIDs}]`);
 			} else this.gallery = null;
+			const mediaCaption =
+				  article.media?.caption &&
+				  sanitizeHtml(article.media.caption, { allowedTags: ['p'] });
 			let contentString = sanitizeHtml(`<div>${article.content}</div>`, {
 				allowedTags: [...sanitizeHtml.defaults.allowedTags, 'img'],
 				allowedAttributes: {
@@ -187,7 +191,14 @@ export default class ArticlePage extends Vue {
 					div: ['data-photo-ids'],
 				},
 				allowedClasses: {
-					div: ['pullquote', 'storysidebar', 'photowrap', 'remodal', 'sfiphotowrap'],
+					div: [
+						'pullquote',
+						'storysidebar',
+						'photowrap',
+						'remodal',
+						'sfiphotowrap',
+						'wp-caption',
+					],
 					p: ['pullquotetext', 'quotespeaker'],
 				},
 				transformTags: {
@@ -218,10 +229,10 @@ export default class ArticlePage extends Vue {
 				if (e.children[0]?.classList.contains('sfiphotowrap')) {
 					const gallery = document.createElement('gallery');
 					gallery.setAttribute(
-						':pictures',
-						JSON.stringify(
-							JSON.parse(`[${e.children[0].getAttribute('data-photo-ids')}]`)
-						)
+						  ':pictures',
+						  JSON.stringify(
+								JSON.parse(`[${e.children[0].getAttribute('data-photo-ids')}]`),
+						  ),
 					);
 					e.replaceWith(gallery);
 				}
@@ -241,6 +252,7 @@ export default class ArticlePage extends Vue {
 			const writers: string[] = (article.writers || []).filter(writer => writer !== '');
 			this.article = {
 				media: article.media,
+				mediaCaption,
 				title: article.title,
 				subtitle: article.subtitle,
 				content,
@@ -284,62 +296,6 @@ p {
 	font-size: var(--font-size);
 }
 
-.article::v-deep iframe {
-	width: 100vw;
-}
-
-.article::v-deep iframe[src*="://youtube.com"], .article::v-deep iframe[src*="://www.youtube.com"] {
-	height: 56.25vw;
-}
-
-.article::v-deep h1,
-.article::v-deep h2,
-.article::v-deep h3,
-.article::v-deep h4,
-.article::v-deep h5,
-.article::v-deep h6,
-.article::v-deep p {
-	margin-left: 15px;
-	margin-right: 15px;
-}
-
-.article::v-deep .storysidebar {
-	font-size: calc(var(--font-size) * 1.4);
-}
-
-.article::v-deep .pullquote {
-	/* Hide everything except for .pullquotetext and .quotespeaker */
-	font-size: 0;
-}
-
-.article::v-deep .pullquotetext {
-	font-size: calc(var(--font-size) * 2);
-}
-
-.article::v-deep {
-	.photowrap,
-	.remodal {
-		display: none;
-	}
-
-	.remodal + div + p {
-		display: none;
-	}
-}
-
-.article::v-deep .pullquotetext:before {
-	content: '“';
-}
-
-.article::v-deep .quotespeaker {
-	font-size: calc(var(--font-size) * 1.3);
-}
-
-* {
-	font-family: var(--font-family, 'Open Sans');
-	font-weight: var(--font-weight, normal);
-}
-
 .categories span:not(:last-child) {
 	padding-right: 1em;
 }
@@ -360,5 +316,83 @@ p {
 	text-decoration: none;
 	color: inherit;
 	font-weight: bolder;
+}
+
+.article::v-deep {
+	iframe {
+		width: 100vw;
+	}
+
+	iframe[src*="://youtube.com"], .article::v-deep iframe[src*="://www.youtube.com"] {
+		height: 56.25vw;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	p {
+		margin-left: 15px;
+		margin-right: 15px;
+	}
+
+	.storysidebar {
+		font-size: calc(var(--font-size) * 1.4);
+	}
+
+	.pullquote {
+		/* Hide everything except for .pullquotetext and .quotespeaker */
+		font-size: 0;
+	}
+
+	.pullquotetext {
+		font-size: calc(var(--font-size) * 2);
+	}
+
+	.photowrap,
+	.remodal {
+		display: none;
+	}
+
+	.remodal + div + p {
+		display: none;
+	}
+
+	.pullquotetext:before {
+		content: '“';
+	}
+
+	.quotespeaker {
+		font-size: calc(var(--font-size) * 1.3);
+	}
+
+	.wp-caption p {
+		font-size: calc(var(--font-size) * 0.9);
+		margin-left: 25px;
+		margin-right: 25px;
+		margin-top: 0;
+		font-style: italic;
+
+		a {
+			margin-bottom: 0.5em;
+			display: block;
+
+			&:before {
+				content: 'Photo by ';
+				color: var(--color);
+			}
+		}
+
+		br {
+			display: none;
+		}
+	}
+}
+
+* {
+	font-family: var(--font-family, 'Open Sans');
+	font-weight: var(--font-weight, normal);
 }
 </style>
