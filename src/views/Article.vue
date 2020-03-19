@@ -60,6 +60,7 @@ import { Category } from '@/helpers/categories';
 import Gallery from '@/components/Gallery.vue';
 import { getNav, injectParent } from '@/helpers';
 import NavLink from '@/components/NavLink.vue';
+import openLink from '@/helpers/link';
 
 const { Share } = Plugins;
 @Component({
@@ -73,6 +74,7 @@ const { Share } = Plugins;
 export default class ArticlePage extends Vue {
 	@Prop(String) id;
 	@Prop({ type: Boolean, default: false }) slug;
+	@Prop({ type: String, default: '' }) onFailure;
 	@Inject() readonly API!: any;
 
 	gallery: number[] | null = null;
@@ -100,7 +102,7 @@ export default class ArticlePage extends Vue {
 		Share.share({
 			title: this.article.title,
 			text: this.article.title,
-			url: `https://shakerite.com/?p=${this.id}`,
+			url: this.article.link || `https://shakerite.com/?p=${this.id}`,
 			dialogTitle: 'Share',
 		});
 	}
@@ -159,6 +161,7 @@ export default class ArticlePage extends Vue {
 				categories: Category[];
 				writers: string[];
 				excerpt: string;
+				link?: string;
 		  }
 		| {} = {};
 
@@ -170,7 +173,6 @@ export default class ArticlePage extends Vue {
 	async idUpdated() {
 		this.article = {};
 		try {
-			console.log(this.id);
 			const article: Article = this.slug
 				? await Article.getPostBySlug(this.API, this.id)
 				: await Article.getPost(this.API, parseInt(this.id, 10), this.$store);
@@ -259,9 +261,13 @@ export default class ArticlePage extends Vue {
 				categories,
 				writers,
 				excerpt: article.excerpt,
+				link: article.link,
 			};
 		} catch (e) {
 			console.error(e);
+			if (this.onFailure) {
+				openLink(this.onFailure, this.$store, true);
+			}
 			this.getNav().pop();
 		}
 	}

@@ -87,19 +87,6 @@ export default new Vuex.Store<RootStore>({
 		[Mutations.SET_COLOR_BG](state, color) {
 			state.font.bg = color;
 		},
-		[Mutations.ADD_ARTICLE](state, articles) {
-			state.articles.push(...articles);
-			state.articles = uniqBy(state.articles, property('id')).sort(
-				(a, b) => +b.date - +a.date
-			);
-		},
-		[Mutations.SET_ARTICLES](state, articles) {
-			state.articles = [];
-			state.articles.push(...articles);
-			state.articles = uniqBy(state.articles, property('id')).sort(
-				(a, b) => +b.date - +a.date
-			);
-		},
 		[Mutations.SET_SEARCH_TERM](state, term) {
 			state.searchTerm = term;
 		},

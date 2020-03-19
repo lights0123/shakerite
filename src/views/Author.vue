@@ -63,8 +63,8 @@ type RefresherEvent = { target: RefresherEventDetail };
 						title: article.title,
 						content,
 					};
-				} else if (this.slug) {
-					openLink(`https://shakerite.com/staff-profile/${this.name}`, this.$store);
+				} else if (this.onFailure) {
+					openLink(this.onFailure, this.$store, true);
 				} else this.error = true;
 				return {};
 			},
@@ -74,6 +74,7 @@ type RefresherEvent = { target: RefresherEventDetail };
 export default class Author extends Vue {
 	@Prop({ type: String, required: true }) name!: string;
 	@Prop(String) from?: string;
+	@Prop({ type: String, default: '' }) onFailure;
 	@Prop({ type: Boolean, default: false }) slug!: boolean;
 	@Inject() readonly API!: any;
 	articles: Post[] = [];

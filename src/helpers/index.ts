@@ -40,3 +40,8 @@ export const injectParent = {
 		return RootComponentDefinition;
 	},
 };
+export function setImmediate() {
+	return new Promise(resolve => {
+		window.setTimeout(resolve, 0);
+	});
+}

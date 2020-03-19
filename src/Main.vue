@@ -46,6 +46,7 @@ import '@/views/Copyright.vue';
 import { getNav } from './helpers';
 import { KeyboardInfo, Plugins, StatusBarStyle } from '@capacitor/core';
 import VueRouter from '@/router';
+import openLink from '@/helpers/link';
 
 const { App, StatusBar, Keyboard } = Plugins;
 @Component({
@@ -60,7 +61,7 @@ export default class Main extends Vue {
 	activeTab = 'news';
 	isSystemDark = false;
 
-	@Ref() readonly tabBar!: HTMLElement;
+	@Ref() readonly tabBar!: HTMLIonTabBarElement;
 
 	get isDarkTheme() {
 		if (this.$store.state.theme === 'default') return this.isSystemDark;
@@ -118,6 +119,11 @@ export default class Main extends Vue {
 			},
 			true
 		);
+		App.addListener('appUrlOpen', data => {
+			this.openUrl(data.url);
+		});
+		//@ts-ignore
+		window.openUrl = (...a) => this.openUrl(...a);
 
 		const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)') as any;
 		this.isSystemDark = mediaQuery.matches;
@@ -133,6 +139,12 @@ export default class Main extends Vue {
 		}
 		this.activeTab = e;
 		this.$router.replace(e);
+	}
+
+	async openUrl(url: string) {
+		if (this.$route.path !== '/news') await this.$router.replace('/news');
+		await this.$helpers.setImmediate();
+		openLink(url);
 	}
 }
 </script>

@@ -156,11 +156,13 @@ export class AuthorSearch extends Paginate<Author> {
 export class Post {
 	id: number;
 	content: string;
-	categories: Array<Category>;
+	categories: Category[];
 	date: Date;
 	title: string;
 	subtitle?: string;
 	media?: Media;
+	slug?: string;
+	link?: string;
 
 	constructor({
 		id,
@@ -170,14 +172,18 @@ export class Post {
 		title,
 		subtitle,
 		media,
+		slug,
+		link,
 	}: {
-		id;
-		content;
-		categories;
-		date;
-		title;
-		subtitle?;
+		id: number;
+		content: string;
+		categories: Category[];
+		date: Date;
+		title: string;
+		subtitle?: string;
 		media?: Media;
+		slug?: string;
+		link?: string;
 	}) {
 		this.id = id;
 		this.content = content;
@@ -186,6 +192,8 @@ export class Post {
 		this.title = decode(title);
 		this.subtitle = subtitle;
 		this.media = media;
+		this.slug = slug;
+		this.link = link;
 	}
 
 	static fromAPI(data) {
@@ -227,17 +235,28 @@ export class Post {
 		sno_deck,
 		featured_media,
 		_embedded,
+		slug,
+		link,
 	}) {
 		let media;
-		if (_embedded && _embedded['wp:featuredmedia'] && _embedded['wp:featuredmedia'][0])
-			media = Media.fromAPI(_embedded['wp:featuredmedia'][0]);
-		else if (featured_media) media = new Media(featured_media);
+		if (_embedded?.['wp:featuredmedia']?.[0]) {
+			try {
+				media = Media.fromAPI(_embedded['wp:featuredmedia'][0]);
+			} catch (e) {
+				console.error(e);
+			}
+		} else if (featured_media) media = new Media(featured_media);
 		let categoryList: Category[] = [];
-		if (_embedded && _embedded['wp:term'] && _embedded['wp:term'][0]) {
-			_embedded['wp:term'][0].forEach(category => {
-				if (category['taxonomy'] === 'category')
-					categoryList.push(Category.fromAPI(category));
-			});
+		if (_embedded?.['wp:term']?.[0]) {
+			try {
+				_embedded['wp:term'][0].forEach(category => {
+					if (category['taxonomy'] === 'category') {
+						categoryList.push(Category.fromAPI(category));
+					}
+				});
+			} catch (e) {
+				console.error(e);
+			}
 		} else if (categories) {
 			categories.forEach(id => {
 				categoryList.push(new Category(id));
@@ -249,8 +268,10 @@ export class Post {
 			categories: categoryList,
 			date: new Date(modified_gmt),
 			title,
-			subtitle: sno_deck ? sno_deck[0] : undefined,
+			subtitle: sno_deck?.[0],
 			media,
+			slug,
+			link,
 		};
 	}
 }
@@ -271,6 +292,8 @@ export class Article extends Post {
 		media,
 		jobTitle,
 		writers,
+		slug,
+		link,
 	}: {
 		id;
 		content;
@@ -282,8 +305,10 @@ export class Article extends Post {
 		media?;
 		jobTitle?;
 		writers?;
+		slug?: string;
+		link?: string;
 	}) {
-		super({ id, content, categories, date, title, subtitle, media });
+		super({ id, content, categories, date, title, subtitle, media, slug, link });
 		this.jobTitle = jobTitle;
 		this.writers = writers;
 		this.excerpt = excerpt;
@@ -316,6 +341,8 @@ export class Author extends Post {
 		name,
 		position,
 		schoolYear,
+		slug,
+		link,
 	}: {
 		id;
 		content;
@@ -327,8 +354,10 @@ export class Author extends Post {
 		name?;
 		position?;
 		schoolYear?;
+		slug?: string;
+		link?: string;
 	}) {
-		super({ id, content, categories, date, title, media });
+		super({ id, content, categories, date, title, media, slug, link });
 		this.name = name;
 		this.position = position;
 		this.schoolYear = schoolYear;
@@ -379,14 +408,9 @@ export class Media {
 		this.sizes = [];
 	}
 
-	static fromAPI({
-		id,
-		caption: { rendered: caption },
-		date_gmt: date,
-		media_details: { sizes },
-	}): Media {
+	static fromAPI({ id, caption, date_gmt: date, media_details: { sizes } }): Media {
 		let media = new Media(id);
-		media.caption = caption;
+		media.caption = caption?.rendered;
 		media.date = date;
 		media.loaded = true;
 		for (const size in sizes) {

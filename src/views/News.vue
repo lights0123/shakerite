@@ -64,6 +64,8 @@ import { defaultCategories } from '@/helpers/categories';
 import { Article, Author, AuthorSearch, Post, Search } from '@/helpers/api';
 import { getNav, injectParent } from '@/helpers';
 import Logo from '../components/Logo.vue';
+import uniqBy from 'lodash/uniqBy';
+import property from 'lodash/property';
 
 const searches: { articles: Search<Article>; authors: AuthorSearch }[] = [];
 
@@ -162,6 +164,7 @@ export default class News extends Vue {
 		if (!search) return;
 		await search.next(10);
 		if (this.s === search) this.articles = search.items;
+		this.articles = uniqBy(this.articles, property('id')).sort((a, b) => +b.date - +a.date);
 		e?.target.complete();
 	}
 

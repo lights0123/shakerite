@@ -3,8 +3,6 @@ export const SET_FONT_WEIGHT = 'setFontWeight';
 export const SET_FONT_NAME = 'setFontName';
 export const SET_COLOR_BG = 'setBGColor';
 export const SET_COLOR_FG = 'setFGColor';
-export const ADD_ARTICLE = 'addArticle';
-export const SET_ARTICLES = 'setArticle';
 export const SET_SEARCH_TERM = 'setSearchTerm';
 export const SET_CATEGORY = 'setCategory';
 export const ADD_CACHED = 'addCache';
@@ -18,8 +16,6 @@ export default {
 	SET_FONT_NAME,
 	SET_COLOR_BG,
 	SET_COLOR_FG,
-	ADD_ARTICLE,
-	SET_ARTICLES,
 	SET_SEARCH_TERM,
 	SET_CATEGORY,
 	ADD_CACHED,

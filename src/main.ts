@@ -77,6 +77,12 @@ async function initCapacitor() {
 // Initialize Capacitor
 initCapacitor();
 // Initialize helpers
+declare module 'vue/types/vue' {
+	// 3. Declare augmentation for Vue
+	interface Vue {
+		$helpers: typeof helpers;
+	}
+}
 Vue.prototype.$helpers = helpers;
 // Create a Vue app instance
 // @ts-ignore
