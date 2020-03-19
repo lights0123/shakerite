@@ -87,12 +87,12 @@ export default class ArticlePage extends Vue {
 
 	openFonts(event: MouseEvent) {
 		this.$ionic.popoverController
-			  .create({
-				  component: FontPopover,
-				  componentProps: { parent: this },
-				  event,
-			  })
-			  .then(p => ((p as unknown) as { present(): Promise<void> }).present());
+			.create({
+				component: FontPopover,
+				componentProps: { parent: this },
+				event,
+			})
+			.then(p => ((p as unknown) as { present(): Promise<void> }).present());
 	}
 
 	share() {
@@ -144,23 +144,23 @@ export default class ArticlePage extends Vue {
 			this.$store.dispatch(SET_SAVED_ARTICLES, [...this.$store.state.savedArticles, this.id]);
 		else {
 			const otherArticles = this.$store.state.savedArticles.filter(
-				  article => article !== this.id,
+				article => article !== this.id
 			);
 			this.$store.dispatch(SET_SAVED_ARTICLES, otherArticles);
 		}
 	}
 
 	article:
-		  | {
-		media: Media;
-		title: string;
-		subtitle?: string;
-		content: Vue.ComponentOptions<Vue>;
-		categories: Category[];
-		writers: string[];
-		excerpt: string;
-	}
-		  | {} = {};
+		| {
+				media: Media;
+				title: string;
+				subtitle?: string;
+				content: Vue.ComponentOptions<Vue>;
+				categories: Category[];
+				writers: string[];
+				excerpt: string;
+		  }
+		| {} = {};
 
 	get loaded() {
 		return 'title' in this.article;
@@ -172,16 +172,16 @@ export default class ArticlePage extends Vue {
 		try {
 			console.log(this.id);
 			const article: Article = this.slug
-				  ? await Article.getPostBySlug(this.API, this.id)
-				  : await Article.getPost(this.API, parseInt(this.id, 10), this.$store);
+				? await Article.getPostBySlug(this.API, this.id)
+				: await Article.getPost(this.API, parseInt(this.id, 10), this.$store);
 			// see /data-examples/gallery.html
 			const galleryIDs = /var photoids = '([\d,]+)';/.exec(article.content)?.[1];
 			if (galleryIDs) {
 				this.gallery = JSON.parse(`[${galleryIDs}]`);
 			} else this.gallery = null;
 			const mediaCaption =
-				  article.media?.caption &&
-				  sanitizeHtml(article.media.caption, { allowedTags: ['p'] });
+				article.media?.caption &&
+				sanitizeHtml(article.media.caption, { allowedTags: ['p'] });
 			let contentString = sanitizeHtml(`<div>${article.content}</div>`, {
 				allowedTags: [...sanitizeHtml.defaults.allowedTags, 'img'],
 				allowedAttributes: {
@@ -229,10 +229,10 @@ export default class ArticlePage extends Vue {
 				if (e.children[0]?.classList.contains('sfiphotowrap')) {
 					const gallery = document.createElement('gallery');
 					gallery.setAttribute(
-						  ':pictures',
-						  JSON.stringify(
-								JSON.parse(`[${e.children[0].getAttribute('data-photo-ids')}]`),
-						  ),
+						':pictures',
+						JSON.stringify(
+							JSON.parse(`[${e.children[0].getAttribute('data-photo-ids')}]`)
+						)
 					);
 					e.replaceWith(gallery);
 				}
