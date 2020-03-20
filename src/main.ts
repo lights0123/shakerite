@@ -1,10 +1,11 @@
 import 'mdn-polyfills/Node.prototype.replaceWith';
 import Vue from 'vue';
 import Vuex from 'vuex';
+
 import './theme/common.css';
 import Ionic from '@modus/ionic-vue';
 import '@ionic/core/css/ionic.bundle.css';
-import { Capacitor, Plugins } from '@capacitor/core';
+import { Capacitor, LocalNotifications, Plugins } from '@capacitor/core';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faBookmark, faFont } from '@fortawesome/free-solid-svg-icons';
@@ -19,6 +20,7 @@ import Main from './Main.vue';
 import { addIcons } from 'ionicons';
 import * as allIcons from 'ionicons/icons';
 import { wpapi } from '@/helpers/api';
+import openLink from '@/helpers/link';
 
 const currentIcons = Object.keys(allIcons).map(i => {
 	const key = i.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
@@ -35,7 +37,7 @@ const currentIcons = Object.keys(allIcons).map(i => {
 const iconsObject = Object.assign({}, ...currentIcons);
 addIcons(iconsObject);
 enableReviews();
-const { SplashScreen, Network, StatusBar, Browser, App } = Plugins;
+const { SplashScreen, Network, PushNotifications } = Plugins;
 Vue.config.productionTip = false;
 library.add(faBookmark, faFont, faBookmarkRegular);
 // window.HTTP = HTTP;
@@ -71,6 +73,40 @@ async function initCapacitor() {
 	// Listen to network changes
 	Network.addListener('networkStatusChange', s => {
 		Vue.prototype.$networkStatus = s;
+	});
+
+	PushNotifications.requestPermission().then(result => {
+		if (result.granted) {
+			// Register with Apple / Google to receive push via APNS/FCM
+			PushNotifications.register();
+		} else {
+			// Show some error
+		}
+	});
+
+	// Some issue with our setup and push will not work
+	PushNotifications.addListener('registrationError', (error: any) => {
+		alert('Error on registration: ' + JSON.stringify(error));
+	});
+
+	// Show us the notification payload if the app is open on our device
+	PushNotifications.addListener('pushNotificationReceived', notification => {
+		LocalNotifications.schedule({
+			notifications: [
+				{
+					body: notification.body || 'body',
+					title: notification.title || '',
+					id: 1,
+				},
+			],
+		});
+	});
+
+	// Method called when tapping on a notification
+	PushNotifications.addListener('pushNotificationActionPerformed', notification => {
+		if (notification.notification.data.link) {
+			openLink(notification.notification.data.link);
+		}
 	});
 }
 
