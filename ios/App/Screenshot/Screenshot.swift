@@ -69,6 +69,7 @@ class Screenshot: XCTestCase {
             .children(matching: .other).element
 			.children(matching: .button).element(boundBy: 1)
 			.tap()
+		sleep(1)
 		webViewsQuery/*@START_MENU_TOKEN@*/.buttons["Saved"]/*[[".otherElements[\"The Shakerite\"].buttons[\"Saved\"]",".buttons[\"Saved\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
 		snapshot("04Saved")
 	}
