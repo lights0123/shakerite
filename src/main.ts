@@ -5,7 +5,7 @@ import Vuex from 'vuex';
 import './theme/common.css';
 import Ionic from '@modus/ionic-vue';
 import '@ionic/core/css/ionic.bundle.css';
-import { Capacitor, LocalNotifications, Plugins } from '@capacitor/core';
+import { Capacitor, Plugins } from '@capacitor/core';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faBookmark, faFont } from '@fortawesome/free-solid-svg-icons';
@@ -20,7 +20,8 @@ import Main from './Main.vue';
 import { addIcons } from 'ionicons';
 import * as allIcons from 'ionicons/icons';
 import { wpapi } from '@/helpers/api';
-import openLink from '@/helpers/link';
+// import openLink from '@/helpers/link';
+// import { FCM } from 'capacitor-fcm';
 
 const currentIcons = Object.keys(allIcons).map(i => {
 	const key = i.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
@@ -37,7 +38,7 @@ const currentIcons = Object.keys(allIcons).map(i => {
 const iconsObject = Object.assign({}, ...currentIcons);
 addIcons(iconsObject);
 enableReviews();
-const { SplashScreen, Network, PushNotifications } = Plugins;
+const { SplashScreen, Network } = Plugins;
 Vue.config.productionTip = false;
 library.add(faBookmark, faFont, faBookmarkRegular);
 // window.HTTP = HTTP;
@@ -46,16 +47,6 @@ Vue.use(Ionic);
 Vue.use(Vuex);
 Vue.use(VueShave, { character: '…' });
 Vue.use(AsyncComputed);
-
-const isNative = Capacitor.platform !== 'web';
-let deviceReady = false;
-document.addEventListener(
-	'deviceready',
-	() => {
-		deviceReady = true;
-	},
-	false
-);
 
 // Initial Capacitor calls
 async function initCapacitor() {
@@ -75,13 +66,24 @@ async function initCapacitor() {
 		Vue.prototype.$networkStatus = s;
 	});
 
-	PushNotifications.requestPermission().then(result => {
+	/*PushNotifications.requestPermission().then(result => {
 		if (result.granted) {
 			// Register with Apple / Google to receive push via APNS/FCM
 			PushNotifications.register();
 		} else {
 			// Show some error
 		}
+	});
+
+	PushNotifications.register().then(() => {
+		const fcm = new FCM();
+		fcm.subscribeTo({ topic: 'all' }).then(console.log, console.error);
+		fcm.subscribeTo({ topic: 'breaking' }).then(console.log, console.error);
+		fcm.subscribeTo({ topic: 'campus' }).then(console.log, console.error);
+		fcm.subscribeTo({ topic: 'investigations' }).then(console.log, console.error);
+		fcm.subscribeTo({ topic: 'opinion' }).then(console.log, console.error);
+		fcm.subscribeTo({ topic: 'spotlight' }).then(console.log, console.error);
+		fcm.subscribeTo({ topic: 'raider-zone' }).then(console.log, console.error);
 	});
 
 	// Some issue with our setup and push will not work
@@ -107,7 +109,7 @@ async function initCapacitor() {
 		if (notification.notification.data.link) {
 			openLink(notification.notification.data.link);
 		}
-	});
+	});*/
 }
 
 // Initialize Capacitor
@@ -133,8 +135,6 @@ getData(store).then(() => {
 		store,
 		render: h => h(Main),
 		mounted() {
-			console.log('mounted!');
-
 			SplashScreen.hide().catch(console.error);
 		},
 		provide() {

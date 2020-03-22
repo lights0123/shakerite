@@ -155,10 +155,6 @@ export default class News extends Vue {
 		this.authors = search.authors.items as Author[];
 	}
 
-	log(e: any) {
-		console.log(e);
-	}
-
 	async loadContent(e?: RefresherEvent) {
 		let search = this.s;
 		if (!search) return;

@@ -799,6 +799,13 @@
   dependencies:
     tslib "^1.9.0"
 
+"@capacitor/core@latest":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@capacitor/core/-/core-1.5.1.tgz#d2529a460623545e9c28d6e59bff20867cf3e41f"
+  integrity sha512-3ncsiM+G1w4/osKbtPXGfHGOp/A1WKein1EVDX3O151aqjNf44F+n/zweZG1XvtOmY4AHNaQcHYO/s9nMOmPOw==
+  dependencies:
+    tslib "^1.9.0"
+
 "@capacitor/ios@^2.0.0-beta.0":
   version "2.0.0-beta.0"
   resolved "https://registry.yarnpkg.com/@capacitor/ios/-/ios-2.0.0-beta.0.tgz#ae280f144ffacf1fcee323fb665ecc7e5242ec04"
@@ -2234,6 +2241,12 @@ caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001020, caniuse-lite@^1.0.30001030:
   version "1.0.30001035"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001035.tgz#2bb53b8aa4716b2ed08e088d4dc816a5fe089a1e"
   integrity sha512-C1ZxgkuA4/bUEdMbU5WrGY4+UhMFFiXrgNAfxiMIqWgFTWfv/xsZCS2xEHT2LMq7xAZfuAnu6mcqyDl0ZR6wLQ==
+
+"capacitor-fcm@https://github.com/lights0123/capacitor-fcm":
+  version "1.0.1"
+  resolved "https://github.com/lights0123/capacitor-fcm#43a8f3e87917026bd972439ed61aadffc071c210"
+  dependencies:
+    "@capacitor/core" latest
 
 case-sensitive-paths-webpack-plugin@^2.3.0:
   version "2.3.0"

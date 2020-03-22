@@ -1,6 +1,6 @@
 {
 	"name": "shakerite",
-	"version": "3.1.0",
+	"version": "3.1.1",
 	"description": "The app for the Shakerite",
 	"author": "Ben Schattinger <developer@lights0123.com>",
 	"scripts": {
@@ -37,6 +37,7 @@
 		"@vue/web-component-wrapper": "latest",
 		"array-to-sentence": "^2.0.0",
 		"axios": "0.19.2",
+		"capacitor-fcm": "https://github.com/lights0123/capacitor-fcm",
 		"cordova-launch-review": "^3.1.1",
 		"cordova-plugin-advanced-http": "^2.3.1",
 		"cordova-plugin-file": "^6.0.2",

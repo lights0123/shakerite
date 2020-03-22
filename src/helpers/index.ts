@@ -23,7 +23,6 @@ export function getNav(): Nav & HTMLElement {
 
 export const iOSAppID = env('IOS_APP_ID');
 export const { platform } = Capacitor;
-console.log(platform);
 export let deviceReady = false;
 document.addEventListener(
 	'deviceready',
