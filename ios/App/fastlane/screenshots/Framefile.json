@@ -9,8 +9,7 @@
 		"padding": 50,
 		"show_complete_frame": false,
 		"stack_title": false,
-		"title_below_image": false,
-		"frame": "WHITE"
+		"title_below_image": false
 	},
 	"data": [
 		{

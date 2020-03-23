@@ -21,12 +21,12 @@ class Screenshot: XCTestCase {
 	}
 
 	private func waitArticles(webViewsQuery: XCUIElementQuery) {
-		webViewsQuery/*@START_MENU_TOKEN@*/.otherElements["paper News, tab panel"]/*[[".otherElements[\"The Shakerite\"].otherElements[\"paper News, tab panel\"]",".otherElements[\"paper News, tab panel\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+		XCTAssert(webViewsQuery/*@START_MENU_TOKEN@*/.otherElements["paper News, tab panel"]/*[[".otherElements[\"The Shakerite\"].otherElements[\"paper News, tab panel\"]",".otherElements[\"paper News, tab panel\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
             .children(matching: .other).element
             .children(matching: .other).element(boundBy: 1)
             .children(matching: .other).element
             .children(matching: .other).element(boundBy: 2)
-			.waitForExistence(timeout: 10)
+			.waitForExistence(timeout: 10))
 	}
 	
 	private func openFirstArticle(webViewsQuery: XCUIElementQuery) {
@@ -36,12 +36,13 @@ class Screenshot: XCTestCase {
             .children(matching: .other).element
             .children(matching: .other).element(boundBy: 2)
 			.children(matching: .image).element.tap()
-		webViewsQuery/*@START_MENU_TOKEN@*/.otherElements["paper News, tab panel"]/*[[".otherElements[\"The Shakerite\"].otherElements[\"paper News, tab panel\"]",".otherElements[\"paper News, tab panel\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+		XCTAssert(webViewsQuery/*@START_MENU_TOKEN@*/.otherElements["paper News, tab panel"]/*[[".otherElements[\"The Shakerite\"].otherElements[\"paper News, tab panel\"]",".otherElements[\"paper News, tab panel\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
 			.children(matching: .other).element
 			.children(matching: .other).element(boundBy: 1)
-			.children(matching: .other).element(boundBy: 4)
+            .children(matching: .other).element
+			.children(matching: .other).element
 			.children(matching: .staticText).element
-			.waitForExistence(timeout: 5)
+			.waitForExistence(timeout: 5))
 	}
 	
     
@@ -69,8 +70,9 @@ class Screenshot: XCTestCase {
             .children(matching: .other).element
 			.children(matching: .button).element(boundBy: 1)
 			.tap()
-		sleep(1)
+        usleep(200000)
 		webViewsQuery/*@START_MENU_TOKEN@*/.buttons["Saved"]/*[[".otherElements[\"The Shakerite\"].buttons[\"Saved\"]",".buttons[\"Saved\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        usleep(200000)
 		snapshot("04Saved")
 	}
 	

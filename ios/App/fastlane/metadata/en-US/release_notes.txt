@@ -1,4 +1,4 @@
-This release adds many new features, including:
-• Search
-• Improved navigation
+This release adds several new features, including:
+• Opening links to the Shakerite in the app
+• Improved captions
 • Bug fixes

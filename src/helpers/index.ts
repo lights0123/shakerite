@@ -21,7 +21,7 @@ export function getNav(): Nav & HTMLElement {
 		HTMLElement;
 }
 
-export const iOSAppID = env('IOS_APP_ID');
+export const iOSAppID = env('VUE_APP_IOS_APP_ID');
 export const { platform } = Capacitor;
 export let deviceReady = false;
 document.addEventListener(

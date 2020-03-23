@@ -20,11 +20,14 @@ platform :ios do
     capture_screenshots
     frame_screenshots
   end
+  lane :build do
+    build_app(workspace: "App.xcworkspace", scheme: "App", export_xcargs: "-allowProvisioningUpdates")
+  end
   desc "Push a new release build to the App Store"
   lane :release do
     increment_build_number(xcodeproj: "App.xcodeproj")
-    build_app(workspace: "App.xcworkspace", scheme: "App")
-    Screenshots
+    screenshots
+    build
     upload_to_app_store
   end
 end
