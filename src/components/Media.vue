@@ -1,3 +1,6 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at https://mozilla.org/MPL/2.0/. -->
 <template>
 	<div
 		class="wrapper"
@@ -32,7 +35,7 @@ export default class Media extends Vue {
 				const idealWidth = window.devicePixelRatio * window.screen.width;
 				const sizes = this.media.sizes.sort((a, b) => a.width - b.width);
 				const selectedSize =
-					this.media.sizes.find(size => size.width >= idealWidth) ||
+					this.media.sizes.find((size) => size.width >= idealWidth) ||
 					sizes[sizes.length - 1];
 				this.src = selectedSize.url;
 				this.aspect = `${selectedSize.aspectRatio}%`;

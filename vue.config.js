@@ -11,7 +11,7 @@ module.exports = {
 		appleMobileWebAppStatusBarStyle: 'black-translucent',
 	},
 
-	chainWebpack: config => {
+	chainWebpack: (config) => {
 		config.module
 			.rule('html')
 			.test(/\.html$/)

@@ -1,3 +1,6 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at https://mozilla.org/MPL/2.0/. -->
 <template>
 	<fragment>
 		<ion-header>
@@ -90,7 +93,7 @@ export default class News extends Vue {
 
 	async mounted() {
 		const input = await this.searchBar.getInputElement();
-		input.addEventListener('keyup', e => {
+		input.addEventListener('keyup', (e) => {
 			if (e.key === 'Enter') {
 				const activeElement = document.activeElement as HTMLOrSVGElement | null;
 				if (activeElement?.blur) activeElement.blur();
@@ -130,7 +133,7 @@ export default class News extends Vue {
 		this.infiniteScroll?.complete();
 		this.refreshComponent?.cancel();
 		let search = searches.find(
-			search =>
+			(search) =>
 				search.articles.categories === this.selCategory.id &&
 				search.articles.term === this.searchTerm
 		);

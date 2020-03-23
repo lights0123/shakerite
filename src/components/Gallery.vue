@@ -1,3 +1,6 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at https://mozilla.org/MPL/2.0/. -->
 <template>
 	<div>
 		<ion-slides pager="true">
@@ -25,7 +28,7 @@ export default class Gallery extends Vue {
 
 	@Watch('pictures', { immediate: true })
 	updatePictures() {
-		this.media = this.pictures.map(id => new Media(id));
+		this.media = this.pictures.map((id) => new Media(id));
 	}
 
 	@Inject() readonly API!: any;

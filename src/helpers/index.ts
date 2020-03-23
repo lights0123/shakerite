@@ -1,3 +1,7 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
 import { Capacitor } from '@capacitor/core';
 import { Nav } from '@ionic/core/dist/types/components/nav/nav';
 
@@ -13,7 +17,7 @@ export enum Platform {
 
 export function getActiveComponent(app) {
 	const tab = document.querySelector('body ion-tab:not(.tab-hidden)');
-	return app.$children.find(child => tab?.contains(child.$el));
+	return app.$children.find((child) => tab?.contains(child.$el));
 }
 
 export function getNav(): Nav & HTMLElement {
@@ -40,7 +44,7 @@ export const injectParent = {
 	},
 };
 export function setImmediate() {
-	return new Promise(resolve => {
+	return new Promise((resolve) => {
 		window.setTimeout(resolve, 0);
 	});
 }

@@ -1,3 +1,7 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
 import 'mdn-polyfills/Node.prototype.replaceWith';
 import Vue from 'vue';
 import Vuex from 'vuex';
@@ -23,8 +27,8 @@ import { wpapi } from '@/helpers/api';
 // import openLink from '@/helpers/link';
 // import { FCM } from 'capacitor-fcm';
 
-const currentIcons = Object.keys(allIcons).map(i => {
-	const key = i.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
+const currentIcons = Object.keys(allIcons).map((i) => {
+	const key = i.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
 	if (typeof allIcons[i] === 'string') {
 		return {
 			[key]: allIcons[i],
@@ -56,13 +60,13 @@ async function initCapacitor() {
 
 	// Set network checks
 	Network.getStatus()
-		.then(s => {
+		.then((s) => {
 			Vue.prototype.$networkStatus = s;
 		})
 		.catch(console.error);
 
 	// Listen to network changes
-	Network.addListener('networkStatusChange', s => {
+	Network.addListener('networkStatusChange', (s) => {
 		Vue.prototype.$networkStatus = s;
 	});
 
@@ -133,7 +137,7 @@ getData(store).then(() => {
 	window.vue = new Vue({
 		// router,
 		store,
-		render: h => h(Main),
+		render: (h) => h(Main),
 		mounted() {
 			SplashScreen.hide().catch(console.error);
 		},

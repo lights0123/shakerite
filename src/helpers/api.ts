@@ -1,3 +1,7 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
 import { decode } from 'he';
 import { Category } from './categories';
 import { ADD_CACHED, ADD_CACHED_IMAGE } from '@/store/mutations';
@@ -35,7 +39,7 @@ export class Paginate<T> {
 	async next(items: number = 25) {
 		if (this._finished) return this;
 		const posts = await this.query(items);
-		posts.forEach(post => {
+		posts.forEach((post) => {
 			try {
 				this.items.push(this.parse(post));
 			} catch (e) {
@@ -50,11 +54,7 @@ export class Paginate<T> {
 	}
 
 	protected query(items: number = 25) {
-		return this.wp
-			.posts()
-			.offset(this._offset)
-			.perPage(items)
-			.embed();
+		return this.wp.posts().offset(this._offset).perPage(items).embed();
 	}
 
 	protected parse(post) {
@@ -136,11 +136,7 @@ export class AuthorSearch extends Paginate<Author> {
 	}
 
 	protected query(items: number = 25) {
-		let q = this.wp
-			.writers()
-			.offset(this._offset)
-			.perPage(items)
-			.embed();
+		let q = this.wp.writers().offset(this._offset).perPage(items).embed();
 		if (this.ids) q = q.include(this.ids);
 		if (this.slug) q = q.slug(this.slug);
 		if (this.name) {
@@ -205,25 +201,13 @@ export class Post {
 			const article = store.getters.getCachedArticle(id);
 			if (article) return article;
 		}
-		let article = this.fromAPI(
-			await wp
-				.posts()
-				.id(id)
-				.embed()
-		);
+		let article = this.fromAPI(await wp.posts().id(id).embed());
 		if (store) store.commit(ADD_CACHED, article);
 		return article;
 	}
 
 	static async getPostBySlug(wp, slug: string) {
-		return this.fromAPI(
-			(
-				await wp
-					.posts()
-					.slug(slug)
-					.embed()
-			)[0]
-		);
+		return this.fromAPI((await wp.posts().slug(slug).embed())[0]);
 	}
 
 	protected static APITransform({
@@ -249,7 +233,7 @@ export class Post {
 		let categoryList: Category[] = [];
 		if (_embedded?.['wp:term']?.[0]) {
 			try {
-				_embedded['wp:term'][0].forEach(category => {
+				_embedded['wp:term'][0].forEach((category) => {
 					if (category['taxonomy'] === 'category') {
 						categoryList.push(Category.fromAPI(category));
 					}
@@ -258,7 +242,7 @@ export class Post {
 				console.error(e);
 			}
 		} else if (categories) {
-			categories.forEach(id => {
+			categories.forEach((id) => {
 				categoryList.push(new Category(id));
 			});
 		}
@@ -462,7 +446,7 @@ if (isNative) {
 		get(wpreq, cb?: (err: Error | null, data?: object) => any) {
 			const url = wpreq.toString();
 			return HTTP.get(url, {}, {}).then(
-				res => {
+				(res) => {
 					const body = returnBody(wpreq, res);
 					if (cb && typeof cb === 'function') cb(null, body);
 					return body;

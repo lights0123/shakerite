@@ -1,3 +1,7 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
 import Vuex from 'vuex';
 import { Storage } from '@capacitor/core';
 import uniqBy from 'lodash/uniqBy';
@@ -22,7 +26,7 @@ export async function getData(store) {
 		Actions.SET_BROWSER,
 		Actions.SET_THEME,
 	];
-	actions.forEach(key => data.push(Storage.get({ key })));
+	actions.forEach((key) => data.push(Storage.get({ key })));
 	(await Promise.all(data)).forEach(({ value }, index) => {
 		if (parseFloat(value).toString() === value) value = parseFloat(value);
 		if (value === 'undefined') value = undefined;
@@ -112,8 +116,9 @@ export default new Vuex.Store<RootStore>({
 		},
 	},
 	getters: {
-		getCachedArticle: state => id => state.cachedArticles.find(article => article.id === id),
-		getCachedImage: state => id => state.cachedImages.find(image => image.id === id),
+		getCachedArticle: (state) => (id) =>
+			state.cachedArticles.find((article) => article.id === id),
+		getCachedImage: (state) => (id) => state.cachedImages.find((image) => image.id === id),
 	},
 	actions: {
 		async [Actions.SET_FONT_NAME]({ commit }, name) {

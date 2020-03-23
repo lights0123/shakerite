@@ -2,9 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-import vueCustomElement from 'vue-custom-element';
-import { Plugin } from 'vue-fragment';
 import Vue from 'vue';
+import { IonicVueRouter as VueRouter } from '@modus/ionic-vue';
 
-Vue.use(vueCustomElement);
-Vue.use(Plugin);
+Vue.use(VueRouter);
+export default VueRouter;

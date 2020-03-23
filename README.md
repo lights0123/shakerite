@@ -73,8 +73,8 @@ You can create an iOS-specific build by executing:
 yarn run build:ios
 ```
 
-To deploy, `cd` to `ios/app` and run `sudo bundle install`. Then, run
-`bundle exec fastlane release`.
+To deploy, run `sudo bundle install` and then `cd` to `ios/app`. Then,
+run `bundle exec fastlane release`.
 
 ## Android build
 

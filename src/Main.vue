@@ -1,3 +1,6 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at https://mozilla.org/MPL/2.0/. -->
 <template>
 	<ion-app>
 		<ion-tabs>
@@ -98,7 +101,7 @@ export default class Main extends Vue {
 		});
 		window.addEventListener(
 			'ionBackButton',
-			async e => {
+			async (e) => {
 				e.stopPropagation();
 				if (!this.shouldGoBack) return;
 				this.shouldGoBack = false;
@@ -119,7 +122,7 @@ export default class Main extends Vue {
 			},
 			true
 		);
-		App.addListener('appUrlOpen', data => {
+		App.addListener('appUrlOpen', (data) => {
 			this.openUrl(data.url);
 		});
 		//@ts-ignore

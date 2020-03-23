@@ -1,3 +1,7 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
 import { Plugins } from '@capacitor/core';
 import { getNav } from '@/helpers/index';
 
@@ -10,17 +14,17 @@ function reg<T>(reg: RegexReturn, f: (RegexReturn) => T) {
 
 function deepLink(url: URL, urlString: string) {
 	return (
-		reg(/^\?(?:.*&)?p=(\d+)(?:&.*)?$/.exec(url.search), res =>
+		reg(/^\?(?:.*&)?p=(\d+)(?:&.*)?$/.exec(url.search), (res) =>
 			getNav().push('app-article', { id: res[1], onFailure: urlString })
 		) ||
-		reg(/^\/staff_profile\/([a-z0-9-]+)\/?$/.exec(url.pathname), res =>
+		reg(/^\/staff_profile\/([a-z0-9-]+)\/?$/.exec(url.pathname), (res) =>
 			getNav().push('app-author', {
 				name: res[1],
 				slug: true,
 				onFailure: urlString,
 			})
 		) ||
-		reg(/^\/(?:[a-z0-9-]+\/)([a-z0-9-]+)(?:\/[a-z0-9-]+)*\/?$/.exec(url.pathname), res =>
+		reg(/^\/(?:[a-z0-9-]+\/)([a-z0-9-]+)(?:\/[a-z0-9-]+)*\/?$/.exec(url.pathname), (res) =>
 			getNav().push('app-article', {
 				id: res[1],
 				slug: true,

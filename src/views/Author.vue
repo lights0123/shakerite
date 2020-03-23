@@ -1,3 +1,6 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at https://mozilla.org/MPL/2.0/. -->
 <template>
 	<fragment>
 		<ion-header>
@@ -107,7 +110,7 @@ export default class Author extends Vue {
 	async loadContent(e?: RefresherEvent) {
 		if (!this.s) return;
 		const articles = (await this.s.next(10)).items.filter(
-			article => article.id.toString() !== this.from
+			(article) => article.id.toString() !== this.from
 		);
 		this.articles.push(...articles);
 		this.articles = uniqBy(this.articles, property('id')).sort((a, b) => +b.date - +a.date);

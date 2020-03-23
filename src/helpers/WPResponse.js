@@ -36,7 +36,7 @@ function createPaginationObject(result, options, httpTransport) {
 	}
 
 	// Guard against capitalization inconsistencies in returned headers
-	Object.keys(result.headers).forEach(header => {
+	Object.keys(result.headers).forEach((header) => {
 		result.headers[header.toLowerCase()] = result.headers[header];
 	});
 

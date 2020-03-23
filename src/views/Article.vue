@@ -1,3 +1,6 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at https://mozilla.org/MPL/2.0/. -->
 <template>
 	<fragment>
 		<ion-header>
@@ -94,7 +97,7 @@ export default class ArticlePage extends Vue {
 				componentProps: { parent: this },
 				event,
 			})
-			.then(p => ((p as unknown) as { present(): Promise<void> }).present());
+			.then((p) => ((p as unknown) as { present(): Promise<void> }).present());
 	}
 
 	share() {
@@ -146,7 +149,7 @@ export default class ArticlePage extends Vue {
 			this.$store.dispatch(SET_SAVED_ARTICLES, [...this.$store.state.savedArticles, this.id]);
 		else {
 			const otherArticles = this.$store.state.savedArticles.filter(
-				article => article !== this.id
+				(article) => article !== this.id
 			);
 			this.$store.dispatch(SET_SAVED_ARTICLES, otherArticles);
 		}
@@ -209,7 +212,7 @@ export default class ArticlePage extends Vue {
 			});
 			const parser = new DOMParser().parseFromString(contentString, 'text/html');
 			const images: { [id: string]: Media } = {};
-			parser.querySelectorAll('a').forEach(e => {
+			parser.querySelectorAll('a').forEach((e) => {
 				if (e.children.length !== 1 || e.children[0].tagName !== 'IMG') {
 					const link = document.createElement('smart-link');
 					link.setAttribute('href', e.getAttribute('href') || '');
@@ -227,7 +230,7 @@ export default class ArticlePage extends Vue {
 				e.replaceWith(media);
 			});
 			// see /data-examples/sfiphotowrap.html
-			parser.querySelectorAll('div.photowrap').forEach(e => {
+			parser.querySelectorAll('div.photowrap').forEach((e) => {
 				if (e.children[0]?.classList.contains('sfiphotowrap')) {
 					const gallery = document.createElement('gallery');
 					gallery.setAttribute(
@@ -247,11 +250,11 @@ export default class ArticlePage extends Vue {
 				template: parser.body.innerHTML,
 			};
 			const categoriesPromises: Promise<Category>[] = [];
-			article.categories.forEach(category => {
+			article.categories.forEach((category) => {
 				categoriesPromises.push(category.fetch(this.API));
 			});
 			const categories: Category[] = await Promise.all(categoriesPromises);
-			const writers: string[] = (article.writers || []).filter(writer => writer !== '');
+			const writers: string[] = (article.writers || []).filter((writer) => writer !== '');
 			this.article = {
 				media: article.media,
 				mediaCaption,
@@ -329,7 +332,8 @@ p {
 		width: 100vw;
 	}
 
-	iframe[src*="://youtube.com"], .article::v-deep iframe[src*="://www.youtube.com"] {
+	iframe[src*="://youtube.com"], .article::v-deep iframe[src*="://www.youtube.com"]
+	{
 		height: 56.25vw;
 	}
 
