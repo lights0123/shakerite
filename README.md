@@ -1,5 +1,10 @@
 <a href="https://shakerite.com">![The Shakerite](shakerite.png)</a>
 
+<a
+href="https://apps.apple.com/us/app/the-shakerite/id508783468">![Download on the App Store](src/images/app-store-badge.svg)</a>
+<a
+href="https://play.google.com/store/apps/details?id=com.shakeritemobile.com">![Get it on Google Play](src/images/google-play-badge.svg)</a>
+
 The official app for the Shakerite, the award-winning Shaker Heights
 High School student news organization! This app is built using
 [Capacitor], [Ionic], and [Vue.js 2] via [Ionic-Vue]. Specifically, this

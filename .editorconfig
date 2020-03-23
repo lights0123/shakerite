@@ -8,5 +8,3 @@ trim_trailing_whitespace = true
 charset = utf-8
 indent_style = tab
 indent_size = 4
-continuation_indent_size = 6
-
