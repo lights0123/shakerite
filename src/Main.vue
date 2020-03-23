@@ -50,6 +50,7 @@ import { getNav } from './helpers';
 import { KeyboardInfo, Plugins, StatusBarStyle } from '@capacitor/core';
 import VueRouter from '@/router';
 import openLink from '@/helpers/link';
+import Actions from '@/store/actions';
 
 const { App, StatusBar, Keyboard } = Plugins;
 @Component({
@@ -72,13 +73,20 @@ export default class Main extends Vue {
 	}
 
 	@Watch('isDarkTheme', { immediate: true })
-	changeTheme(data: boolean) {
-		if (data) document.body.classList.add('dark');
+	changeTheme(dark: boolean) {
+		if (dark) document.body.classList.add('dark');
 		else document.body.classList.remove('dark');
-		StatusBar.setBackgroundColor({ color: data ? '#000000' : '#ffffff' }).catch(console.error);
-		StatusBar.setStyle({ style: data ? StatusBarStyle.Dark : StatusBarStyle.Light }).catch(
+		StatusBar.setBackgroundColor({ color: dark ? '#000000' : '#ffffff' }).catch(console.error);
+		StatusBar.setStyle({ style: dark ? StatusBarStyle.Dark : StatusBarStyle.Light }).catch(
 			console.error
 		);
+		if (dark && this.$store.state.font.bg === '#fff') {
+			this.$store.dispatch(Actions.SET_COLOR_FG, '#fff');
+			this.$store.dispatch(Actions.SET_COLOR_BG, '#000');
+		} else if (!dark && this.$store.state.font.bg === '#000') {
+			this.$store.dispatch(Actions.SET_COLOR_FG, '#000');
+			this.$store.dispatch(Actions.SET_COLOR_BG, '#fff');
+		}
 	}
 
 	shouldGoBack = true;
