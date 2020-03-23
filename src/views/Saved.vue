@@ -5,9 +5,7 @@
 	<fragment>
 		<ion-header>
 			<ion-toolbar>
-				<ion-title
-					><img alt="Shakerite logo" class="logo" src="../images/shakerite.png"
-				/></ion-title>
+				<ion-title><logo /></ion-title>
 			</ion-toolbar>
 		</ion-header>
 		<ion-content class="outer-content">
@@ -52,12 +50,13 @@ import { Search } from '@/helpers/api';
 import { Component, Inject, Vue, Watch } from 'vue-property-decorator';
 import { RefresherEventDetail } from '@ionic/core';
 import { getNav, injectParent } from '@/helpers';
+import Logo from '@/components/Logo.vue';
 // TODO: fix bug where adding new articles causes next pagination to return fewer results
 
 let s;
 let articles = [];
 type RefresherEvent = { target: RefresherEventDetail };
-@Component({ components: { ArticlePreview } })
+@Component({ components: { ArticlePreview, Logo } })
 export default class Saved extends Vue {
 	articles = articles;
 	@Inject() readonly API!: any;
@@ -91,9 +90,9 @@ export default class Saved extends Vue {
 		return this.$store.state.savedArticles.length > 0;
 	}
 
-	@Watch('hasArticles')
-	onHasArticles(has) {
-		if (has) this.refresh();
+	@Watch('$store.state.savedArticles')
+	articleChanged() {
+		this.refresh();
 	}
 }
 
