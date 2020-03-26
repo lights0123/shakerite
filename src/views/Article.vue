@@ -8,15 +8,18 @@
 				<ion-buttons slot="start">
 					<ion-back-button text="" />
 					<ion-button @click="saved = !saved">
-						<font-awesome-icon :icon="[saved ? 'fas' : 'far', 'bookmark']" size="lg" />
+						<ion-icon
+							slot="icon-only"
+							:name="saved ? 'bookmark' : 'bookmark-outline'"
+						/>
 					</ion-button>
 				</ion-buttons>
 				<ion-buttons slot="primary">
 					<ion-button @click="openFonts">
-						<font-awesome-icon icon="font" size="lg" />
+						<ion-icon slot="icon-only" name="text-outline" />
 					</ion-button>
 					<ion-button @click="share">
-						<ion-icon slot="icon-only" name="share" />
+						<ion-icon slot="icon-only" ios="share-outline" md="share-social-sharp" />
 					</ion-button>
 				</ion-buttons>
 				<ion-title>
@@ -64,7 +67,7 @@ import Gallery from '@/components/Gallery.vue';
 import { getNav, injectParent } from '@/helpers';
 import NavLink from '@/components/NavLink.vue';
 import openLink from '@/helpers/link';
-
+import { popover } from '@/helpers/popover';
 const { Share } = Plugins;
 @Component({
 	components: {
@@ -91,13 +94,11 @@ export default class ArticlePage extends Vue {
 	}
 
 	openFonts(event: MouseEvent) {
-		this.$ionic.popoverController
-			.create({
-				component: FontPopover,
-				componentProps: { parent: this },
-				event,
-			})
-			.then((p) => ((p as unknown) as { present(): Promise<void> }).present());
+		popover({
+			component: FontPopover,
+			componentProps: { parent: this },
+			event,
+		}).then((p) => ((p as unknown) as { present(): Promise<void> }).present());
 	}
 
 	share() {

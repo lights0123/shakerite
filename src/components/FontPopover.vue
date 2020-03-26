@@ -17,7 +17,7 @@
 				</ion-col>
 			</ion-row>
 			<ion-row class="row-dots">
-				<ion-col @click="selectedColor = dot" v-for="dot in dots" :key="dot.fg + dot.bg">
+				<ion-col v-for="dot in dots" :key="dot.fg + dot.bg" @click="selectedColor = dot">
 					<div
 						:class="{
 							selected: selectedColor.fg === dot.fg && selectedColor.bg === dot.bg,
@@ -44,25 +44,22 @@
 	</ion-list>
 </template>
 
-<script>
+<script lang="ts">
 import Actions from '@/store/actions';
+import { Component, Vue } from 'vue-property-decorator';
 
-export default {
-	name: 'FontPopover',
-	data() {
-		return {
-			dots: [
-				{ bg: '#fff', fg: '#000' },
-				{ bg: '#f9f1e4', fg: '#000' },
-				{ bg: '#4c4b50', fg: '#fff' },
-				{ bg: '#000', fg: '#fff' },
-			],
-		};
-	},
-	computed: {
-		fonts() {
-			if (this.$isIOS) {
-				return [
+@Component
+export default class FontPopover extends Vue {
+	dots = [
+		{ bg: '#fff', fg: '#000' },
+		{ bg: '#f9f1e4', fg: '#000' },
+		{ bg: '#4c4b50', fg: '#fff' },
+		{ bg: '#000', fg: '#fff' },
+	];
+
+	get fonts() {
+		return this.$isIOS
+			? [
 					{ displayName: 'Athelas', name: 'Athelas' },
 					{ displayName: 'Charter', name: 'Charter' },
 					{ displayName: 'Georgia', name: 'Georgia' },
@@ -76,74 +73,73 @@ export default {
 					{ displayName: 'Roboto', name: 'Roboto' },
 					{ displayName: 'Open Sans', name: 'Open Sans' },
 					{ displayName: 'Open Sans Light', name: 'Open Sans', weight: 300 },
-				];
-			}
-			return [
-				{ displayName: 'Sans Serif', name: 'sans-serif' },
-				{ displayName: 'Serif', name: 'serif' },
-				{ displayName: 'Zilla Slab', name: 'Zilla Slab' },
-				{ displayName: 'Zilla Slab Light', name: 'Zilla Slab', weight: 300 },
-				{ displayName: 'Roboto', name: 'Roboto' },
-				{ displayName: 'Open Sans', name: 'Open Sans' },
-				{ displayName: 'Open Sans Light', name: 'Open Sans', weight: 300 },
-			];
-		},
-		selectedFont: {
-			get() {
-				const { font } = this.$store.state;
-				try {
-					return this.fonts.find(
-						({ name, weight }) => font.family === name && font.weight === weight
-					).displayName;
-				} catch (e) {
-					return undefined;
-				}
-			},
-			set(name) {
-				const font = this.fonts.find(({ displayName }) => displayName === name);
-				this.$store.dispatch(Actions.SET_FONT_NAME, font.name);
-				this.$store.dispatch(Actions.SET_FONT_WEIGHT, font.weight);
-			},
-		},
-		fontWeight: {
-			get() {
-				return this.$store.state.font.weight;
-			},
-			set(weight) {
-				this.$store.dispatch(Actions.SET_FONT_WEIGHT, weight);
-			},
-		},
-		fontSize: {
-			get() {
-				return this.$store.state.font.size;
-			},
-			set(size) {
-				this.$store.dispatch(Actions.SET_FONT_SIZE, size);
-			},
-		},
-		selectedColor: {
-			get() {
-				return { fg: this.$store.state.font.fg, bg: this.$store.state.font.bg };
-			},
-			set({ fg, bg }) {
-				this.$store.dispatch(Actions.SET_COLOR_FG, fg);
-				this.$store.dispatch(Actions.SET_COLOR_BG, bg);
-			},
-		},
-	},
-	methods: {
-		decreaseFont() {
-			let newSize = this.fontSize - 2;
-			if (newSize < 10) newSize = 10;
-			this.fontSize = newSize;
-		},
-		increaseFont() {
-			let newSize = this.fontSize + 2;
-			if (newSize > 30) newSize = 30;
-			this.fontSize = newSize;
-		},
-	},
-};
+			  ]
+			: [
+					{ displayName: 'Sans Serif', name: 'sans-serif' },
+					{ displayName: 'Serif', name: 'serif' },
+					{ displayName: 'Zilla Slab', name: 'Zilla Slab' },
+					{ displayName: 'Zilla Slab Light', name: 'Zilla Slab', weight: 300 },
+					{ displayName: 'Roboto', name: 'Roboto' },
+					{ displayName: 'Open Sans', name: 'Open Sans' },
+					{ displayName: 'Open Sans Light', name: 'Open Sans', weight: 300 },
+			  ];
+	}
+
+	get selectedFont() {
+		const { font } = this.$store.state;
+		try {
+			return this.fonts.find(
+				({ name, weight }) => font.family === name && font.weight === weight
+			)?.displayName;
+		} catch (e) {
+			return undefined;
+		}
+	}
+
+	set selectedFont(name) {
+		const font = this.fonts.find(({ displayName }) => displayName === name);
+		if (!font) return;
+		this.$store.dispatch(Actions.SET_FONT_NAME, font.name);
+		this.$store.dispatch(Actions.SET_FONT_WEIGHT, font.weight);
+	}
+
+	get fontWeight() {
+		return this.$store.state.font.weight;
+	}
+
+	set fontWeight(weight) {
+		this.$store.dispatch(Actions.SET_FONT_WEIGHT, weight);
+	}
+
+	get fontSize() {
+		return this.$store.state.font.size;
+	}
+
+	set fontSize(size) {
+		this.$store.dispatch(Actions.SET_FONT_SIZE, size);
+	}
+
+	get selectedColor() {
+		return { fg: this.$store.state.font.fg, bg: this.$store.state.font.bg };
+	}
+
+	set selectedColor({ fg, bg }) {
+		this.$store.dispatch(Actions.SET_COLOR_FG, fg);
+		this.$store.dispatch(Actions.SET_COLOR_BG, bg);
+	}
+
+	decreaseFont() {
+		let newSize = this.fontSize - 2;
+		if (newSize < 10) newSize = 10;
+		this.fontSize = newSize;
+	}
+
+	increaseFont() {
+		let newSize = this.fontSize + 2;
+		if (newSize > 30) newSize = 30;
+		this.fontSize = newSize;
+	}
+}
 </script>
 
 <style scoped>
@@ -205,11 +201,11 @@ ion-grid {
 
 .row-dots {
 	border-bottom: 1px solid
-		rgba(var(--ion-item-md-border-color-rgb, var(--ion-item-border-color-rgb, 0, 0, 0)), 0.13);
+		rgba(var(--ion-item-md-border-color-rgb, var(--ion-item-border-color-rgb, 0)), 0.13);
 }
 
 .dot {
 	border: 1px solid
-		rgba(var(--ion-item-md-border-color-rgb, var(--ion-item-border-color-rgb, 0, 0, 0)), 0.13);
+		rgba(var(--ion-item-md-border-color-rgb, var(--ion-item-border-color-rgb, 0)), 0.13);
 }
 </style>

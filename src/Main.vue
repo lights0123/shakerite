@@ -3,7 +3,7 @@
    - file, You can obtain one at https://mozilla.org/MPL/2.0/. -->
 <template>
 	<ion-app>
-		<ion-tabs>
+		<ion-tabs ref="tabs">
 			<ion-tab tab="news">
 				<ion-nav root="app-news" />
 			</ion-tab>
@@ -18,17 +18,17 @@
 
 			<ion-tab-bar slot="bottom" ref="tabBar">
 				<ion-tab-button tab="news" @click="click('news')">
-					<ion-icon name="paper" />
+					<ion-icon name="newspaper" />
 					<ion-label>News</ion-label>
 				</ion-tab-button>
 
 				<ion-tab-button tab="saved" @click="click('saved')">
-					<ion-icon :src="bookmarkURL" class="bookmark-icon" />
+					<ion-icon name="bookmark" />
 					<ion-label>Saved</ion-label>
 				</ion-tab-button>
 
 				<ion-tab-button tab="settings" @click="click('settings')">
-					<ion-icon name="settings" />
+					<ion-icon ios="cog" md="settings-sharp" />
 					<ion-label>Settings</ion-label>
 				</ion-tab-button>
 			</ion-tab-bar>
@@ -48,24 +48,17 @@ import '@/views/About.vue';
 import '@/views/Copyright.vue';
 import { getNav } from './helpers';
 import { KeyboardInfo, Plugins, StatusBarStyle } from '@capacitor/core';
-import VueRouter from '@/router';
 import openLink from '@/helpers/link';
 import Actions from '@/store/actions';
 
 const { App, StatusBar, Keyboard } = Plugins;
-@Component({
-	router: new VueRouter({
-		mode: 'history',
-		base: process.env.BASE_URL,
-		routes: [{ path: '/', redirect: '/news' }],
-	}),
-})
+@Component
 export default class Main extends Vue {
-	bookmarkURL = require('@fortawesome/fontawesome-free/svgs/solid/bookmark.svg');
 	activeTab = 'news';
 	isSystemDark = false;
 
 	@Ref() readonly tabBar!: HTMLIonTabBarElement;
+	@Ref() readonly tabs!: HTMLIonTabsElement;
 
 	get isDarkTheme() {
 		if (this.$store.state.theme === 'default') return this.isSystemDark;
@@ -76,10 +69,10 @@ export default class Main extends Vue {
 	changeTheme(dark: boolean) {
 		if (dark) document.body.classList.add('dark');
 		else document.body.classList.remove('dark');
-		StatusBar.setBackgroundColor({ color: dark ? '#000000' : '#ffffff' }).catch(console.error);
-		StatusBar.setStyle({ style: dark ? StatusBarStyle.Dark : StatusBarStyle.Light }).catch(
-			console.error
-		);
+		StatusBar.setBackgroundColor({ color: dark ? '#000000' : '#ffffff' }).catch(() => {});
+		StatusBar.setStyle({
+			style: dark ? StatusBarStyle.Dark : StatusBarStyle.Light,
+		}).catch(() => {});
 		if (dark && this.$store.state.font.bg === '#fff') {
 			this.$store.dispatch(Actions.SET_COLOR_FG, '#fff');
 			this.$store.dispatch(Actions.SET_COLOR_BG, '#000');
@@ -149,11 +142,10 @@ export default class Main extends Vue {
 			return;
 		}
 		this.activeTab = e;
-		this.$router.replace(e);
 	}
 
 	async openUrl(url: string) {
-		if (this.$route.path !== '/news') await this.$router.replace('/news');
+		if ((await this.tabs.getSelected()) !== 'news') await this.tabs.select('news');
 		await this.$helpers.setImmediate();
 		openLink(url);
 	}

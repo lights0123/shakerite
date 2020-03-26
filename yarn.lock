@@ -812,41 +812,10 @@
   resolved "https://registry.yarnpkg.com/@capacitor/ios/-/ios-2.0.0-beta.1.tgz#a995f1eb42149335f5b2cf90d7ab8792080dea3d"
   integrity sha512-GCMsH2IpMaT+uciNA0dGrax6vE7nRtcrl6sF7C9eYfGelhBpkLg8uJV4JAkpvHfC0CXDYRAdqt7S70eIx7Eq0w==
 
-"@fortawesome/fontawesome-common-types@^0.2.28":
-  version "0.2.28"
-  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-0.2.28.tgz#1091bdfe63b3f139441e9cba27aa022bff97d8b2"
-  integrity sha512-gtis2/5yLdfI6n0ia0jH7NJs5i/Z/8M/ZbQL6jXQhCthEOe5Cr5NcQPhgTvFxNOtURE03/ZqUcEskdn2M+QaBg==
-
 "@fortawesome/fontawesome-free@^5.13.0":
   version "5.13.0"
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.13.0.tgz#fcb113d1aca4b471b709e8c9c168674fbd6e06d9"
   integrity sha512-xKOeQEl5O47GPZYIMToj6uuA2syyFlq9EMSl2ui0uytjY9xbe8XS0pexNWmxrdcCyNGyDmLyYw5FtKsalBUeOg==
-
-"@fortawesome/fontawesome-svg-core@^1.2.28":
-  version "1.2.28"
-  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-1.2.28.tgz#e5b8c8814ef375f01f5d7c132d3c3a2f83a3abf9"
-  integrity sha512-4LeaNHWvrneoU0i8b5RTOJHKx7E+y7jYejplR7uSVB34+mp3Veg7cbKk7NBCLiI4TyoWS1wh9ZdoyLJR8wSAdg==
-  dependencies:
-    "@fortawesome/fontawesome-common-types" "^0.2.28"
-
-"@fortawesome/free-regular-svg-icons@^5.13.0":
-  version "5.13.0"
-  resolved "https://registry.yarnpkg.com/@fortawesome/free-regular-svg-icons/-/free-regular-svg-icons-5.13.0.tgz#925a13d8bdda0678f71551828cac80ab47b8150c"
-  integrity sha512-70FAyiS5j+ANYD4dh9NGowTorNDnyvQHHpCM7FpnF7GxtDjBUCKdrFqCPzesEIpNDFNd+La3vex+jDk4nnUfpA==
-  dependencies:
-    "@fortawesome/fontawesome-common-types" "^0.2.28"
-
-"@fortawesome/free-solid-svg-icons@^5.13.0":
-  version "5.13.0"
-  resolved "https://registry.yarnpkg.com/@fortawesome/free-solid-svg-icons/-/free-solid-svg-icons-5.13.0.tgz#44d9118668ad96b4fd5c9434a43efc5903525739"
-  integrity sha512-IHUgDJdomv6YtG4p3zl1B5wWf9ffinHIvebqQOmV3U+3SLw4fC+LUCCgwfETkbTtjy5/Qws2VoVf6z/ETQpFpg==
-  dependencies:
-    "@fortawesome/fontawesome-common-types" "^0.2.28"
-
-"@fortawesome/vue-fontawesome@^0.1.9":
-  version "0.1.9"
-  resolved "https://registry.yarnpkg.com/@fortawesome/vue-fontawesome/-/vue-fontawesome-0.1.9.tgz#d3af6d4e50f337327de90447fe35fa1e117a2fbe"
-  integrity sha512-h/emhmZz+DfB2zOGLWawNwXq82UYhn9waTfUjLLmeaIqtnIyNt6kYlpQT/vzJjLZRDRvY2IEJAh1di5qKpKVpA==
 
 "@hapi/address@2.x.x":
   version "2.1.4"
@@ -910,18 +879,13 @@
   dependencies:
     "@types/cordova" latest
 
-"@ionic/core@^4.11.10":
-  version "4.11.10"
-  resolved "https://registry.yarnpkg.com/@ionic/core/-/core-4.11.10.tgz#1aa5f2e31b8d0c741471af9c272964c34155ab5a"
-  integrity sha512-PeonKl5E+VOTBeKDr83y0N/1wbfkZ5jV3PSJTsVPE3Q15LxGEO0GzBvVMgkmkssuqOI3WJPXxYWZVL8ejzSFOQ==
+"@ionic/core@^5.0.7":
+  version "5.0.7"
+  resolved "https://registry.yarnpkg.com/@ionic/core/-/core-5.0.7.tgz#fbb8877991204a721ebfdd56600e6e3931efda7e"
+  integrity sha512-94Ebr4Uw/2aOqweGr4Xmo5csjTQwLcDuHraMC+VuQWNoCztuJI9cX/yhsAS2Yftor+vXC/uGZkubK+P+RFh1jQ==
   dependencies:
-    ionicons "^4.6.3"
+    ionicons "^5.0.1"
     tslib "^1.10.0"
-
-"@modus/ionic-vue@1.3.4":
-  version "1.3.4"
-  resolved "https://registry.yarnpkg.com/@modus/ionic-vue/-/ionic-vue-1.3.4.tgz#f98994a534dbc6213470dd616daabd5e8f60b04f"
-  integrity sha512-RSj7vK5Z3zjSFOG7/6uGln05BnU6lq5k8pzdG7Zzsiapr5Wviz7DyKb0jLx9E2LNBWdYZirRYbqp7QKoFaz9kQ==
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
@@ -1312,7 +1276,7 @@
   resolved "https://registry.yarnpkg.com/@vue/preload-webpack-plugin/-/preload-webpack-plugin-1.1.1.tgz#18723530d304f443021da2292d6ec9502826104a"
   integrity sha512-8VCoJeeH8tCkzhkpfOkt+abALQkS11OIHhte5MBzYaKMTqK0A3ZAKEUVAffsOklhEv7t0yrQt696Opnu9oAx+w==
 
-"@vue/web-component-wrapper@^1.2.0", "@vue/web-component-wrapper@latest":
+"@vue/web-component-wrapper@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@vue/web-component-wrapper/-/web-component-wrapper-1.2.0.tgz#bb0e46f1585a7e289b4ee6067dcc5a6ae62f1dd1"
   integrity sha512-Xn/+vdm9CjuC9p3Ae+lTClNutrVhsXpzxvoTXXtoys6kVRX9FkueSUAqSWAyZntmVLlR4DosBV4pH8y5Z/HbUw==
@@ -4810,10 +4774,10 @@ invert-kv@^2.0.0:
   resolved "https://registry.yarnpkg.com/invert-kv/-/invert-kv-2.0.0.tgz#7393f5afa59ec9ff5f67a27620d11c226e3eec02"
   integrity sha512-wPVv/y/QQ/Uiirj/vh3oP+1Ww+AWehmi1g5fFWGPF6IpCBCDVrhgHRMvrLfdYcwDh3QJbGXDW4JAuzxElLSqKA==
 
-ionicons@^4.6.3:
-  version "4.6.3"
-  resolved "https://registry.yarnpkg.com/ionicons/-/ionicons-4.6.3.tgz#e4f3a3e9b66761eb8c0db27798cc1a8ce97777d2"
-  integrity sha512-cgP+VIr2cTJpMfFyVHTerq6n2jeoiGboVoe3GlaAo5zoSBDAEXORwUZhv6m+lCyxlsHCS3nqPUE+MKyZU71t8Q==
+ionicons@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/ionicons/-/ionicons-5.0.1.tgz#fb48475b042b04b3ed2ba9876800687917d4603d"
+  integrity sha512-P9GHr7pgCJcG211W0wute49NZ9AvJZvFJf4OwYybakjX6j7tu0q5t5HNWn9bcb9YjI7SxBblJg8iqQ1Yb59DXw==
 
 ip-regex@^2.1.0:
   version "2.1.0"
@@ -8867,7 +8831,7 @@ vue-eslint-parser@^7.0.0:
     esquery "^1.0.1"
     lodash "^4.17.15"
 
-vue-fragment@latest:
+vue-fragment@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/vue-fragment/-/vue-fragment-1.5.1.tgz#44c070d55ed1e9a6c698ef57a5c83f64bb06feeb"
   integrity sha512-ig6eES6TcMBbANW71ylB+AJgRN+Zksb3f50AxjGpAk6hMzqmeuD80qeh4LJP0jVw2dMBMjgRUfIkrvxygoRgtQ==

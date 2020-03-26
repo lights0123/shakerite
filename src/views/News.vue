@@ -24,6 +24,7 @@
 				@ionCancel="cancelSearch"
 				@ionClear="$refs.search.setFocus()"
 				ref="search"
+				inputmode="search"
 			/>
 			<ion-item
 				v-for="author in authors"
@@ -127,6 +128,8 @@ export default class News extends Vue {
 	onSearchChange() {
 		if (this.searchTerm.toLowerCase().startsWith('bruh moment')) {
 			this.searchTerm = '';
+			const activeElement = document.activeElement as HTMLOrSVGElement | null;
+			if (activeElement?.blur) activeElement.blur();
 			getNav().push('app-dino');
 			return;
 		}
