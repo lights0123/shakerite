@@ -43,7 +43,7 @@
 		"moment": "^2.22.2",
 		"moment-timezone": "^0.5.23",
 		"pako": "^1.0.7",
-		"sanitize-html": "^1.19.3",
+		"sanitize-html": "^2.3.2",
 		"sha1": "^1.1.1",
 		"typeface-open-sans": "^0.0.75",
 		"typeface-roboto": "^0.0.75",
