@@ -41,7 +41,7 @@
 		"lodash": "^4.17.11",
 		"mdn-polyfills": "^5.14.0",
 		"moment": "^2.22.2",
-		"moment-timezone": "^0.5.23",
+		"moment-timezone": "^0.5.35",
 		"pako": "^1.0.7",
 		"sanitize-html": "^1.19.3",
 		"sha1": "^1.1.1",
